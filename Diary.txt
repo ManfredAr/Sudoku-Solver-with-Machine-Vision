@@ -1,0 +1,5 @@
+Week 1 - 28/09/2023:
+This week I have design and implemented the interface for the Sudoku page on the website. It contains the sudoku grid which 
+is currently hardcoded and also buttons for the numbers which is used to fill the grid. I have also done some research on 
+constraint solvers and the basics of machine vision. 
+Next I will complete the web page for killer Sudoku and then start work on building a constrint solver for Sudoku.
