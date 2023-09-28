@@ -1,0 +1,29 @@
+{% extends "home/home.html" %}
+{%load static%}
+{% block style %} 
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/playsudoku.css' %}">
+<script src="{% static 'js/playsudoku.js' %}" type="module"></script>
+<script src="{% static 'js/stack.js' %}" type="module"></script>
+<script src="{% static 'js/notes.js' %}" type="module"></script>
+{% endblock %}
+
+{% block content %}
+<div class="play">
+    <div id="grid"></div> </br>
+
+    <div class="buttons">
+        <div class="notes"> 
+            <Button id="enableNotes"> Notes </Button>
+        </div> </br>
+    
+        <div class="back">
+            <Button id="undo"> Undo </Button> </br>
+        </div>
+    </div>
+
+    <div id="values"> </br>
+    </div>
+</div>
+
+<button onclick="runTest()"> Test </button>
+{% endblock %}

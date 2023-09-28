@@ -1,0 +1,59 @@
+.heading {
+    /* Makes the heading bold and centered */    
+    font-weight: bolder;
+    font-size: 50px;
+    text-align: center;
+    padding: 5%;
+}
+
+.choices button {
+    /* Adds separation between buttons */    
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    border: none;
+    width: 200px;
+}
+
+.decision {
+    /* Centring the text and buttons */
+    text-align: center;
+}
+
+.subheading {
+    /* Making the subheading bolder */
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+}
+
+.container {
+    /* adding a gradient background */
+    height: 100%;
+    background-image: linear-gradient(rgba(136, 1, 138, 0.768), rgb(0, 28, 152));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.Navbar {
+    /* chnage nav bar background to black */
+    background-color: black;
+}
+
+p {
+    /* Set the headings color to white */
+    color: rgb(255, 213, 213);
+}
+
+.white-text {
+    /* Set the text color to white */
+    color: white; 
+}
+
+.navbar-nav a:hover, a:hover {
+    /* invert the colors on hover */
+    background-color: white;
+    color: black !important;
+}

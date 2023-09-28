@@ -1,0 +1,110 @@
+#grid {
+    /* Setups the full size of the grid with some additional css */
+    width: 540px;
+    height: 540px;
+    background-color: rgb(255, 255, 255);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.play {
+    padding-top: 30px;
+}
+
+/*The css for each individual cell in the grid*/
+.cell {
+    /* the dimensions of the cells */
+    width: 60px; 
+    height: 60px;
+    border: 1px solid lightgray;
+    /* text css and placement */
+    margin: 0 auto;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The css for the numbers button options */
+#values {
+    width: 540px;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: flex;
+}
+
+.number {
+    /* the dimensions of each individual number buttons */
+    width: 60px; 
+    height: 50px;
+    border: 1px solid black;
+    margin: 2px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0) !important;
+
+    /* Alignment of the numbers */
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Change the colour of a cell when clicked on*/
+.selected-tile {
+    background-color: rgb(0, 179, 255) !important;
+}
+
+/* Creates a thicker horizontal line */
+/*This is to split the grid into the 3x3 mini boxes*/
+.horizontal {
+    border-bottom: 2px solid black;
+}
+
+/* Creates a thicker verticle line */
+.vertical {
+    border-right: 2px solid black;
+}
+
+.notes .back {
+    text-align: center;
+    border: 0;
+}
+
+
+.notes button .back button{
+    border: 0;
+    padding: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.activeButton {
+    background-color: red;
+    color: white !important;
+}
+
+.noteCell {
+    width: 19px; /* Adjust the width for cells in the grid */
+    height: 19px; /* Adjust the height for cells in the grid */
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+ 
+}
+
+.incorrectGuess {
+    color: red !important;
+}
+
+.selectedSquare {
+    background-color: rgb(63, 191, 220);
+}
