@@ -1,0 +1,37 @@
+{% extends "home/home.html" %}
+{%load static%}
+{% block style %} 
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/playsudoku.css' %}">
+<script src="{% static 'js/playsudoku.js' %}" type="module"></script>
+{% endblock %}
+
+{% block content %}
+<div class="play">
+    <div id="grid"></div> </br>
+
+    <div class="buttons">
+        <div class="note"> 
+            <Button id="enableNotes"> Notes </Button>
+        </div> 
+    
+        <div class="back">
+            <Button id="undo"> Undo </Button> </br>
+        </div>
+    </div>
+
+    <div id="complete" style="display: none;"> 
+        <h1 style="padding: 20px;">Congratulations!</h1>
+        <div class="choices">
+            <span><a href="/home"><button>Home</button></a></span></br>
+            <span><a href="/PlaySudoku"><button>Play Sudoku</button></a></span></br>
+            <span><button>Play Killer Sudoku</button></span></br>
+            <span><button>Upload A puzzle</button></span></br>
+        </div>
+    </div>
+
+    <div id="values"> </br>
+    </div>
+</div>
+
+<button onclick="runTest()"> Test </button>
+{% endblock %}

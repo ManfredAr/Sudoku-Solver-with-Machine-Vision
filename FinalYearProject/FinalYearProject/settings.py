@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'home.apps.HomeConfig',
     'playsudoku.apps.PlaysudokuConfig',
+    'playkillersudoku.apps.PlaykillersudokuConfig',
 ]
 
 MIDDLEWARE = [
