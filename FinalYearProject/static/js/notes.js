@@ -31,6 +31,23 @@ class Notes {
         return this.notesArray[(row*9) + col];
     }
 
+    addNotes(row, col) {
+        let currentTile = document.getElementById(row + "." + col);
+        currentTile.innerHTML = "";
+        for (let idx = 1; idx <= 9; idx++) {
+            let noteTile = document.createElement("div");
+            noteTile.id = row.toString() + "." + col.toString() + "." + idx.toString();
+            noteTile.className = "notes";
+            noteTile.classList.add("noteCell");
+            // this displays the numbers which the user noted earlier.
+            let set = this.getNote(row, col, idx);
+            if (set != 0) {
+                noteTile.innerText = set;
+            }
+            currentTile.append(noteTile);
+        }
+    }
+
 }
 
 export { Notes };
