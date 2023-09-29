@@ -2,20 +2,20 @@ class SudokuTest {
         // TTD
 
     runTest() {
-        testGrid();
-        testChoices();
+        this.testGrid();
+        this.testChoices();
         document.getElementById("1.1").click();
-        TestselectedTile();
+        this.TestselectedTile();
         document.getElementById("1").click();
-        TestClickedNumber()
+        this.TestClickedNumber()
         document.getElementById("1.2").click();
-        TestPrevSelected();
-        TestNoteSlots();
+        this.TestPrevSelected();
+        this.TestNoteSlots();
         notesArray[0][0] = 1;
         document.getElementById("0.0").click();
         document.getElementById("1").click();
         document.getElementById("x").click();
-        TestNotesReappear();
+        this.TestNotesReappear();
     }
 
     // testing the initial grid is properly created.

@@ -1,7 +1,10 @@
 import { Stack } from "./stack.js";
 import { Notes } from "./notes.js";
 import { SudokuScreen } from "./SetSudokuScreen.js";
+import { SudokuTest } from "./sudokuTest.js";
 
+// board and solution are currently hardcoded
+// but will eventually be replaced with generated puzzles.
 var board = [
     ["8", "3", "7", "4", "9", "1", "6", "2", "5"],
     ["2", "4", "5", "8", "6", "7", "3", "1", "9"],
@@ -28,10 +31,12 @@ var solution = [
 
 var SetScreen = null;
 
+// on load the screen should be set up with the grid and the buttons.
 window.onload = function() {
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
 
+    // add event listeners for cells and buttons
     let numClass = document.getElementsByClassName("num");
     for (let i = 0; i < numClass.length; i++) {
         numClass[i].addEventListener("click", () => SetScreen.selectedNum(numClass[i]));
@@ -44,6 +49,9 @@ window.onload = function() {
 
     document.getElementById("enableNotes").addEventListener("click", () => SetScreen.activeNotes());
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
+
+    let t = new SudokuTest()
+    t.runTest();
 }
 
 

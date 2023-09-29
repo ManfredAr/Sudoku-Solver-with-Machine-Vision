@@ -70,7 +70,7 @@ class SudokuScreen {
         }
     }
 
-
+    // toggles the notes button
     activeNotes(event) {
         document.getElementById("enableNotes").classList.toggle("activeButton");
         if (this.takingNotes) {
@@ -80,21 +80,27 @@ class SudokuScreen {
         }
     }
 
+    // Used to revert the last action that was taken.
     lastAction(event) {
         let action = this.myStack.getLastAction();
         if (action != null) {
+            // retrieves information about the last action
+            // Such as the row and column that was changed. 
             let row = parseInt(action[1]);
             let col = parseInt(action[2]);
             let element = document.getElementById(row + "." + col);
 
+            // check if the user made a guess in the last action.
             if (action[0] == "guess") {
+                // if a guess was made when the cell only contained notes 
+                // then remove the guess and add back the notes 
                 let prev = parseInt(action[3])
                 if (prev == "switch") {
-                    this.board[row, col] = 0;
+                    this.board[row][col] = 0;
                     element.innerText = "";
-                    //element.innerHTML = "";
                     this.notes.addNotes(row, col);
                 } else {
+                    // if a guess was already made then simply put in the previous guess.
                     if (!prev) {
                         element.innerText = "";
                         this.notes.addNotes(row, col);
@@ -110,9 +116,11 @@ class SudokuScreen {
                     }  
                 } 
             } else if (action[0] == "note") {
+                // If the last action was to add a not.
                 let prev = parseInt(action[3]);
                 let noteCell = document.getElementById(row + "." + col + "." + prev);
-
+                // Since notes can only be added if the cell didn't contain a guess
+                // just add back the note or remove it. 
                 if (this.notes.getNote(row, col, prev) == prev) {
                     noteCell.innerText = "";
                     this.notes.removeNote(row, col, prev);
@@ -121,6 +129,8 @@ class SudokuScreen {
                     this.notes.setNote(row, col, prev);
                 }
             } else {
+                // if the user clears the notes in a cell then get back the 
+                // last notes they had and re build the notes.
                 let array = action[3];
                 this.notes.addCellNotes(row, col, array);
                 this.notes.addNotes(row, col);
@@ -194,15 +204,23 @@ class SudokuScreen {
             console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
         }
         this.myStack.displayStack();
+
+        this.isComplete();
+    }
+
+    isComplete() {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
                 if (this.board[a][b] != this.solution[a][b]) {
-                    console.log("nop");
                     return;
                 }
             }
         }
-        console.log("yes")
+
+        document.getElementsByClassName("buttons")[0].style.display = "none";   
+        document.getElementById("values").style.display = "none";
+        document.getElementById("complete").style.display = "block";
+
     }
 
     // keeping track of the current and previous selected square
