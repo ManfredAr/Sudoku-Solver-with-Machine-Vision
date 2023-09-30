@@ -185,6 +185,7 @@ class SudokuScreen {
         } else {
             // If a cell already contains a guess then notes cannot be added.
             if (document.getElementById(this.sel_row + "." + this.sel_col).childElementCount == 9) { 
+                document.getElementById(this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
                 let idx = element.innerText;
                 if (idx != "x") {
                     let noteTile = document.getElementById(this.sel_row + "." + this.sel_col + "." + parseInt(idx));
@@ -208,6 +209,7 @@ class SudokuScreen {
         this.isComplete();
     }
 
+    // checks whether the user has correctly completed the puzzle
     isComplete() {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
@@ -216,7 +218,7 @@ class SudokuScreen {
                 }
             }
         }
-
+        // removes the number buttons as the puzzle is completed.
         document.getElementsByClassName("buttons")[0].style.display = "none";   
         document.getElementById("values").style.display = "none";
         document.getElementById("complete").style.display = "block";
@@ -238,6 +240,7 @@ class SudokuScreen {
         // adding color for new selected square
         let tile = document.getElementById(this.sel_row + "." + this.sel_col);
 
+        // highlights all the cells which has the same number and the cell the user clicked on.
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 let all = document.getElementById(row + "." + col);

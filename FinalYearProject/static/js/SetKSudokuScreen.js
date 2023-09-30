@@ -76,6 +76,9 @@ class KSudokuScreen {
                 }
             }
         }
+
+        // the grid is initially set up with a cage around every cell.
+        // After this check which cels are in the same group and remove the borders between them. 
         let count = 0;
         for (const group of this.groups) {
             let sum = document.createElement("div");
@@ -85,6 +88,7 @@ class KSudokuScreen {
             count += 1;
             for (let i = 0; i < group.length; i++) {
                 for (let j = i+1; j < group.length; j++) {
+                    // removes left and right borders.
                     if (group[i][0] === group[j][0]) {
                         document.getElementById("c" + group[i]).classList.add("removeRight");
                         document.getElementById("c" + group[j]).classList.add("removeLeft");
@@ -92,6 +96,7 @@ class KSudokuScreen {
                         document.getElementById(group[j]).classList.add("removeLeftPadding");
                     }
 
+                    // removes top and bottom borders.
                     if (group[i][2] === group[j][2]) {
                         document.getElementById("c" + group[i]).classList.add("removeBottom");
                         document.getElementById("c" + group[j]).classList.add("removeTop");
@@ -219,7 +224,8 @@ class KSudokuScreen {
             }
         } else {
             // If a cell already contains a guess then notes cannot be added.
-            if (document.getElementById("c" + this.sel_row + "." + this.sel_col).childElementCount == 9) { 
+            if (document.getElementById("c" + this.sel_row + "." + this.sel_col).childElementCount == 9) {
+                document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess"); 
                 let idx = element.innerText;
                 if (idx != "x") {
                     let noteTile = document.getElementById(this.sel_row + "." + this.sel_col + "." + parseInt(idx));
@@ -252,6 +258,7 @@ class KSudokuScreen {
             }
         }
 
+        // removes buttons as puzzle is completed.
         document.getElementsByClassName("buttons")[0].style.display = "none";   
         document.getElementById("values").style.display = "none";
         document.getElementById("complete").style.display = "block";
@@ -273,6 +280,7 @@ class KSudokuScreen {
         // adding color for new selected square
         let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
 
+        // highlights all the cells which has the same number and the cell the user clicked on.
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 let all = document.getElementById("c" + row + "." + col);
