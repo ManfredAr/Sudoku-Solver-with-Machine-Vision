@@ -1,11 +1,13 @@
 import { Notes } from "./notes.js";
 import { Stack } from "./stack.js";
 
-class SudokuScreen {
+class KSudokuScreen {
 
-    constructor(grid, solution) {
+    constructor(grid, solution, group, val) {
         this.board = grid;
         this.solution = solution;
+        this.groups = group;
+        this.val = val;
         this.notes = new Notes();
         this.myStack = new Stack();
         this.takingNotes = false;
@@ -46,10 +48,7 @@ class SudokuScreen {
                 let tile = document.createElement("div");
                 tile.id = row.toString() + "." + col.toString();
                 tile.className = "tile";
-                if (this.board[row][col] != "-") {
-                    tile.innerText = this.board[row][col];
-                }
-    
+
                 // adding vertical rows for the 3x3 mini boxes
                 if (row == 2 || row == 5) {
                     tile.classList.add("horizontal");
@@ -63,13 +62,53 @@ class SudokuScreen {
                 //tile.addEventListener("click", this.selectedTile);
                 tile.classList.add("cell");
                 document.getElementById("grid").append(tile);
+
+                let cage = document.createElement("div");
+                cage.id = "c" + row.toString() + "." + col.toString();
+                cage.className = "cage";
+                cage.classList.add("cage");
+                if (this.board[row][col] != "-") {
+                    cage.innerText = this.board[row][col];
+                }
+                tile.appendChild(cage);
                 if (this.board[row][col] == "-") {
-                    this.notes.addNotes(row, col);
+                    this.notes.addKNotes(row, col);
+                }
+            }
+        }
+
+        // the grid is initially set up with a cage around every cell.
+        // After this check which cels are in the same group and remove the borders between them. 
+        let count = 0;
+        for (const group of this.groups) {
+            let sum = document.createElement("div");
+            sum.innerText = this.val[count];
+            sum.classList.add("sumsquare");
+            document.getElementById(group[0]).appendChild(sum);
+            count += 1;
+            for (let i = 0; i < group.length; i++) {
+                for (let j = i+1; j < group.length; j++) {
+                    // removes left and right borders.
+                    if (group[i][0] === group[j][0]) {
+                        document.getElementById("c" + group[i]).classList.add("removeRight");
+                        document.getElementById("c" + group[j]).classList.add("removeLeft");
+                        document.getElementById(group[i]).classList.add("removeRightPadding");
+                        document.getElementById(group[j]).classList.add("removeLeftPadding");
+                    }
+
+                    // removes top and bottom borders.
+                    if (group[i][2] === group[j][2]) {
+                        document.getElementById("c" + group[i]).classList.add("removeBottom");
+                        document.getElementById("c" + group[j]).classList.add("removeTop");
+                        document.getElementById(group[i]).classList.add("removeBottomPadding");
+                        document.getElementById(group[j]).classList.add("removeTopPadding");
+                    }
                 }
             }
         }
     }
 
+    
     // toggles the notes button
     activeNotes(event) {
         document.getElementById("enableNotes").classList.toggle("activeButton");
@@ -88,7 +127,7 @@ class SudokuScreen {
             // Such as the row and column that was changed. 
             let row = parseInt(action[1]);
             let col = parseInt(action[2]);
-            let element = document.getElementById(row + "." + col);
+            let element = document.getElementById("c" + row + "." + col);
 
             // check if the user made a guess in the last action.
             if (action[0] == "guess") {
@@ -98,12 +137,12 @@ class SudokuScreen {
                 if (prev == "switch") {
                     this.board[row][col] = 0;
                     element.innerText = "";
-                    this.notes.addNotes(row, col);
+                    this.notes.addKNotes(row, col);
                 } else {
                     // if a guess was already made then simply put in the previous guess.
                     if (!prev) {
                         element.innerText = "";
-                        this.notes.addNotes(row, col);
+                        this.notes.addKNotes(row, col);
                         this.board[row][col] = "";
                     } else {
                         element.innerText = prev;
@@ -133,16 +172,17 @@ class SudokuScreen {
                 // last notes they had and re build the notes.
                 let array = action[3];
                 this.notes.addCellNotes(row, col, array);
-                this.notes.addNotes(row, col);
+                this.notes.addKNotes(row, col);
             }
         }
     }
 
     // updating the currently selected square to the select number
     selectedNum(element) {
-        console.log(this.sel_row + "." + this.sel_col);
+        console.log("hi");
+        console.log("c" + this.sel_row + "." + this.sel_col);
         if (!this.takingNotes) {
-            let tile = document.getElementById(this.sel_row + "." + this.sel_col);
+            let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
             
             if (children == 9) {
@@ -165,7 +205,7 @@ class SudokuScreen {
                 } else {
                     this.myStack.insertGuess(this.sel_row, this.sel_col, curText, "");
                 }
-                this.notes.addNotes(this.sel_row, this.sel_col);
+                this.notes.addKNotes(this.sel_row, this.sel_col);
                 // if user deletes a guess then the notes subcells should be baught back.
             } else {
                 if (children == 9) {
@@ -184,8 +224,8 @@ class SudokuScreen {
             }
         } else {
             // If a cell already contains a guess then notes cannot be added.
-            if (document.getElementById(this.sel_row + "." + this.sel_col).childElementCount == 9) { 
-                document.getElementById(this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
+            if (document.getElementById("c" + this.sel_row + "." + this.sel_col).childElementCount == 9) {
+                document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess"); 
                 let idx = element.innerText;
                 if (idx != "x") {
                     let noteTile = document.getElementById(this.sel_row + "." + this.sel_col + "." + parseInt(idx));
@@ -209,7 +249,6 @@ class SudokuScreen {
         this.isComplete();
     }
 
-    // checks whether the user has correctly completed the puzzle
     isComplete() {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
@@ -218,7 +257,8 @@ class SudokuScreen {
                 }
             }
         }
-        // removes the number buttons as the puzzle is completed.
+
+        // removes buttons as puzzle is completed.
         document.getElementsByClassName("buttons")[0].style.display = "none";   
         document.getElementById("values").style.display = "none";
         document.getElementById("complete").style.display = "block";
@@ -234,16 +274,16 @@ class SudokuScreen {
         this.sel_row = parseInt(coordinates[0]);
         this.sel_col = parseInt(coordinates[1]);
         // removing the color from previous square
-        let prevtile = document.getElementById(this.prev_row + "." + this.prev_col);
+        let prevtile = document.getElementById("c" + this.prev_row + "." + this.prev_col);
         prevtile.classList.remove("selected-tile");
 
         // adding color for new selected square
-        let tile = document.getElementById(this.sel_row + "." + this.sel_col);
+        let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
 
         // highlights all the cells which has the same number and the cell the user clicked on.
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
-                let all = document.getElementById(row + "." + col);
+                let all = document.getElementById("c" + row + "." + col);
                 if (all.innerText === tile.innerText && all.innerText != "") {
                     all.classList.add("selectedSquare");
                 } else {
@@ -254,5 +294,4 @@ class SudokuScreen {
         tile.classList.add("selected-tile");
     }
 }
-
-export { SudokuScreen };
+export { KSudokuScreen };
