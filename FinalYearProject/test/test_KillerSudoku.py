@@ -1,5 +1,5 @@
-from backend.KillerSudoku import KillerSudoku    # The code to test
-import unittest   # The test framework
+from backend.KillerSudoku import KillerSudoku
+import unittest
 
 class Test_Sudoku(unittest.TestCase):
 
