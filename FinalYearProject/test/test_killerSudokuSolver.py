@@ -90,11 +90,41 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing the correct domain is returned
     def test_getDomain(self):
-        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+                                                [0,0,0,5,9,8,0,1,6],
+                                                [0,1,2,0,0,0,0,5,0],
+                                                [0,0,0,4,0,7,0,9,0],
+                                                [0,4,0,0,0,5,0,6,0],
+                                                [0,0,0,0,0,0,0,2,0],
+                                                [6,0,0,0,7,0,5,0,4],
+                                                [1,5,0,0,0,0,6,0,2],
+                                                [0,7,0,2,0,0,0,8,9]], self.cages))
         self.assertEqual(solver.getDomain(2, 8), set([3, 7, 8]))
 
     
     # testing is a cell is the last cage to be filled or on its own its values becames the cage sum
     def test_getLastDomain(self):
-        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+                                                [0,0,0,5,9,8,0,1,6],
+                                                [0,1,2,0,0,0,0,5,0],
+                                                [0,0,0,4,0,7,0,9,0],
+                                                [0,4,0,0,0,5,0,6,0],
+                                                [0,0,0,0,0,0,0,2,0],
+                                                [6,0,0,0,7,0,5,0,4],
+                                                [1,5,0,0,0,0,6,0,2],
+                                                [0,7,0,2,0,0,0,8,9]], self.cages))
         self.assertEqual(solver.getDomain(1, 1), set([3]))
+
+
+    # testing the sudoku grid is solved correctly
+    def test_correctSolution(self):
+        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
+        self.assertEqual(solver.solver(), [[5, 8, 6, 1, 3, 2, 9, 4, 7],
+                                            [4, 3, 7, 5, 9, 8, 2, 1, 6],
+                                            [9, 1, 2, 7, 6, 4, 8, 5, 3],
+                                            [8, 6, 5, 4, 2, 7, 3, 9, 1],
+                                            [2, 4, 3, 9, 1, 5, 7, 6, 8],
+                                            [7, 9, 1, 6, 8, 3, 4, 2, 5],
+                                            [6, 2, 9, 8, 7, 1, 5, 3, 4],
+                                            [1, 5, 8, 3, 4, 9, 6, 7, 2],
+                                            [3, 7, 4, 2, 5, 6, 1, 8, 9]])

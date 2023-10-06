@@ -1,10 +1,60 @@
 class KillerSudokuSolver:
+    '''
+    A class which deals with solving killer sudoku puzzles.
+    '''
 
     def __init__(self, killerSudoku):
+        '''
+        The constructor method and takes a KillerSudoku object
+
+        Parameter:
+        A killerSudoku object
+        '''
         self.KSudoku = killerSudoku
+
+    def solver(self):
+        '''
+        It uses a range of techniques to solve a sudoku puzzle.
+
+        Returns:
+        the completed puzzle if a solution was found
+        False if no solution was found.
+        '''
+        if self.solve() == True:
+            return self.KSudoku.grid
+        return False
+    
+    def solve(self):
+        '''
+        A backtracking method which recusively tries values for cells
+        until the entire grid is complete or a solution is not possible. 
+
+        Returns:
+        boolean depending on if the puzzle was solved or not.
+        '''
+        row, col = self.getNextEmptyCell()
+        
+        if row is None:
+            return True
+        
+        domain = self.getDomain(row, col)
+
+        for value in domain:
+            self.KSudoku.grid[row][col] = value
+            if self.solve():
+                return True
+            self.KSudoku.grid[row][col] = 0
+        
+        return False
 
 
     def getNextEmptyCell(self):
+        '''
+        Finds the first empty cell within the array.
+        Returns:
+        row, column of empty cell.
+        Null, Null if no empty cell exists.
+        '''
         for i in range(9):
             for j in range(9):
                 if self.KSudoku.grid[i][j] == 0:
@@ -14,6 +64,16 @@ class KillerSudokuSolver:
     
     
     def getDomain(self, row, col):
+        '''
+        For a given cell find the valid choices for this cell.
+
+        Parameters:
+        row - the row the cell is in.
+        col - the column the cell is in.
+
+        Returns:
+        An array containing the possiblle values.
+        '''
         used = []
         cageNum = self.KSudoku.cellCage.get((row,col))
         cageSum = next(iter(self.KSudoku.cages.get(cageNum)))
