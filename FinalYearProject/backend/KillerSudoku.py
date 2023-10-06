@@ -8,7 +8,8 @@ class KillerSudoku:
 
     def __init__(self, grid, cages):
         '''
-        Initializes the grid and the cages.
+        Initializes the grid and the cages. It also initializes a new dictionary which 
+        maps the individual cells to the cage number.
 
         Parameters: 
         grid - the killer sudoku grid in a 2D array.
@@ -16,6 +17,8 @@ class KillerSudoku:
         '''
         self.grid = grid
         self.cages = cages
+        self.cellCage = {}
+        self.convertCageToCellCages()
 
 
     def checkValid(self):
@@ -39,9 +42,22 @@ class KillerSudoku:
         True if sum of cages is correct and false otherwise.
         '''
         total = 0
-        for i in self.cages.values():
-            total += i
+
+        for cage_number, cage_dict in self.cages.items():
+            for cage_sum in cage_dict.keys():
+                total += cage_sum
+        
         return total == 405 
+    
+
+    def convertCageToCellCages(self):
+        '''
+        Creates a new dictionary which maps an individual cell to its cage number.
+        '''
+        for cage_number, cage_dict in self.cages.items():
+            for cage_sum, cells in cage_dict.items():
+                for cell in cells:
+                    self.cellCage[cell] = cage_number
         
 
     def getCages(self):
@@ -51,6 +67,7 @@ class KillerSudoku:
         the cages
         '''
         return self.cages
+    
     
     def getGrid(self):
         '''
