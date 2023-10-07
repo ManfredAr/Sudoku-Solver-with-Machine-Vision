@@ -1,5 +1,6 @@
 from backend.KillerSudoku import KillerSudoku
 from backend.killerSudokuSolver import KillerSudokuSolver
+from backend.killerSudokuSolver2 import KillerSudokuSolver2
 import unittest
 
 class Test_KSudokuSolver(unittest.TestCase):
@@ -59,7 +60,7 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing that the constructor stores the killer sudoku object properly
     def test_Constructor(self):
-        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver.KSudoku.grid, self.grid)
         self.assertEqual(solver.KSudoku.cages, self.cages)
         self.assertEqual(len(solver.KSudoku.cellCage), 81)
@@ -90,7 +91,7 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing the correct domain is returned
     def test_getDomain(self):
-        solver = KillerSudokuSolver(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                                 [0,0,0,5,9,8,0,1,6],
                                                 [0,1,2,0,0,0,0,5,0],
                                                 [0,0,0,4,0,7,0,9,0],
@@ -104,7 +105,7 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing is a cell is the last cage to be filled or on its own its values becames the cage sum
     def test_getLastDomain(self):
-        solver = KillerSudokuSolver(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                                 [0,0,0,5,9,8,0,1,6],
                                                 [0,1,2,0,0,0,0,5,0],
                                                 [0,0,0,4,0,7,0,9,0],
@@ -118,7 +119,7 @@ class Test_KSudokuSolver(unittest.TestCase):
 
     # testing the sudoku grid is solved correctly
     def test_correctSolution(self):
-        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver.solver(), [[5, 8, 6, 1, 3, 2, 9, 4, 7],
                                             [4, 3, 7, 5, 9, 8, 2, 1, 6],
                                             [9, 1, 2, 7, 6, 4, 8, 5, 3],
@@ -128,3 +129,10 @@ class Test_KSudokuSolver(unittest.TestCase):
                                             [6, 2, 9, 8, 7, 1, 5, 3, 4],
                                             [1, 5, 8, 3, 4, 9, 6, 7, 2],
                                             [3, 7, 4, 2, 5, 6, 1, 8, 9]])
+        
+    def test_DomainQueue(self):
+        solver = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
+        arr = solver.DomainQueue()
+        self.assertEqual(arr[0], (0,0,1))
+        self.assertEqual(arr[1], (0,2,1))
+        self.assertEqual(arr[2], (0,5,1))
