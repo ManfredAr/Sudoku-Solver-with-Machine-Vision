@@ -70,10 +70,8 @@ class Test_Sudoku(unittest.TestCase):
         self.assertEqual(solver.solver(), False)
 
 
-    
-    def test_DomainQueue(self):
+    # testing the pq contains all the empty cells.
+    def test_setupHeap(self):
         solver = SudokuSolver2(Sudoku(self.grid))
-        arr = solver.DomainQueue()
-        self.assertEqual(arr[0], (4,2,1))
-        self.assertEqual(arr[1], (0,2,2))
-        self.assertEqual(arr[2], (1,5,2))
+        solver.setupHeap()
+        self.assertEqual(len(solver.heap.pq), 58)

@@ -1,5 +1,4 @@
-from collections import OrderedDict
-import copy
+from backend.heap import heap
 
 class SudokuSolver2:
     '''
@@ -14,6 +13,8 @@ class SudokuSolver2:
         A sudoku object which contains the grid to be solved.
         '''
         self.sudoku = grid
+        self.heap = heap()
+        self.removed = {}
 
     
     def solver(self):
@@ -24,13 +25,13 @@ class SudokuSolver2:
         The completed grid if a solution was found, False otherwise.
         '''
 
-
-        if self.solve(self.DomainQueue()) == True:
+        self.setupHeap()
+        if self.solve(self.heap) == True:
             return self.sudoku.grid
         return False
 
 
-    def solve(self, queue):
+    def solve(self, pq):
         '''
         Recursively tries to add values into the grid to complete it.
 
@@ -38,23 +39,34 @@ class SudokuSolver2:
         True if a solution was found, False otherwise
         '''
 
-        if len(queue) == 0:
+        # getting the cell with the smallest domain
+        length, count, cell, domain = pq.pop_cell()
+        self.removed[cell] = (length, cell, domain)
+
+        # if the length of the queue is empty it means that all the cells have a value
+        # inserted and since no incorrect choice has been made it is the correct solution so we can return True.
+        if length == None:
             return True
         
-        # gets the cell with the lowest domain length
-        row, col, val = queue.pop(0)
-
-        domain = self.getDomain(row, col)
+        # if the length is 0 it means a mistake was made in a previous cell leaving no valid options for 
+        # the current cell. Therefore we need to backtrack.
+        if length == 0:
+            pq.addToHeap(self.removed[(cell[0], cell[1])])
+            return False
 
         for value in domain:
-            self.sudoku.grid[row][col] = value
-            if self.solve(queue) == True:
+            self.sudoku.grid[cell[0]][cell[1]] = value
+            # updating domains for affected cells.
+            updatedCells = pq.decreaseKey(cell[0], cell[1], value)
+
+            if self.solve(pq) == True:
                 return True
-            self.sudoku.grid[row][col] = 0
-            
-        # if backtracking occurs then insert the cell and its values back into the queue
-        # since it was the first element just it back in the first index.
-        queue.insert(0, (row, col, val))
+            # reseting the grid and queue to before a value was assigned.
+            self.sudoku.grid[cell[0]][cell[1]] = 0
+            pq.increaseKey(updatedCells)
+            updatedCells = []
+        
+        pq.addToHeap(self.removed[(cell[0], cell[1])])
         return False
 
     
@@ -95,19 +107,12 @@ class SudokuSolver2:
         return set([1,2,3,4,5,6,7,8,9]) - used
     
 
-    def DomainQueue(self):
+    def setupHeap(self):
         '''
-        Gets the length of the domains for each empty cell. It then orders the array in 
-        ascending order on the length of the domain.
-
-        Returns:
-        an array contain cells in order of length of domain.
+        Goes through the entire grid and inserts each empty cell into the priority queue.
         '''
-        domains = []
         for i in range(9):
             for j in range(9):
                 if self.sudoku.grid[i][j] == 0:
-                    domains.append((i, j, len(self.getDomain(i, j))))
-        domains = sorted(domains, key=lambda x: x[2])
-        return domains
-    
+                    values = self.getDomain(i, j)
+                    self.heap.addToHeap((len(values), (i,j), values))
