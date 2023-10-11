@@ -38,10 +38,10 @@ class KillerSudokuSolver:
             return True
         
         domain = self.getDomain(row, col)
-
+        print(domain)
         for value in domain:
             self.KSudoku.grid[row][col] = value
-            if self.solve():
+            if self.solve() == True:
                 return True
             self.KSudoku.grid[row][col] = 0
         
@@ -106,11 +106,17 @@ class KillerSudokuSolver:
                 used.append(self.KSudoku.grid[cells[i][0]][cells[i][1]])
                 count += 1
         
-        # condition to check if this is the last cell to be filled in the cage.
-        # the second part makes sure that the remaining sum of the cage hasnt been used yet.
-        if count == len(cells) - 1 and cageSum not in used:
-            return set([cageSum])
+        if cageSum <= 0:
+            return {}
+        
+        if count == len(cells) - 1:
+            #print(set(used))
+            if cageSum > 9 or cageSum in set(used):
+                return {}
+            return {cageSum}
 
-        # getting all unique values
+
         used = set(used)
-        return set([1,2,3,4,5,6,7,8,9]) - used
+        validGuesses = set([1,2,3,4,5,6,7,8,9]) - used
+        validGuesses = {i for i in validGuesses if i <= cageSum}
+        return validGuesses
