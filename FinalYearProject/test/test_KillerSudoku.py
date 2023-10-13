@@ -99,3 +99,19 @@ class Test_Sudoku(unittest.TestCase):
     def test_cellCages(self):
         sudoku = KillerSudoku(self.grid, self.cages)
         self.assertEqual(len(sudoku.cellCage), 81)
+
+
+    # testing related cells returns all cells related to a particular cell
+    def test_RelatedCells(self):
+        sudoku = KillerSudoku(self.grid, self.cages)
+        self.assertEqual(len(sudoku.getRelatedCells(0, 0)), 21)
+
+    # testing cageCells returns all the cells in a givens cells cage
+    def test_cageCells(self):
+        sudoku = KillerSudoku(self.grid, self.cages)
+        self.assertEqual(sudoku.getCageCells(0, 1), [(0, 1), (1, 1)])
+
+    # testing cageSum returns the sum of a cage the cell is in
+    def test_cageSum(self):
+        sudoku = KillerSudoku(self.grid, self.cages)
+        self.assertEqual(sudoku.getCageSum(0, 1), 11)

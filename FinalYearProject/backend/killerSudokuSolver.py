@@ -38,7 +38,6 @@ class KillerSudokuSolver:
             return True
         
         domain = self.getDomain(row, col)
-        print(domain)
         for value in domain:
             self.KSudoku.grid[row][col] = value
             if self.solve() == True:

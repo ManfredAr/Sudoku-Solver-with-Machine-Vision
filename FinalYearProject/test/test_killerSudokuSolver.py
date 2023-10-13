@@ -100,7 +100,7 @@ class Test_KSudokuSolver(unittest.TestCase):
                                                 [6,0,0,0,7,0,5,0,4],
                                                 [1,5,0,0,0,0,6,0,2],
                                                 [0,7,0,2,0,0,0,8,9]], self.cages))
-        self.assertEqual(solver.getDomain(2, 8), set([3, 7, 8]))
+        self.assertEqual(solver.getDomain(3, 0), set([2, 3, 5, 8]))
 
     
     # testing is a cell is the last cage to be filled or on its own its values becames the cage sum
@@ -115,12 +115,27 @@ class Test_KSudokuSolver(unittest.TestCase):
                                                 [1,5,0,0,0,0,6,0,2],
                                                 [0,7,0,2,0,0,0,8,9]], self.cages))
         self.assertEqual(solver.getDomain(1, 1), set([3]))
+        
 
+    # testing the pq contains all the empty cells.
+    def test_setupHeap(self):
+        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+                                                    [0,0,0,5,9,8,0,1,6],
+                                                    [0,1,2,0,0,0,0,5,0],
+                                                    [0,0,0,4,0,7,0,9,0],
+                                                    [0,4,0,0,0,5,0,6,0],
+                                                    [0,0,0,0,0,0,0,2,0],
+                                                    [6,0,0,0,7,0,5,0,4],
+                                                    [1,5,0,0,0,0,6,0,2],
+                                                    [0,7,0,2,0,0,0,8,9]], self.cages))
+        solver.setupHeap()
+        self.assertEqual(len(solver.queue.pq), 50)
+        
 
-    # testing the sudoku grid is solved correctly
+    # testing the killer sudoku grid is solved correctly
     def test_correctSolution(self):
-        solver = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
-        self.assertEqual(solver.solver(), [[5, 8, 6, 1, 3, 2, 9, 4, 7],
+        solver2 = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
+        self.assertEqual(solver2.solver(), [[5, 8, 6, 1, 3, 2, 9, 4, 7],
                                             [4, 3, 7, 5, 9, 8, 2, 1, 6],
                                             [9, 1, 2, 7, 6, 4, 8, 5, 3],
                                             [8, 6, 5, 4, 2, 7, 3, 9, 1],
@@ -130,9 +145,20 @@ class Test_KSudokuSolver(unittest.TestCase):
                                             [1, 5, 8, 3, 4, 9, 6, 7, 2],
                                             [3, 7, 4, 2, 5, 6, 1, 8, 9]])
         
-    def test_DomainQueue(self):
-        solver = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
-        arr = solver.DomainQueue()
-        self.assertEqual(arr[0], (0,0,1))
-        self.assertEqual(arr[1], (0,2,1))
-        self.assertEqual(arr[2], (0,5,1))
+
+    # testing that decrease keys returns all the orginal values of te changed keys
+    def test_decreaseKeys(self):
+        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+                                            [0,0,0,5,9,8,0,1,6],
+                                            [0,1,2,0,0,0,0,5,0],
+                                            [0,0,0,4,0,7,0,9,0],
+                                            [0,4,0,0,0,5,0,6,0],
+                                            [0,0,0,0,0,0,0,2,0],
+                                            [6,0,0,0,7,0,5,0,4],
+                                            [1,5,0,0,0,0,6,0,2],
+                                            [0,7,0,2,0,0,0,8,9]], self.cages))
+        solver.setupHeap()
+        poppedCell = solver.queue.pop_cell()
+        solver.KSudoku.grid[0][0] = 5
+        # this only changes the domain of one cell 
+        self.assertEqual(solver.decreaseKeys(poppedCell[1]), [[4, 15, (3, 0), {8, 2, 3, 5}, '<removed-task>']])

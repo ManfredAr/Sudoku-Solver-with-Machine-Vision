@@ -76,3 +76,57 @@ class KillerSudoku:
         the grid
         '''
         return self.grid
+    
+
+    def getRelatedCells(self, row, col):
+        '''
+        Gets all the cells related to the given cell not including the cage cells
+
+        Parameter:
+        the row and column of the cell
+
+        Returns:
+        A set of cells in the row, column and box of the requested cell 
+        '''
+        connectCells = set()
+
+        for i in range(9):
+            connectCells.add((row, i))
+            connectCells.add((i, col))
+
+        box_row = (row // 3) * 3
+        col_box = (col // 3) * 3
+
+        for i in range(box_row, box_row + 3):
+            for j in range(col_box, col_box + 3):
+                connectCells.add((i, j))
+
+        return connectCells
+    
+
+    def getCageCells(self, row, col):
+        '''
+        Returns all the cells in the given cells cage
+
+        Parameter:
+        the row and column of the cell
+
+        Returns:
+        An array of cells in the cage
+        '''
+        cageNum = self.cellCage.get((row,col))
+        cells = next(iter(self.cages.get(cageNum).values()))
+        return cells
+    
+    def getCageSum(self, row, col):
+        '''
+        Returns the sum that a cage should add up to.
+
+        Parameter:
+        the row and column of the cell
+
+        Returns:
+        The total sum of a cage.
+        '''
+        cageNum = self.cellCage.get((row,col))
+        return next(iter(self.cages.get(cageNum)))
