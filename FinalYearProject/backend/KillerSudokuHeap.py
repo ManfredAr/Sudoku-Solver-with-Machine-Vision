@@ -65,13 +65,12 @@ class KillerSudokuHeap:
             priority, count, cell, domain, status = heapq.heappop(self.pq)
             if status is not self.REMOVED:
                 del self.key_map[cell]
-                #print(priority, cell, domain)
                 return priority, cell, domain
         return None, None, None
     
 
 
-    def decreaseKey(self, cell, domain):
+    def decreaseCageKey(self, cell, domain):
         '''
         Goes through all the cells in the given cells row, column and 3x3 box and
         updates them if the values assigned is contained in their domain.
@@ -85,7 +84,27 @@ class KillerSudokuHeap:
         item = self.key_map[cell]
         if len(item[3]) != len(domain):
             self.addToHeap((len(domain), cell, domain))
-            return item
+            return (item[0], item[2], item[3])
+        return None
+    
+
+    def decreaseNonCageKey(self, cell, val):
+        '''
+        Goes through all the cells in the given cells row, column and 3x3 box and
+        updates them if the values assigned is contained in their domain.
+
+        Parameters:
+        The row, column and the value that was assigned.
+
+        Returns:
+        An array containing tuples with the row, column and value of the cells which were updated.
+        '''
+        item = self.key_map[cell]
+        if val in item[3]:
+            m_set = item[3].copy()
+            m_set.remove(val)
+            self.addToHeap((len(m_set), cell, m_set))
+            return (len(m_set) + 1, cell, item[3])
         return None
 
         
@@ -99,4 +118,4 @@ class KillerSudokuHeap:
         An array containing tuples with the row, col and value which was removed.
         '''
         for updated in updatedCells:
-            self.addToHeap((updated[0], updated[2], updated[3]))
+            self.addToHeap((updated[0], updated[1], updated[2]))

@@ -1,4 +1,6 @@
-from backend.KillerSudokuHeap import KillerSudokuHeap
+from KillerSudokuHeap import KillerSudokuHeap
+import time
+
 
 class KillerSudokuSolver2:
     '''
@@ -14,6 +16,7 @@ class KillerSudokuSolver2:
         '''
         self.KSudoku = killerSudoku
         self.queue = KillerSudokuHeap()
+        
 
     def solver(self):
         '''
@@ -49,7 +52,7 @@ class KillerSudokuSolver2:
 
         for value in domain:
             self.KSudoku.grid[cell[0]][cell[1]] = value
-            updatedCells = self.decreaseKeys(cell)
+            updatedCells = self.decreaseKeys(cell, value)
             if self.solve(queue):
                 return True
             self.KSudoku.grid[cell[0]][cell[1]] = 0
@@ -117,7 +120,8 @@ class KillerSudokuSolver2:
 
 
 
-    def decreaseKeys(self, cell):
+    def decreaseKeys(self, cell, val):
+        
         '''
         It updates the cells in the queue to reduce the domains due to a guess being made.
 
@@ -127,18 +131,22 @@ class KillerSudokuSolver2:
         Returns:
         An array containing all changed cells.
         '''
-        cageCells = self.KSudoku.getCageCells(cell[0], cell[1])
+        cageCells = set(self.KSudoku.getCageCells(cell[0], cell[1]))
         nonCageCells = self.KSudoku.getRelatedCells(cell[0], cell[1])
 
-        allCells = nonCageCells.union(set(cageCells))
-
+        nonCageCells -= cageCells
         changed = []
-
-        for i in allCells:
+        for i in nonCageCells:
             if self.KSudoku.grid[i[0]][i[1]] == 0:
-                values = self.getDomain(i[0], i[1])
-                check = self.queue.decreaseKey(i, values)
+                ret = self.queue.decreaseNonCageKey(i, val)
+                if ret != None:
+                    changed.append(ret)
+
+        for j in cageCells:
+            if self.KSudoku.grid[j[0]][j[1]] == 0:
+                values = self.getDomain(j[0], j[1])
+                check = self.queue.decreaseCageKey(j, values)
                 if check != None:
                     changed.append(check)
-
+        end = time.time()
         return changed

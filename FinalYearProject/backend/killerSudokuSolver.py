@@ -109,7 +109,6 @@ class KillerSudokuSolver:
             return {}
         
         if count == len(cells) - 1:
-            #print(set(used))
             if cageSum > 9 or cageSum in set(used):
                 return {}
             return {cageSum}

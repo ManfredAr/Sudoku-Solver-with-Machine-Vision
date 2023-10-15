@@ -58,8 +58,7 @@ cages = {
 }
 
 
-a = KillerSudokuSolver2(KillerSudoku(grid, cages))
-
+a = KillerSudokuSolver(KillerSudoku(grid, cages))
 start = time.time()
 print(a.solver())
 end = time.time()
