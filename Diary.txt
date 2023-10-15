@@ -9,3 +9,14 @@ This week I have completed the the web design for the killer sudoku page on the 
 I have added some more styling to the web page to it's nicer to look at. In addition I have set up some classes for sudoku and killer Sudoku
 so the grids and cages can now be stored in objects.
 Next I will start work on the constraint solver for both types of puzzles using backtracking. 
+
+Week 2 - 07/10/2023:
+Since the last update I have implemented a simple solver for both sudoku and Killer sudoku which using backtracking and node consistency to
+reduce the domain space for the cells. 
+Next, I will implemented value order heuristic to both the solvers and see if and how they improve the solvers and then start working on the
+report for these sections.
+
+Week 3 - 12/1-/2023:
+This week I have implemented value order heuristics for both the solvers by created a priority queue and choose the next cell to guess based 
+on which cell has the smallest domain space. 
+Next week I will write the report for the constraint solver section and being work on machine vision for sudoku. 
