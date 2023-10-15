@@ -1,32 +1,33 @@
 from backend.SudokuSolver import SudokuSolver
+from backend.SudokuSolver2 import SudokuSolver2
 from backend.Sudoku import Sudoku
 import unittest  
 
 class Test_Sudoku(unittest.TestCase):
 
-    grid = [[0,8,0,1,3,0,0,4,0],
-            [0,0,0,5,9,8,0,1,6],
-            [0,1,2,0,0,0,0,5,0],
-            [0,0,0,4,0,7,0,9,0],
-            [0,4,0,0,0,5,0,6,0],
-            [0,0,0,0,0,0,0,2,0],
-            [6,0,0,0,0,0,0,0,0],
-            [1,5,0,0,0,0,6,0,2],
-            [0,7,0,0,0,0,0,8,9]]
+    grid = [[0,9,0,8,0,0,0,6,0],
+            [6,0,7,0,2,0,1,0,0],
+            [0,3,0,0,0,7,0,0,0],
+            [8,0,4,0,0,9,0,1,0],
+            [0,0,0,5,0,0,2,0,0],
+            [0,6,0,0,0,0,0,0,0],
+            [0,0,0,0,9,0,0,0,4],
+            [0,0,3,0,0,0,0,0,0],
+            [7,0,1,0,0,4,0,8,0]]
     
-    answer = [[5,8,6,1,3,2,9,4,7],
-              [4,3,7,5,9,8,2,1,6],
-              [9,1,2,6,7,4,8,5,3],
-              [8,2,1,4,6,7,3,9,5],
-              [3,4,9,8,2,5,7,6,1],
-              [7,6,5,9,1,3,4,2,8],
-              [6,9,3,2,8,1,5,7,4],
-              [1,5,8,7,4,9,6,3,2],
-              [2,7,4,3,5,6,1,8,9]]
+    answer = [[4,9,2,8,1,5,7,6,3],
+              [6,5,7,4,2,3,1,9,8],
+              [1,3,8,9,6,7,4,5,2],
+              [8,7,4,2,3,9,6,1,5],
+              [3,1,9,5,8,6,2,4,7],
+              [2,6,5,7,4,1,8,3,9],
+              [5,8,6,1,9,2,3,7,4],
+              [9,4,3,6,7,8,5,2,1],
+              [7,2,1,3,5,4,9,8,6]]
 
     # testing the class is instantiated properly
     def test_Constructor(self):
-        solver = SudokuSolver(Sudoku(self.grid))
+        solver = SudokuSolver2(Sudoku(self.grid))
         self.assertEqual(solver.sudoku.grid, self.grid)
 
     # testing that the next empty cell is returned.
@@ -51,13 +52,13 @@ class Test_Sudoku(unittest.TestCase):
 
     # testing that the correct answer is returned for a puzzle
     def test_validGridSolver(self):
-        solver = SudokuSolver(Sudoku(self.grid))
+        solver = SudokuSolver2(Sudoku(self.grid))
         self.assertEqual(solver.solver(), self.answer)
 
 
     # testing that an invalid grid returns false
     def test_invalidGridSolver(self):
-        solver = SudokuSolver(Sudoku([[1,0,1,0,0,1,0,0,1],
+        solver = SudokuSolver2(Sudoku([[1,0,1,0,0,1,0,0,1],
                                       [1,0,1,5,9,8,1,1,6],
                                       [1,1,0,0,1,0,0,0,4],
                                       [0,0,2,4,0,0,4,9,4],
@@ -67,3 +68,10 @@ class Test_Sudoku(unittest.TestCase):
                                       [0,5,0,2,0,0,0,3,2],
                                       [0,7,0,2,0,0,0,8,0]]))
         self.assertEqual(solver.solver(), False)
+
+
+    # testing the pq contains all the empty cells.
+    def test_setupHeap(self):
+        solver = SudokuSolver2(Sudoku(self.grid))
+        solver.setupHeap()
+        self.assertEqual(len(solver.heap.pq), 58)
