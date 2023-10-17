@@ -1,4 +1,4 @@
-from KillerSudokuHeap import KillerSudokuHeap
+from backend.KillerSudokuHeap import KillerSudokuHeap
 import time
 
 
