@@ -20,3 +20,8 @@ Week 3 - 12/1-/2023:
 This week I have implemented value order heuristics for both the solvers by created a priority queue and choose the next cell to guess based 
 on which cell has the smallest domain space. 
 Next week I will write the report for the constraint solver section and being work on machine vision for sudoku. 
+
+Week 4 - 17/10/2023:
+This week I have finished writing the constraint solver section with the different algorithms used within it in my report as well as my 
+how I implemented the sudoku solver. In addition I have started the section on the killer sudoku solver.
+Next, I will start working on the machine vision and complete the report for killer sudoku
