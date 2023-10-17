@@ -15,7 +15,6 @@ class SudokuSolver2:
         self.sudoku = grid
         self.heap = heap()
         self.removed = {}
-        self.setupHeap()
     
     def solver(self):
         '''
@@ -24,6 +23,7 @@ class SudokuSolver2:
         Returns
         The completed grid if a solution was found, False otherwise.
         '''
+        self.setupHeap()
         if self.solve(self.heap) == True:
             return self.sudoku.grid
         return False

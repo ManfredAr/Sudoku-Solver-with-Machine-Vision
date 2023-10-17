@@ -1,7 +1,7 @@
 from backend.KillerSudoku import KillerSudoku
 import unittest
 
-class Test_Sudoku(unittest.TestCase):
+class Test_KillerSudoku(unittest.TestCase):
 
     grid = [[0,8,0,1,3,0,0,4,0],
             [0,0,0,5,9,8,0,1,6],
