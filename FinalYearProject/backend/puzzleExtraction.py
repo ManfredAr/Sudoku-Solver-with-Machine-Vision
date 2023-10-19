@@ -8,29 +8,74 @@ class PuzzleExtraction:
 
 
     def ConvertAndCrop(self):
-        image = cv2.imread(self.image, cv2.IMREAD_GRAYSCALE)
-        # the block size to process the image
-        block_size = 92
+        '''
+        Converts the image to a grayscale image and run some noise reduction methods.  
+        '''
+        image = cv2.imread(self.image)
 
-        # creating a new image which is black.
-        bin_image = np.zeros_like(image)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-        # Iterate through the image in blocks
-        for y in range(0, image.shape[0], block_size):
-            for x in range(0, image.shape[1], block_size):
-                #Getting a block from the original image
-                block = image[y:y + block_size, x:x + block_size]
+        # applying adaptive threshold to the block
+        threshold = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 0)
 
-                # applying adaptive threshold to the block
-                threshold = cv2.adaptiveThreshold(block, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 0)
+        # a window size for erosion and dilation to be applied
+        kernel = np.ones((2, 2), np.uint8) 
+        
+        # applying erosion and dialation
+        img_erosion = cv2.erode(threshold, kernel) 
+        img_dilation = cv2.dilate(img_erosion, kernel) 
 
-                # Placing the block in the corresponding place in the new image.
-                bin_image[y:y + block_size, x:x + block_size] = threshold
+        edgePoints = self.getBorder(img_dilation)
+        self.straightenImage(img_dilation, edgePoints)
 
 
-        self.displayImage(bin_image)
+    def getBorder(self, ProcessedImage):
+        '''
+        takes an image and tries to find the corners which the puzzle is bounded by.
 
+        Parameters:
+        The image to find the contours for.
+
+        Returns:
+        An array containing the edges of the puzzle. 
+        '''
+
+        # finds the contours in the image
+        contours, hierarchy = cv2.findContours(ProcessedImage.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        # sorting the contours by areas
+        cnt = sorted(contours, key=cv2.contourArea, reverse=True)
+
+        # The second contour in the puzzle the first is the border of the image.
+        puzzleContour = cnt[1]
+
+        # ep calculates the precision of the approxPolyDP method
+        ep = 0.02 * cv2.arcLength(puzzleContour, True)
+
+        # gets the corners of the puzzle.
+        edgePoints = cv2.approxPolyDP(puzzleContour, ep, True)
+
+        return edgePoints
     
+
+    def straightenImage(self, processedImage, edges):
+
+        # getting the array in the correct format.
+        edgePoints = np.zeros((4, 1, 2), dtype=np.float32)
+        for i in range(4):
+            edgePoints[i][0] = edges[i]
+
+        # creating a 450 by 450 template image
+        dst = np.array([[0, 0], [450, 0], [450, 450], [0, 450]], dtype='float32')
+
+        # Calculate the perspective transformation matrix
+        M = cv2.getPerspectiveTransform(edgePoints, dst)
+
+        # Apply the perspective transformation to the image
+        output = cv2.warpPerspective(processedImage, M, (450, 450))
+
+        self.displayImage(output)
+
     def displayImage(self, image):
         cv2.imshow("puzzle", image)
         cv2.waitKey(0)
