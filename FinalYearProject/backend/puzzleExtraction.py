@@ -16,6 +16,14 @@ class PuzzleExtraction:
         '''
         self.image = image
 
+    
+    def getCells(self):
+        processedImage = self.ConvertAndCrop()
+        edgePoints = self.getBorder(processedImage)
+        straightenedImage = self.straightenImage(processedImage, edgePoints)
+        cells = self.CellExtraction(straightenedImage)
+        final_arr = self.processCells(cells)
+        return final_arr
 
     def ConvertAndCrop(self):
         '''
@@ -29,15 +37,13 @@ class PuzzleExtraction:
         threshold = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 0)
 
         # a window size for erosion and dilation to be applied
-        kernel = np.ones((2, 2), np.uint8) 
+        kernel = np.ones((2, 2), np.uint8)
         
         # applying erosion and dialation
         img_erosion = cv2.erode(threshold, kernel) 
         img_dilation = cv2.dilate(img_erosion, kernel) 
 
-        edgePoints = self.getBorder(img_dilation)
-        straightenedImage = self.straightenImage(img_dilation, edgePoints)
-        return self.CellExtraction(straightenedImage)
+        return img_dilation
 
 
     def getBorder(self, ProcessedImage):
@@ -126,7 +132,72 @@ class PuzzleExtraction:
                 cells.append(block)
 
         return cells
+    
 
+    def processCells(self, cells):
+        '''
+        Processes the images to find out which cells contain a digit and which do not.
+
+        Parameters:
+        cells - An array containing the cells to be processed
+
+        Returns:
+        An array containing only the cells with digits.
+        '''
+
+        digit_Cells = []
+
+        for i in range(len(cells)):
+            # Cropping the image by 2 pixels on each side.
+            new_height = 50 - 2 * 2
+            new_width = 50 - 2 * 2
+            cropped_image = cells[i][2:2 + new_height, 2:2 + new_width]
+
+
+            contours, _ = cv2.findContours(cropped_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            # Only process cells with more than one contour.
+            if len(contours) > 1:
+                cnt = sorted(contours, key=cv2.contourArea, reverse=True)
+
+                # check if the contour is centered and the right size for a digit.
+                x, y, w, h = cv2.boundingRect(cnt[1])
+                if h >= 46 // 2 and self.isCentered(x, y, w, h) == True:
+
+                    digit_Cells.append(cropped_image[y:y + h, x:x + w])
+            else:
+                digit_Cells.append(None)
+
+
+        return digit_Cells
+
+    def isCentered(self, x1, y1, w1, h1):
+        '''
+        Checking if the given contour is centered or not
+
+        Parameters:
+        x1 - x coordinate of contour
+        y1 - y cooridnate of contour
+        w1 - width of the contour
+        h1 - hight of the contour
+
+        Returns:
+        True if centered false otherwise.
+        '''
+
+        # defining the center to be 15 x 15
+        x2, y2, w2, h2 = 15, 15, 15, 15
+
+        # Calculate the right and bottom coordinates of each rectangle
+        right1, bottom1 = x1 + w1, y1 + h1
+        right2, bottom2 = x2 + w2, y2 + h2
+
+        # Checking if there is an overlap
+        if (x1 > right2) or (x2 > right1):
+            return False 
+        if (y1 > bottom2) or (y2 > bottom1):
+            return False
+
+        return True
 
     def displayImage(self, image):
         '''
@@ -137,3 +208,4 @@ class PuzzleExtraction:
         '''
         cv2.imshow("puzzle", image)
         cv2.waitKey(0)
+        cv2.destroyAllWindows()
