@@ -2,8 +2,18 @@ import cv2
 import numpy as np
 
 class PuzzleExtraction:
+    '''
+    This class is responsible for the processing of an image to extract the individual
+    cells of the puzzle. 
+    '''
 
     def __init__(self, image):
+        '''
+        A constructor method for instantiating the class
+
+        parameters:
+        image - the image which will be processed
+        '''
         self.image = image
 
 
@@ -26,7 +36,8 @@ class PuzzleExtraction:
         img_dilation = cv2.dilate(img_erosion, kernel) 
 
         edgePoints = self.getBorder(img_dilation)
-        self.straightenImage(img_dilation, edgePoints)
+        straightenedImage = self.straightenImage(img_dilation, edgePoints)
+        return self.CellExtraction(straightenedImage)
 
 
     def getBorder(self, ProcessedImage):
@@ -59,6 +70,17 @@ class PuzzleExtraction:
     
 
     def straightenImage(self, processedImage, edges):
+        '''
+        Givens the corners of the puzzle, it resizes the puzzle as need to fit in a 
+        450x450 box. 
+
+        Parameters:
+        processedImage - A grayscale image 
+        edges - an array containing the edge points of the puzzle.
+
+        Returns:
+        An image which has been straightened.
+        '''
 
         # getting the array in the correct format.
         edgePoints = np.zeros((4, 1, 2), dtype=np.float32)
@@ -74,8 +96,44 @@ class PuzzleExtraction:
         # Apply the perspective transformation to the image
         output = cv2.warpPerspective(processedImage, M, (450, 450))
 
-        self.displayImage(output)
+        return output
+
+
+    def CellExtraction(self, image):   
+        '''
+        Extracts all the cells from the image 
+
+        Parameters:
+        image - A straighted image of the puzzle
+
+        Returns:
+        An array containing the cells in the image.
+        '''
+
+        # defining the height and width for each cell      
+        cell_height = 450 // 9
+        cell_width = 450 // 9
+
+        cells = []
+
+        # looping through each cell in the image.
+        for y in range(0, 450, cell_height):
+            for x in range(0, 450, cell_width):
+                # getting each 50x50 block from the image
+                block = image[y:y+cell_height, x:x+cell_width]
+                
+                # Appending the extracted block to the cells array
+                cells.append(block)
+
+        return cells
+
 
     def displayImage(self, image):
+        '''
+        displays the image on the screen
+
+        parameters:
+        image - the image to be displayed.
+        '''
         cv2.imshow("puzzle", image)
         cv2.waitKey(0)
