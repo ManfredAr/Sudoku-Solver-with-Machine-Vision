@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from PIL import Image
 
 class PuzzleExtraction:
     '''
@@ -31,19 +32,57 @@ class PuzzleExtraction:
         '''
         image = cv2.imread(self.image)
 
+        # some images give an EXIF orientation tag
+        # which causes incorrect rotation in images
+        # This fixes the rotation problem.
+        try:
+            with Image.open(self.image) as img:
+                exif = img._getexif()
+                if exif is not None and 274 in exif:
+                    orientation = exif[274]
+                    if orientation == 3:
+                        image = cv2.rotate(image, cv2.ROTATE_180)
+                    elif orientation == 6:
+                        image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+                    elif orientation == 8:
+                        image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        except Exception:
+            pass
+
+        if image.shape[0] > 1000 and image.shape[1] > 100:
+            image = self.resizeImage(image)
+
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
         # applying adaptive threshold to the block
         threshold = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 0)
 
-        # a window size for erosion and dilation to be applied
-        kernel = np.ones((2, 2), np.uint8)
-        
-        # applying erosion and dialation
-        img_erosion = cv2.erode(threshold, kernel) 
-        img_dilation = cv2.dilate(img_erosion, kernel) 
+        return threshold
+    
+    def resizeImage(self, image):
+        '''
+        Resizes the image to fit in a 1000x1000 frame
 
-        return img_dilation
+        Parameters:
+        the image to be resized.
+
+        Returns:
+        The resized image
+        '''
+
+        # defining max sizes for image
+        max_width = 1000
+        max_height = 1000
+
+        height, width, _ = image.shape
+
+        # Calculate the scale factors
+        width_scale = max_width / width
+        height_scale = max_height / height
+        factor = min(width_scale, height_scale)
+
+        # Resize the image with the calculated scale factor
+        return cv2.resize(image, None, fx=factor, fy=factor, interpolation=cv2.INTER_AREA)
 
 
     def getBorder(self, ProcessedImage):
@@ -102,6 +141,8 @@ class PuzzleExtraction:
         # Apply the perspective transformation to the image
         output = cv2.warpPerspective(processedImage, M, (450, 450))
 
+        self.displayImage(output)
+
         return output
 
 
@@ -153,8 +194,8 @@ class PuzzleExtraction:
             new_width = 50 - 2 * 2
             cropped_image = cells[i][2:2 + new_height, 2:2 + new_width]
 
-
             contours, _ = cv2.findContours(cropped_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
             # Only process cells with more than one contour.
             if len(contours) > 1:
                 cnt = sorted(contours, key=cv2.contourArea, reverse=True)
@@ -162,7 +203,7 @@ class PuzzleExtraction:
                 # check if the contour is centered and the right size for a digit.
                 x, y, w, h = cv2.boundingRect(cnt[1])
                 if h >= 46 // 2 and self.isCentered(x, y, w, h) == True:
-
+                    self.displayImage(cropped_image[y:y + h, x:x + w])
                     digit_Cells.append(cropped_image[y:y + h, x:x + w])
             else:
                 digit_Cells.append(None)

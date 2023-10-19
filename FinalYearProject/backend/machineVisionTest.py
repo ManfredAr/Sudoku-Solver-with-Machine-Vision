@@ -1,6 +1,6 @@
 from puzzleExtraction import PuzzleExtraction
 
-test = PuzzleExtraction(".\MachineVisionImages\sudoku3.jpg")
+test = PuzzleExtraction(".\MachineVisionImages\sudoku6.jpg")
 a = test.getCells()
 
 count = 0
