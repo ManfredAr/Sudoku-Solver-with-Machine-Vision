@@ -1,5 +1,4 @@
 from KillerSudokuHeap import KillerSudokuHeap
-import time
 
 
 class KillerSudokuSolver2:
@@ -148,5 +147,4 @@ class KillerSudokuSolver2:
                 check = self.queue.decreaseCageKey(j, values)
                 if check != None:
                     changed.append(check)
-        end = time.time()
         return changed

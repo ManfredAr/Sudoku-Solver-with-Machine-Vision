@@ -16,7 +16,13 @@ reduce the domain space for the cells.
 Next, I will implemented value order heuristic to both the solvers and see if and how they improve the solvers and then start working on the
 report for these sections.
 
-Week 3 - 12/1-/2023:
+Week 3 - 12/10/2023:
 This week I have implemented value order heuristics for both the solvers by created a priority queue and choose the next cell to guess based 
 on which cell has the smallest domain space. 
 Next week I will write the report for the constraint solver section and being work on machine vision for sudoku. 
+
+Week 4 - 20/10/2023:
+This week I have begun working on the machine vision for killer Sudoku. I have implemented code which isolates the puzzle within an image and
+then extract each cell within the puzzle. I have also finished the section in my report on the killer sudoku solver and also on the data
+structures I have used to create the solvers. 
+Next, I will work on a machine learning model which will classify images containing numbers.  
