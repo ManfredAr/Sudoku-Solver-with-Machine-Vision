@@ -141,8 +141,6 @@ class PuzzleExtraction:
         # Apply the perspective transformation to the image
         output = cv2.warpPerspective(processedImage, M, (450, 450))
 
-        self.displayImage(output)
-
         return output
 
 
@@ -203,10 +201,11 @@ class PuzzleExtraction:
                 # check if the contour is centered and the right size for a digit.
                 x, y, w, h = cv2.boundingRect(cnt[1])
                 if h >= 46 // 2 and self.isCentered(x, y, w, h) == True:
-                    self.displayImage(cropped_image[y:y + h, x:x + w])
                     digit_Cells.append(cropped_image[y:y + h, x:x + w])
+                else:
+                    digit_Cells.append(-1)
             else:
-                digit_Cells.append(None)
+                digit_Cells.append(-1)
 
 
         return digit_Cells
@@ -239,14 +238,3 @@ class PuzzleExtraction:
             return False
 
         return True
-
-    def displayImage(self, image):
-        '''
-        displays the image on the screen
-
-        parameters:
-        image - the image to be displayed.
-        '''
-        cv2.imshow("puzzle", image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
