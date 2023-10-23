@@ -72,6 +72,16 @@ class Test_Sudoku(unittest.TestCase):
 
     # testing the pq contains all the empty cells.
     def test_setupHeap(self):
-        solver = SudokuSolver2(Sudoku(self.grid))
+        solver = SudokuSolver2(Sudoku([[0,9,0,8,0,0,0,6,0],
+                                        [6,0,7,0,2,0,1,0,0],
+                                        [0,3,0,0,0,7,0,0,0],
+                                        [8,0,4,0,0,9,0,1,0],
+                                        [0,0,0,5,0,0,2,0,0],
+                                        [0,6,0,0,0,0,0,0,0],
+                                        [0,0,0,0,9,0,0,0,4],
+                                        [0,0,3,0,0,0,0,0,0],
+                                        [7,0,1,0,0,4,0,8,0]]))
+        # reseting pq from previous tests.
+        solver.heap.pq = []
         solver.setupHeap()
         self.assertEqual(len(solver.heap.pq), 58)

@@ -161,4 +161,4 @@ class Test_KSudokuSolver(unittest.TestCase):
         poppedCell = solver.queue.pop_cell()
         solver.KSudoku.grid[0][0] = 5
         # this only changes the domain of one cell 
-        self.assertEqual(solver.decreaseKeys(poppedCell[1]), [[4, 15, (3, 0), {8, 2, 3, 5}, '<removed-task>']])
+        self.assertEqual(solver.decreaseKeys(poppedCell[1], 5), [(4, (3, 0), {8, 2, 3, 5})])
