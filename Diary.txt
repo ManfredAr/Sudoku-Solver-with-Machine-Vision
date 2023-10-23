@@ -4,11 +4,13 @@ is currently hardcoded and also buttons for the numbers which is used to fill th
 constraint solvers and the basics of machine vision. 
 Next I will complete the web page for killer Sudoku and then start work on building a constraint solver for Sudoku.
 
+
 Week 2 - 03/10/2023:
 This week I have completed the the web design for the killer sudoku page on the website. Now both sudoku and killer sudoku can be played.
 I have added some more styling to the web page to it's nicer to look at. In addition I have set up some classes for sudoku and killer Sudoku
 so the grids and cages can now be stored in objects.
 Next I will start work on the constraint solver for both types of puzzles using backtracking. 
+
 
 Week 2 - 07/10/2023:
 Since the last update I have implemented a simple solver for both sudoku and Killer sudoku which using backtracking and node consistency to
@@ -21,7 +23,15 @@ This week I have implemented value order heuristics for both the solvers by crea
 on which cell has the smallest domain space. 
 Next week I will write the report for the constraint solver section and being work on machine vision for sudoku. 
 
+
 Week 4 - 17/10/2023:
 This week I have finished writing the constraint solver section with the different algorithms used within it in my report as well as my 
 how I implemented the sudoku solver. In addition I have started the section on the killer sudoku solver.
 Next, I will start working on the machine vision and complete the report for killer sudoku
+
+
+Week 4 - 22/10/2023:
+This week I have begun working on the machine vision for killer Sudoku. I have implemented code which isolates the puzzle within an image and
+then extract each cell within the puzzle. I have also finished the section in my report on the killer sudoku solver and also on the data
+structures I have used to create the solvers. 
+Next, I will work on a machine learning model which will classify images containing numbers.  
