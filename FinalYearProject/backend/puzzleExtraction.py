@@ -25,6 +25,7 @@ class PuzzleExtraction:
         cells = self.CellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
         return final_arr
+    
 
     def ConvertAndCrop(self):
         '''
@@ -49,7 +50,7 @@ class PuzzleExtraction:
         except Exception:
             pass
 
-        if image.shape[0] > 1000 and image.shape[1] > 100:
+        if image.shape[0] > 1000 and image.shape[1] > 1000:
             image = self.resizeImage(image)
 
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
