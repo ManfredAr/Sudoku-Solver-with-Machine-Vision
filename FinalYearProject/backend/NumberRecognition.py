@@ -40,6 +40,23 @@ class NumberRecognition:
 
         # converting the 1D array to a 2D array and returning it.
         return [arr[i:i+9] for i in range(0, len(arr), 9)]
+    
+
+    def ConvertToDigit(self, arr):
+        '''
+        Runs all images through the model to get the predictions.
+
+        Parameters:
+        arr - the array containing image to be classified.
+        '''
+        for i in range(len(arr)):
+            gray_image = cv2.cvtColor(arr[i], cv2.COLOR_BGR2GRAY)
+            processedImages = self.preprocess(gray_image)
+            img = processedImages.reshape((1, 28, 28, 1))
+            prediction = self.model.predict(img)
+            arr[i] = prediction.argmax()
+
+        return arr
 
 
     def preprocess(self, image):
@@ -71,11 +88,11 @@ class NumberRecognition:
             cols = 20
             rows = int(round(rows*factor))
             image = cv2.resize(image, (cols, rows))
-
+            
         # padding the image to get it in a 28x28 shape.
         colsPadding = (int(math.ceil((28-cols)/2.0)),int(math.floor((28-cols)/2.0)))
         rowsPadding = (int(math.ceil((28-rows)/2.0)),int(math.floor((28-rows)/2.0)))
-        image = np.lib.pad(image,(rowsPadding,colsPadding),'constant')
+        image = np.lib.pad(image[:, :],(rowsPadding,colsPadding),'constant')
 
         shiftx, shifty = self.getBestShift(image)
 
