@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-from puzzleExtraction import PuzzleExtraction
-from NumberRecognition import NumberRecognition
+from backend.puzzleExtraction import PuzzleExtraction
+from backend.NumberRecognition import NumberRecognition
 
 
 class KillerSudokuExtraction:

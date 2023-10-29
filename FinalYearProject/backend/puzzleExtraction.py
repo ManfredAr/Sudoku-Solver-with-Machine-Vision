@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from PIL import Image
+from backend.NumberRecognition import NumberRecognition
 
 class PuzzleExtraction:
     '''
@@ -16,15 +17,18 @@ class PuzzleExtraction:
         image - the image which will be processed
         '''
         self.image = image
+        self.digitRecognition = NumberRecognition()
 
     
-    def getCells(self):
+    def ConvertToArray(self):
         processedImage = self.ConvertAndCrop()
         edgePoints = self.getBorder(processedImage)
         straightenedImage = self.straightenImage(processedImage, edgePoints)
+        cv2.imshow(" a", straightenedImage)
+        cv2.waitKey(0)
         cells = self.CellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
-        return final_arr
+        return self.digitRecognition.ConvertToArray(final_arr)
     
 
     def ConvertAndCrop(self):

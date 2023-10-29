@@ -22,7 +22,7 @@ class NumberRecognition:
         #model_file_path = os.path.join(settings.STATIC_ROOT, 'NumbersRecognition.h5')
         self.model = keras.models.load_model("backend/NumberRecognition.h5")
 
-    def CovertToArray(self, arr):
+    def ConvertToArray(self, arr):
         '''
         Runs all images through the model to get the predictions.
 
@@ -88,7 +88,7 @@ class NumberRecognition:
             cols = 20
             rows = int(round(rows*factor))
             image = cv2.resize(image, (cols, rows))
-            
+
         # padding the image to get it in a 28x28 shape.
         colsPadding = (int(math.ceil((28-cols)/2.0)),int(math.floor((28-cols)/2.0)))
         rowsPadding = (int(math.ceil((28-rows)/2.0)),int(math.floor((28-rows)/2.0)))
@@ -109,7 +109,7 @@ class NumberRecognition:
         Returns:
         The X and Y shifts.
         '''
-        centerY, centerX = ndimage.measurements.center_of_mass(img)
+        centerY, centerX = ndimage.center_of_mass(img)
 
         rows,cols = img.shape
         shiftx = np.round(cols/2.0-centerY).astype(int)
