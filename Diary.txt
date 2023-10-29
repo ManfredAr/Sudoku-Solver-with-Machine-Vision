@@ -35,3 +35,9 @@ This week I have begun working on the machine vision for killer Sudoku. I have i
 then extract each cell within the puzzle. I have also finished the section in my report on the killer sudoku solver and also on the data
 structures I have used to create the solvers. 
 Next, I will work on a machine learning model which will classify images containing numbers.  
+
+Week 5 - 29/10/2023:
+This week I have finished the implementation of the machine vision including the machine learning code and I have started work on integrating 
+the machine vision code in the frontend. 
+Next I will work on the frontend to integrate the machine vision into the frontend and write a section in the report for machine vision and the
+frontend design.

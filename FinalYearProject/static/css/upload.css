@@ -1,0 +1,24 @@
+.UploadContainer {
+    color: white;
+}
+
+.puzzleType {
+    display: flex;
+    flex-direction: column;
+}
+
+.heading {
+    margin-bottom: 10px;
+}
+
+.options label {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+.options, .uploadImage, .submit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}

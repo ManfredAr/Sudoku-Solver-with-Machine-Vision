@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'playsudoku.apps.PlaysudokuConfig',
     'playkillersudoku.apps.PlaykillersudokuConfig',
+    'uploadpuzzle.apps.UploadpuzzleConfig',
 ]
 
 MIDDLEWARE = [
