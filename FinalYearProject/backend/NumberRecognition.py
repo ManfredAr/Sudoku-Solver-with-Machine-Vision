@@ -22,7 +22,7 @@ class NumberRecognition:
         #model_file_path = os.path.join(settings.STATIC_ROOT, 'NumbersRecognition.h5')
         self.model = keras.models.load_model("backend/NumberRecognition.h5")
 
-    def CovertToArray(self, arr):
+    def ConvertToArray(self, arr):
         '''
         Runs all images through the model to get the predictions.
 
@@ -40,6 +40,23 @@ class NumberRecognition:
 
         # converting the 1D array to a 2D array and returning it.
         return [arr[i:i+9] for i in range(0, len(arr), 9)]
+    
+
+    def ConvertToDigit(self, arr):
+        '''
+        Runs all images through the model to get the predictions.
+
+        Parameters:
+        arr - the array containing image to be classified.
+        '''
+        for i in range(len(arr)):
+            gray_image = cv2.cvtColor(arr[i], cv2.COLOR_BGR2GRAY)
+            processedImages = self.preprocess(gray_image)
+            img = processedImages.reshape((1, 28, 28, 1))
+            prediction = self.model.predict(img)
+            arr[i] = prediction.argmax()
+
+        return arr
 
 
     def preprocess(self, image):
@@ -75,7 +92,7 @@ class NumberRecognition:
         # padding the image to get it in a 28x28 shape.
         colsPadding = (int(math.ceil((28-cols)/2.0)),int(math.floor((28-cols)/2.0)))
         rowsPadding = (int(math.ceil((28-rows)/2.0)),int(math.floor((28-rows)/2.0)))
-        image = np.lib.pad(image,(rowsPadding,colsPadding),'constant')
+        image = np.lib.pad(image[:, :],(rowsPadding,colsPadding),'constant')
 
         shiftx, shifty = self.getBestShift(image)
 
@@ -92,7 +109,7 @@ class NumberRecognition:
         Returns:
         The X and Y shifts.
         '''
-        centerY, centerX = ndimage.measurements.center_of_mass(img)
+        centerY, centerX = ndimage.center_of_mass(img)
 
         rows,cols = img.shape
         shiftx = np.round(cols/2.0-centerY).astype(int)
