@@ -1,30 +1,55 @@
 {% extends "home/home.html" %}
 {%load static%}
+
 {% block style %} 
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/upload.css' %}">
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/playsudoku.css' %}">
 <script src="{% static 'js/upload.js' %}" type="module"></script>
+
 {% endblock %}
 
 {% block content %}
 <div class="UploadContainer">
-
     <div class="puzzleType">
         <div class="heading">
             <h2> What type of puzzle do you want to upload?</h2>
         </div>
-        <div class="options">
-            <label><input type="radio" name="group" value="sudoku"> Sudoku </label><br>
-            <label><input type="radio" name="group" value="killerSudoku"> Killer Sudoku </label><br>    
-        </div>
-        <div class="uploadImage">
-            <label for="imageUpload">Choose an image to upload:</label>
-            <input type="file" name="image" id="imageUpload" accept="image/*">
-        </div>
-        <div class="submit">
-            <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
-            <button id="processImage"> Process Image </button>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="options">
+                <label><input id="sudoku" type="radio" name="group" value="sudoku"> Sudoku </label><br>
+                <label><input id="ksudoku" type="radio" name="group" value="killerSudoku"> Killer Sudoku </label><br>    
+            </div>
+            <div class="uploadImage">
+                <label for="imageUpload">Choose an image to upload:</label> <br/>
+                <input type="file" name="image" id="imageUpload" accept="image/*">
+            </div>
+            <div class="submit">
+                <button id="processImage"> Process Image </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="overlay" class="invisible">
+        <div class="spinner-border" id="spinner" role="status">
+            <span class="visually-hidden"></span>
         </div>
     </div>
 
+    <div class="invisible sudoku">
+        
+        <div class="play">
+            <div class="heading">
+                <h2> Please check if this is your puzzle! </h2>
+            </div>
+            <div id="grid"></div> </br>
+
+            <div id="values"> </br></div>
+        </div>
+    </div>
+
+    <div class="killerSudoku">
+
+    </div>
 </div>
 {% endblock %}

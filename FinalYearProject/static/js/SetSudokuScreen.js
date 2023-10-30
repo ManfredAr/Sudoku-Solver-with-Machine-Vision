@@ -140,7 +140,7 @@ class SudokuScreen {
 
     // updating the currently selected square to the select number
     selectedNum(element) {
-        console.log(this.sel_row + "." + this.sel_col);
+        //console.log(this.sel_row + "." + this.sel_col);
         if (!this.takingNotes) {
             let tile = document.getElementById(this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
@@ -227,7 +227,7 @@ class SudokuScreen {
 
     // keeping track of the current and previous selected square
     selectedTile(id) {
-        console.log(id);
+        //console.log(id);
         let coordinates = id.split(".");
         this.prev_row = this.sel_row;
         this.prev_col = this.sel_col;

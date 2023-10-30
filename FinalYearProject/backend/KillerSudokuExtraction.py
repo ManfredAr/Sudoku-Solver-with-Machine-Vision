@@ -230,7 +230,7 @@ class KillerSudokuExtraction:
         '''
 
         # getting the array in the correct format.
-        image = cv2.imread(self.image)
+        image = self.image
         if image.shape[0] > 1000 and image.shape[1] > 1000:
             image = self.extraction.resizeImage(image)
 

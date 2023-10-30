@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from PIL import Image
 from backend.NumberRecognition import NumberRecognition
+from PIL import Image
+from PIL.ExifTags import TAGS
 
 class PuzzleExtraction:
     '''
@@ -35,7 +37,10 @@ class PuzzleExtraction:
         '''
         Converts the image to a grayscale image and run some noise reduction methods.  
         '''
-        image = cv2.imread(self.image)
+        image_bytes = self.image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
 
         # some images give an EXIF orientation tag
         # which causes incorrect rotation in images
