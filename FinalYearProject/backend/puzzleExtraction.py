@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 from PIL import Image
 from backend.NumberRecognition import NumberRecognition
-from PIL import Image
-from PIL.ExifTags import TAGS
 
 class PuzzleExtraction:
     '''
@@ -24,10 +22,8 @@ class PuzzleExtraction:
     
     def ConvertToArray(self):
         processedImage = self.ConvertAndCrop()
-        edgePoints = self.getBorder(processedImage)
+        edgePoints, _ = self.getBorder(processedImage)
         straightenedImage = self.straightenImage(processedImage, edgePoints)
-        cv2.imshow(" a", straightenedImage)
-        cv2.waitKey(0)
         cells = self.CellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
         return self.digitRecognition.ConvertToArray(final_arr)
@@ -40,6 +36,7 @@ class PuzzleExtraction:
         image_bytes = self.image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        self.image_copy = image
 
 
         # some images give an EXIF orientation tag
@@ -121,7 +118,7 @@ class PuzzleExtraction:
         # gets the corners of the puzzle.
         edgePoints = cv2.approxPolyDP(puzzleContour, ep, True)
 
-        return edgePoints
+        return edgePoints, self.image_copy
     
 
     def straightenImage(self, processedImage, edges):

@@ -3,6 +3,7 @@
 
 {% block style %} 
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/upload.css' %}">
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/killersudoku.css' %}">
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/playsudoku.css' %}">
 <script src="{% static 'js/upload.js' %}" type="module"></script>
 
@@ -10,7 +11,7 @@
 
 {% block content %}
 <div class="UploadContainer">
-    <div class="puzzleType">
+    <div class="puzzleType" id="type">
         <div class="heading">
             <h2> What type of puzzle do you want to upload?</h2>
         </div>
@@ -36,20 +37,33 @@
         </div>
     </div>
 
-    <div class="invisible sudoku">
-        
+    <div class="invisible sudoku" id="sudokuDiv">
         <div class="play">
             <div class="heading">
                 <h2> Please check if this is your puzzle! </h2>
             </div>
             <div id="grid"></div> </br>
 
-            <div id="values"> </br></div>
+            <div id="values"> </br></br></div>
+            <div class="set">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <button id="set"> Set Puzzle </button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <div class="killerSudoku">
+    <div class="invisible killerSudoku" id="ksudokuDiv">
+        <div class="play">
+            <div class="heading">
+                <h2> Please check if this is your puzzle! </h2>
+            </div>
+            <div id="grid1"></div> </br>
 
+            <div class="values"> </br></br></div>
+            <div class="set"><button>Set Puzzle</button></div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -1,6 +1,10 @@
 {% extends "home/home.html" %}
-{%load static%}
+{% load static %}
 {% block style %} 
+<script>
+    var gridData = JSON.parse('{{ grid|safe }}');
+    var solutionData = JSON.parse('{{ solution|safe }}');
+</script>
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/playsudoku.css' %}">
 <script src="{% static 'js/playsudoku.js' %}" type="module"></script>
 <script src="{% static 'js/stack.js' %}" type="module"></script>

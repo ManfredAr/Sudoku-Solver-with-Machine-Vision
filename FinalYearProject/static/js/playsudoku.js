@@ -33,6 +33,11 @@ var SetScreen = null;
 
 // on load the screen should be set up with the grid and the buttons.
 window.onload = function() {
+    board = gridData;
+    solution = solutionData;
+    console.log(gridData);
+    console.log(solutionData);
+
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
 
