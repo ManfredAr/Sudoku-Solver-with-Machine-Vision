@@ -1,10 +1,9 @@
 import json
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import render
 from backend.puzzleExtraction import PuzzleExtraction
 from backend.KillerSudokuExtraction import KillerSudokuExtraction
-from backend.convertToSudoku import convertToPuzzle
+from backend.convertToPuzzle import convertToPuzzle
 
 
 # Create your views here.
@@ -46,8 +45,6 @@ def playkillersudoku(request):
     cage = json.loads(request.POST.get("cages"))
     c = convertToPuzzle(grid, cage)
     grid, new_cage, solution = c.validateKSudoku()
-    print("hello")
-    #print(new_cage)
     if solution == False:
         return HttpResponse("incorrect puzzle", status=400)
 

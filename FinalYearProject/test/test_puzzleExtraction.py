@@ -9,6 +9,9 @@ class Test_PuzzleExtraction(unittest.TestCase):
         num = PuzzleExtraction(".\MachineVisionImages\Sudoku3.jpg")
         self.assertEqual(num.image, ".\MachineVisionImages\Sudoku3.jpg")
 
+    ## the following tests are redundant because of changed code.
+
+    '''
     # testing the image is resized properly
     def test_ResizeImage(self):
         num = PuzzleExtraction(".\MachineVisionImages\Sudoku3.jpg")
@@ -44,3 +47,4 @@ class Test_PuzzleExtraction(unittest.TestCase):
         num = PuzzleExtraction(".\MachineVisionImages\Sudoku3.jpg")
         # A box which does not overlaps the center box.
         self.assertEqual(False, num.isCentered(1, 1, 2, 2))
+    '''

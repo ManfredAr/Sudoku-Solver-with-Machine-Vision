@@ -20,6 +20,10 @@
     text-align: center;
 }
 
+.invisible {
+    visibility: hidden;
+}
+
 .subheading {
     /* Making the subheading bolder */
     font-weight: bold;

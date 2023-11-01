@@ -46,7 +46,6 @@ class SudokuScreen {
                 let tile = document.createElement("div");
                 tile.id = row.toString() + "." + col.toString();
                 tile.className = "tile";
-                console.log("test", this.board);
                 if (this.board[row][col] != "-" && this.board[row][col] != "0") {
                     tile.innerText = this.board[row][col];
                 }
@@ -61,10 +60,9 @@ class SudokuScreen {
                     tile.classList.add("vertical");
                 }
     
-                //tile.addEventListener("click", this.selectedTile);
                 tile.classList.add("cell");
                 document.getElementById("grid").append(tile);
-                if (this.board[row][col] == "-") {
+                if (this.board[row][col] == "-" || this.board[row][col] == "0") {
                     this.notes.addNotes(row, col);
                 }
             }
@@ -245,7 +243,7 @@ class SudokuScreen {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 let all = document.getElementById(row + "." + col);
-                if (all.innerText === tile.innerText && all.innerText != "") {
+                if (all.childNodes.length == 1 && all.textContent === tile.textContent && all.textContent.trim() !== "") {
                     all.classList.add("selectedSquare");
                 } else {
                     all.classList.remove("selectedSquare");

@@ -1,14 +1,13 @@
 import { SudokuScreen } from "./SetSudokuScreen.js";
 import { KSudokuScreen } from "./SetKSudokuScreen.js"
+
 var sudokuInstance = null;
 var ksudokuInstance = null;
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    const processImageButton = document.getElementById('processImage');
-
     // eventlistener for the submit button
-    processImageButton.addEventListener('click', function(event) {
+    document.getElementById('processImage').addEventListener('click', function(event) {
         event.preventDefault();
 
         // displaying a spinner
@@ -17,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const inputElement = document.getElementById('imageUpload');
         const selectedFile = inputElement.files[0];
 
+        // takes an image and sends it to the machine vision processing code.
         if (selectedFile) {
             console.log(selectedFile)
             const formData = new FormData();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    // processing the response.
+                    // directing data to the correct machine vision code (sudoku or kiler sudoku).
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
                         if (response.type == "sudoku") {
@@ -48,14 +48,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         } else {
                             const grid = response.grid;
                             const cages = response.cages;
-                            console.log(grid);
-                            console.log(cages);
                             displayKSudokuPuzzle(grid, cages)
                         }
                     } else {
                         console.error('Request failed:', xhr.status);
                     }
                 }
+                // removing the spinner
                 document.getElementById('overlay').classList.add("invisible");
                 document.getElementById('overlay').classList.remove("overlay");
             };
@@ -80,10 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
         sendToBackend("ksudoku");
     });
 
+    // when a user is happy with the puzzle they can set it. 
+    // this function sends the puzzle to the backend for solving
+    // and redirects the user to the relevant screen to play the puzzle.
     function sendToBackend(puzzle) {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const formData = new FormData();
-        if (puzzle == sudoku) {
+        if (puzzle == "sudoku") {
             formData.append('puzzle', JSON.stringify(sudokuInstance.board));
         } else {
             formData.append('puzzle', JSON.stringify(ksudokuInstance.board));
@@ -104,12 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // processing the response.
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
+                    // redirecting the user to the sudoku or killer sudoku screen
                     if (response.message == "sudoku") {
                         window.location.href = '/PlaySudoku';
                     } else {
                         window.location.href = '/PlayKillerSudoku';
                     }
                 } else {
+                    // incorrect puzzle displays and alert.
                     console.error('Request failed:', xhr.status);
                     alert("The puzzle was incorrect");
                 }
@@ -119,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// uses the setSudokuScreen class to allow the user to interact with the puzzle 
 function displaySudokuPuzzle(puzzle) {
     sudokuInstance = new SudokuScreen(puzzle, [-1]);
     sudokuInstance.CreateGame();
@@ -137,6 +142,7 @@ function displaySudokuPuzzle(puzzle) {
     }
 }
 
+// uses the setKSudokuScreen class to allow the user to interact with the puzzle 
 function displayKSudokuPuzzle(puzzle, cages) {
     ksudokuInstance = new KSudokuScreen(puzzle, [], cages);
     ksudokuInstance.CreateGame();

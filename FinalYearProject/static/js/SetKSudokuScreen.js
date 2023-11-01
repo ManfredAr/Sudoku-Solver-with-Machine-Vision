@@ -71,7 +71,7 @@ class KSudokuScreen {
                     cage.innerText = this.board[row][col];
                 }
                 tile.appendChild(cage);
-                if (this.board[row][col] == "-") {
+                if (this.board[row][col] == "-" || this.board[row][col] == "0") {
                     this.notes.addKNotes(row, col);
                 }
             }
@@ -96,10 +96,17 @@ class KSudokuScreen {
 
                     // removes left and right borders.
                     if (values[i][0] === values[j][0]) {
-                        document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeRight");
-                        document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeLeft");
-                        document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeRightPadding");
-                        document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeLeftPadding");
+                        if (values[i][1] < values[j][1]) {
+                            document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeRight");
+                            document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeLeft");
+                            document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeRightPadding");
+                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeLeftPadding");
+                        } else {
+                            document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeLeft");
+                            document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeRight");
+                            document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeLeftPadding");
+                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");                       
+                        }
                     }
 
                     // removes top and bottom borders.
@@ -290,7 +297,7 @@ class KSudokuScreen {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 let all = document.getElementById("c" + row + "." + col);
-                if (all.innerText === tile.innerText && all.innerText != "") {
+                if (all.childNodes.length == 1 && all.innerText === tile.innerText && all.innerText != "") {
                     all.classList.add("selectedSquare");
                 } else {
                     all.classList.remove("selectedSquare");
@@ -300,7 +307,7 @@ class KSudokuScreen {
         tile.classList.add("selected-tile");
     }
 
-
+    // changes the sum of the cage 
     changeCageSum(id) {
         let tile = document.getElementById(this.sel_row + "." + this.sel_col);
         let sumElement = tile.querySelector(".sumsquare");

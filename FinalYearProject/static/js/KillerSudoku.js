@@ -65,12 +65,15 @@ var SetScreen = null;
 
 // on load the screen should be set up with the grid and the buttons.
 window.onload = function() {
-    board = gridData;
-    cages = cageData;
-    solution = solutionData;
-    console.log(gridData);
-    console.log(cages);
-    console.log(solutionData);
+    document.getElementsByClassName("bg")[0].classList.toggle("invisible");
+    if (solutionData != -1) {
+        board = gridData;
+        cages = cageData;
+        solution = solutionData;
+        console.log(gridData);
+        console.log(cages);
+        console.log(solutionData);
+    }
 
     SetScreen = new KSudokuScreen(board, solution, cages);
     SetScreen.CreateGame();
@@ -88,5 +91,6 @@ window.onload = function() {
 
     document.getElementById("enableNotes").addEventListener("click", () => SetScreen.activeNotes());
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
+    document.getElementsByClassName("bg")[0].classList.toggle("invisible");
 }
 

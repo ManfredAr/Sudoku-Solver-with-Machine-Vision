@@ -1,7 +1,4 @@
-import { Stack } from "./stack.js";
-import { Notes } from "./notes.js";
 import { SudokuScreen } from "./SetSudokuScreen.js";
-import { SudokuTest } from "./sudokuTest.js";
 
 // board and solution are currently hardcoded
 // but will eventually be replaced with generated puzzles.
@@ -33,10 +30,14 @@ var SetScreen = null;
 
 // on load the screen should be set up with the grid and the buttons.
 window.onload = function() {
-    board = gridData;
-    solution = solutionData;
-    console.log(gridData);
-    console.log(solutionData);
+    document.getElementsByClassName("bg")[0].classList.toggle("invisible");
+    if (gridData != "-1") {
+        console.log("nop");
+        board = gridData;
+        solution = solutionData;
+        console.log(gridData);
+        console.log(solutionData);    
+    }
 
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
@@ -54,6 +55,7 @@ window.onload = function() {
 
     document.getElementById("enableNotes").addEventListener("click", () => SetScreen.activeNotes());
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
+    document.getElementsByClassName("bg")[0].classList.toggle("invisible");
 }
 
 
