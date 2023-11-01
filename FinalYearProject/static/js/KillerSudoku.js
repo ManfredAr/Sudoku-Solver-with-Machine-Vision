@@ -14,7 +14,7 @@ var board = [
     ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
 ];
 
-var easy = {
+var cages = {
     1: { 13: [[0, 0], [1, 0], [2, 0]] },
     2: { 7: [[0, 1], [0, 2]] },
     3: { 14: [[0, 3], [0, 4]] },
@@ -65,7 +65,14 @@ var SetScreen = null;
 
 // on load the screen should be set up with the grid and the buttons.
 window.onload = function() {
-    SetScreen = new KSudokuScreen(board, solution, easy);
+    board = gridData;
+    cages = cageData;
+    solution = solutionData;
+    console.log(gridData);
+    console.log(cages);
+    console.log(solutionData);
+
+    SetScreen = new KSudokuScreen(board, solution, cages);
     SetScreen.CreateGame();
 
     // add event listeners for cells and buttons

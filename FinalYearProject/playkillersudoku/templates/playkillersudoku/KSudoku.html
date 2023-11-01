@@ -1,6 +1,11 @@
 {% extends "home/home.html" %}
 {%load static%}
 {% block style %} 
+<script>
+    var gridData = JSON.parse('{{ grid|safe }}');
+    var cageData = JSON.parse('{{ cages|safe }}')
+    var solutionData = JSON.parse('{{ solution|safe }}');
+</script>
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/killersudoku.css' %}">
 <script src="{% static 'js/killerSudoku.js' %}" type="module"></script>
 {% endblock %}

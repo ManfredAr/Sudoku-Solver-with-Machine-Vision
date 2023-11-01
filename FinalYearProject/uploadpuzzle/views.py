@@ -1,10 +1,10 @@
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from backend.puzzleExtraction import PuzzleExtraction
 from backend.KillerSudokuExtraction import KillerSudokuExtraction
-from backend.convertToSudoku import convertToSudoku
+from backend.convertToSudoku import convertToPuzzle
 
 
 # Create your views here.
@@ -31,11 +31,27 @@ def getPuzzle(request):
 
 def playsudoku(request):
     grid = json.loads(request.POST.get("puzzle"))
-    c = convertToSudoku(grid)
-    grid, solution = c.validatePuzzle()
+    c = convertToPuzzle(grid, None)
+    grid, solution = c.validateSudoku()
     if solution == False:
-        return JsonResponse({'message': "failure"});
+        return HttpResponse("incorrect puzzle", status=400)
 
     request.session['Sarray'] = grid
     request.session['Ssolution'] = solution
     return JsonResponse({'message': "sudoku"});
+
+
+def playkillersudoku(request):
+    grid = json.loads(request.POST.get("puzzle"))
+    cage = json.loads(request.POST.get("cages"))
+    c = convertToPuzzle(grid, cage)
+    grid, new_cage, solution = c.validateKSudoku()
+    print("hello")
+    #print(new_cage)
+    if solution == False:
+        return HttpResponse("incorrect puzzle", status=400)
+
+    request.session['Sarray'] = grid
+    request.session['Scage'] = json.dumps(new_cage)
+    request.session['Ssolution'] = solution
+    return JsonResponse({'message': "Ksudoku"});

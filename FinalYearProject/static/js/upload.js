@@ -1,6 +1,7 @@
 import { SudokuScreen } from "./SetSudokuScreen.js";
 import { KSudokuScreen } from "./SetKSudokuScreen.js"
 var sudokuInstance = null;
+var ksudokuInstance = null;
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -68,19 +69,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
-
     document.getElementById("set").addEventListener('click', function(event) {
         event.preventDefault();
-        console.log(sudokuInstance.board);
+        sendToBackend("sudoku");
+    });
+
+
+    document.getElementById("set1").addEventListener('click', function(event) {
+        event.preventDefault();
+        sendToBackend("ksudoku");
+    });
+
+    function sendToBackend(puzzle) {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        
         const formData = new FormData();
-        formData.append('puzzle', JSON.stringify(sudokuInstance.board));
+        if (puzzle == sudoku) {
+            formData.append('puzzle', JSON.stringify(sudokuInstance.board));
+        } else {
+            formData.append('puzzle', JSON.stringify(ksudokuInstance.board));
+            formData.append('cages', JSON.stringify(ksudokuInstance.groups));
+        }
 
         // creating an HTTP response
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/Upload/loadSudoku/');
+        if (puzzle == "sudoku") {
+            xhr.open('POST', '/Upload/loadSudoku/');
+        } else {
+            xhr.open('POST', '/Upload/loadKSudoku/');
+        }
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
 
         xhr.onreadystatechange = function() {
@@ -90,14 +106,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     const response = JSON.parse(xhr.responseText);
                     if (response.message == "sudoku") {
                         window.location.href = '/PlaySudoku';
+                    } else {
+                        window.location.href = '/PlayKillerSudoku';
                     }
                 } else {
                     console.error('Request failed:', xhr.status);
+                    alert("The puzzle was incorrect");
                 }
             }
         };
         xhr.send(formData); 
-    });
+    }
 });
 
 function displaySudokuPuzzle(puzzle) {
@@ -119,19 +138,19 @@ function displaySudokuPuzzle(puzzle) {
 }
 
 function displayKSudokuPuzzle(puzzle, cages) {
-    const SetScreen = new KSudokuScreen(puzzle, [], cages);
-    SetScreen.CreateGame();
+    ksudokuInstance = new KSudokuScreen(puzzle, [], cages);
+    ksudokuInstance.CreateGame();
     document.getElementById("type").classList.toggle("invisible");
     document.getElementById("ksudokuDiv").classList.toggle("invisible");
 
     // add event listeners for cells and buttons
     let numClass = document.getElementsByClassName("num");
     for (let i = 0; i < numClass.length; i++) {
-        numClass[i].addEventListener("click", () => SetScreen.selectedNum(numClass[i]));
+        numClass[i].addEventListener("click", () => ksudokuInstance.changeCageSum(numClass[i]));
     }
 
     let tiles = document.getElementsByClassName("tile");
     for (let i = 0; i < tiles.length; i++) {
-        tiles[i].addEventListener("click", () => SetScreen.selectedTile(tiles[i].id));
+        tiles[i].addEventListener("click", () => ksudokuInstance.selectedTile(tiles[i].id));
     }
 }

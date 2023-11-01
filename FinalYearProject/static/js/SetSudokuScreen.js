@@ -46,7 +46,8 @@ class SudokuScreen {
                 let tile = document.createElement("div");
                 tile.id = row.toString() + "." + col.toString();
                 tile.className = "tile";
-                if (this.board[row][col] != "-") {
+                console.log("test", this.board);
+                if (this.board[row][col] != "-" && this.board[row][col] != "0") {
                     tile.innerText = this.board[row][col];
                 }
     

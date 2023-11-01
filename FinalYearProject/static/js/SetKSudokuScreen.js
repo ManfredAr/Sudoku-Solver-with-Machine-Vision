@@ -67,7 +67,7 @@ class KSudokuScreen {
                 cage.id = "c" + row.toString() + "." + col.toString();
                 cage.className = "cage";
                 cage.classList.add("cage");
-                if (this.board[row][col] != "-") {
+                if (this.board[row][col] != "-" && this.board[row][col] != "0") {
                     cage.innerText = this.board[row][col];
                 }
                 tile.appendChild(cage);
@@ -91,6 +91,7 @@ class KSudokuScreen {
             document.getElementById(values[0][0] + "." + values[0][1]).appendChild(sum);
             count += 1;
             for (let i = 0; i < values.length; i++) {
+                document.getElementById(values[0][0] + "." + values[0][1]).setAttribute("cageNum", group);
                 for (let j = i+1; j < values.length; j++) {
 
                     // removes left and right borders.
@@ -247,7 +248,7 @@ class KSudokuScreen {
                     }
                 }
             }
-            console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
+            //console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
         }
         this.myStack.displayStack();
 
@@ -272,7 +273,7 @@ class KSudokuScreen {
 
     // keeping track of the current and previous selected square
     selectedTile(id) {
-        console.log(id);
+        //console.log(id);
         let coordinates = id.split(".");
         this.prev_row = this.sel_row;
         this.prev_col = this.sel_col;
@@ -297,6 +298,25 @@ class KSudokuScreen {
             }
         }
         tile.classList.add("selected-tile");
+    }
+
+
+    changeCageSum(id) {
+        let tile = document.getElementById(this.sel_row + "." + this.sel_col);
+        let sumElement = tile.querySelector(".sumsquare");
+        let num = id.id;
+        let cage = this.groups[parseInt(tile.getAttribute("cagenum"))];
+        const values = Object.values(cage)[0];
+        if (sumElement != null) {
+            if (num > 0 && num < 10) {
+                sumElement.innerText += num;
+                const newval = sumElement.innerText;
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = {[newval]: values };
+            } else {
+                sumElement.innerText = "";
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = {0: values };
+            }
+        }
     }
 }
 export { KSudokuScreen };

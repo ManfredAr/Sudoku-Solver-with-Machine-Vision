@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.uploadPage),
     path('uploadImage/', views.getPuzzle),
     path('loadSudoku/', views.playsudoku),
+    path('loadKSudoku/', views.playkillersudoku),
 ]

@@ -62,7 +62,12 @@
             <div id="grid1"></div> </br>
 
             <div class="values"> </br></br></div>
-            <div class="set"><button>Set Puzzle</button></div>
+            <div class="set">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <button id="set1"> Set Puzzle </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
