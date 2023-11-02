@@ -213,6 +213,7 @@ class SudokuScreen {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
                 if (this.board[a][b] != this.solution[a][b]) {
+                    console.log(this.board[a][b], this.solution[a][b]);
                     return;
                 }
             }
@@ -251,6 +252,17 @@ class SudokuScreen {
             }
         }
         tile.classList.add("selected-tile");
+    }
+
+    autoComplete() {
+        console.log(this.solution)
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                document.getElementById(i + "." + j).innerText = this.solution[i][j];
+                this.board[i][j] = this.solution[i][j]
+            }
+        }
+        this.isComplete();
     }
 }
 

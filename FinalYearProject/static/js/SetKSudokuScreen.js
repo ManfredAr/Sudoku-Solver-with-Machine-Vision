@@ -325,5 +325,16 @@ class KSudokuScreen {
             }
         }
     }
+
+    autoComplete() {
+        console.log(this.solution)
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];
+                this.board[i][j] = this.solution[i][j]
+            }
+        }
+        this.isComplete();
+    }
 }
 export { KSudokuScreen };

@@ -28,10 +28,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a class="nav-item nav-link active" style="color: white;" href="/home"> Home <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" style="color: white;" href="/PlaySudoku"> Play Sudoku </a>
-                <a class="nav-item nav-link" style="color: white;" href="/PlayKillerSudoku"> Play killer Sudoku </a>
-                <a class="nav-item nav-link" style="color: white;" href="/Upload"> Upload Puzzles </a>
+                <a class="nav-item nav-link active" style="color: white;" id="H" href="/home"> Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" style="color: white;" id="PS" href="/PlaySudoku"> Play Sudoku </a>
+                <a class="nav-item nav-link" style="color: white;" id="PKS" href="/PlayKillerSudoku"> Play killer Sudoku </a>
+                <a class="nav-item nav-link" style="color: white;" id="U" href="/Upload"> Upload Puzzles </a>
               </div>
               <div class="navbar-nav ml-auto">
                 <a class="nav-item nav-link" style="color: white;" href="#"> Learn Techniques </a>
@@ -49,10 +49,10 @@
             <p>What would you like to do?</p>
         </div>
         <div class="choices">
-            <span><a href="/PlaySudoku"><button>Play Sudoku</button></a></span> </br>
-            <span><a href="/home"><button>Play Killer Sudoku</button></a></span></br>
-            <span><a href="/PlayKillerSudoku"><button>Upload A puzzle</button></a></span></br>
-            <span><button>Learn techniques</button></span>
+            <span><a href="/PlaySudoku"><button id="playSudoku">Play Sudoku</button></a></span> </br>
+            <span><a href="/PlayKillerSudoku"><button id="playKsudoku">Play Killer Sudoku</button></a></span></br>
+            <span><a href="/Upload"><button id="upload">Upload A puzzle</button></a></span></br>
+            <span><button id="learn">Learn techniques</button></span>
         </div>
     </div>
     {% endblock %}

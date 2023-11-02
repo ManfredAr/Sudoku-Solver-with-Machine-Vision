@@ -102,7 +102,7 @@
 }
 
 /* removing the borders from the buttons. */
-#enableNotes, #undo {
+#enableNotes, #undo, #solve {
     border: 0;
     padding: 10px;
     border-radius: 10px;
@@ -116,7 +116,7 @@
 }
 
 /*Adding a gap between the notes and undo button*/
-.back, .note {
+.back, .note, .complete {
     padding: 10px;
 }
 
