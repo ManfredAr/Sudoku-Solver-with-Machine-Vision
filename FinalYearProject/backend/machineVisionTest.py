@@ -1,6 +1,7 @@
 from puzzleExtraction import PuzzleExtraction
 from NumberRecognition import NumberRecognition
-from KillerSudokuExtraction import KillerSudokuExtraction
+import cv2
+#from KillerSudokuExtraction import KillerSudokuExtraction
 
-a = KillerSudokuExtraction(".\MachineVisionImages\Ksudoku1.jpg")
-a.ConvertToPuzzle()
+a = PuzzleExtraction(cv2.imread(".\MachineVisionImages\sudoku5.jpg"))
+print(a.ConvertToArray())

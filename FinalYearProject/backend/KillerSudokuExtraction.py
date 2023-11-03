@@ -28,22 +28,24 @@ class KillerSudokuExtraction:
         Returns the grid and the dictionary containing the cages.
         '''
         processedImage = self.extraction.ConvertAndCrop()
-        edgePoints = self.extraction.getBorder(processedImage)
+        edgePoints, image = self.extraction.getBorder(processedImage)
+        print(image)
+        self.image = image
         straightenedImage, original = self.straightenImage(processedImage, edgePoints)
         cells, cageSums = self.CellExtraction(straightenedImage, original)
         cages = self.getPuzzle(cells, cageSums)
         self.cages = [cages[i:i+9] for i in range(0, len(cages), 9)]
         cages = self.constructGrid()
 
-        grid = [[0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0,0]]
+        grid = [["-","-","-","-","-","-","-","-","-"],
+                ["-","-","-","-","-","-","-","-","-"], 
+                ["-","-","-","-","-","-","-","-","-"],
+                ["-","-","-","-","-","-","-","-","-"],                
+                ["-","-","-","-","-","-","-","-","-"],
+                ["-","-","-","-","-","-","-","-","-"],                
+                ["-","-","-","-","-","-","-","-","-"],
+                ["-","-","-","-","-","-","-","-","-"],                
+                ["-","-","-","-","-","-","-","-","-"]]
 
 
         return grid, cages
@@ -230,7 +232,8 @@ class KillerSudokuExtraction:
         '''
 
         # getting the array in the correct format.
-        image = cv2.imread(self.image)
+        image = self.image
+        
         if image.shape[0] > 1000 and image.shape[1] > 1000:
             image = self.extraction.resizeImage(image)
 

@@ -22,4 +22,5 @@ urlpatterns = [
     path('home/', include("home.urls")),
     path('PlaySudoku/', include("playsudoku.urls")),
     path('PlayKillerSudoku/', include("playkillersudoku.urls")),
+    path('Upload/', include("uploadpuzzle.urls"))
 ]

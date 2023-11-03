@@ -22,10 +22,8 @@ class PuzzleExtraction:
     
     def ConvertToArray(self):
         processedImage = self.ConvertAndCrop()
-        edgePoints = self.getBorder(processedImage)
+        edgePoints, _ = self.getBorder(processedImage)
         straightenedImage = self.straightenImage(processedImage, edgePoints)
-        cv2.imshow(" a", straightenedImage)
-        cv2.waitKey(0)
         cells = self.CellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
         return self.digitRecognition.ConvertToArray(final_arr)
@@ -35,7 +33,11 @@ class PuzzleExtraction:
         '''
         Converts the image to a grayscale image and run some noise reduction methods.  
         '''
-        image = cv2.imread(self.image)
+        image_bytes = self.image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        self.image_copy = image
+
 
         # some images give an EXIF orientation tag
         # which causes incorrect rotation in images
@@ -116,7 +118,7 @@ class PuzzleExtraction:
         # gets the corners of the puzzle.
         edgePoints = cv2.approxPolyDP(puzzleContour, ep, True)
 
-        return edgePoints
+        return edgePoints, self.image_copy
     
 
     def straightenImage(self, processedImage, edges):

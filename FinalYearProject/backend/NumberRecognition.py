@@ -49,14 +49,15 @@ class NumberRecognition:
         Parameters:
         arr - the array containing image to be classified.
         '''
+        pred_arr = []
         for i in range(len(arr)):
             gray_image = cv2.cvtColor(arr[i], cv2.COLOR_BGR2GRAY)
             processedImages = self.preprocess(gray_image)
             img = processedImages.reshape((1, 28, 28, 1))
             prediction = self.model.predict(img)
-            arr[i] = prediction.argmax()
+            pred_arr.append(int(prediction.argmax()))
 
-        return arr
+        return pred_arr
 
 
     def preprocess(self, image):
