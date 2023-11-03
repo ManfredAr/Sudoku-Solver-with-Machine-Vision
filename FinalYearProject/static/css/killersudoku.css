@@ -208,12 +208,12 @@
 /* Styling for smaller screens */
 /* all these stylings simply changes the dimension of the elements */
 @media (max-width: 768px) {
-    #grid {
+    #grid1 {
         height: 320px;
         width: 320px;
     }
 
-    .cell {
+    .tile {
         height: 35px;
         width: 35px;
     }

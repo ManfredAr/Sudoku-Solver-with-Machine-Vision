@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 
 
 class SudokuTest(LiveServerTestCase):
-    '''
+    
     options = Options()
     options.page_load_strategy = 'eager'
     
@@ -263,4 +263,4 @@ class SudokuTest(LiveServerTestCase):
         assert 'display: none' in styleButton, "buttons are not hidden"
         assert 'display: none' in styleValues, "values are not hidden"
         assert driver.find_element(By.ID, "complete") != None, "message and menu not displayed"
-    '''
+    

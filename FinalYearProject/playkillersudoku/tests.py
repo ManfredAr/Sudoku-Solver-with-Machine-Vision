@@ -6,10 +6,9 @@ import time
 
 
 class KillerSudokuTest(LiveServerTestCase):
-
     options = Options()
-    options.page_load_strategy = 'eager'
-    '''
+    options.page_load_strategy = "eager"
+    
     # checking the 9x9 grid is displayed
     def test_Grid(self):
         driver = webdriver.Chrome(options=self.options)
@@ -261,4 +260,16 @@ class KillerSudokuTest(LiveServerTestCase):
         assert 'display: none' in styleValues, "values are not hidden"
         assert driver.find_element(By.ID, "complete") != None, "message and menu not displayed"
 
-    ''' 
+
+    # testing that the correct sum of cage sums is displayed.
+    def test_solve(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get("http://127.0.0.1:8000/PlayKillerSudoku/")
+
+        sum_cell = driver.find_elements(By.CLASS_NAME, "sumsquare")
+        count = 0
+        for i in sum_cell:
+            count += int(i.text)
+
+        assert count == 405, "incorrect sum displayed"
+    

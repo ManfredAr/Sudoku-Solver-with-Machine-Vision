@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('overlay').classList.remove("invisible")
         const inputElement = document.getElementById('imageUpload');
         const selectedFile = inputElement.files[0];
-
+        let s = document.getElementById("sudoku");
+        let ks = document.getElementById("ksudoku")
         // takes an image and sends it to the machine vision processing code.
-        if (selectedFile) {
+        if (selectedFile && (s.checked == true || ks.checked == true)) {
             console.log(selectedFile)
             const formData = new FormData();
             formData.append('image', selectedFile);
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             xhr.send(formData);
         } else {
-            alert('Please select an image to solve');
+            alert('Please select a puzzle type and an image to process!');
 
             // removing the spinner
             document.getElementById('overlay').classList.add("invisible");

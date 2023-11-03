@@ -12,7 +12,7 @@ class homeTest(LiveServerTestCase):
     options = Options()
     options.page_load_strategy = 'eager'
     driver = webdriver.Chrome(options=options)
-    '''
+    
     # checking the headings appear 
     def test_headings(self):
         driver = webdriver.Chrome(options=self.options)
@@ -154,4 +154,4 @@ class homeTest(LiveServerTestCase):
         assert new_page_url == "http://127.0.0.1:8000/Upload/", f"Not on the upload page"
 
         driver.quit()
-    '''
+    
