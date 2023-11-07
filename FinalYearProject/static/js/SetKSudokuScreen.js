@@ -3,11 +3,10 @@ import { Stack } from "./stack.js";
 
 class KSudokuScreen {
 
-    constructor(grid, solution, group, val) {
+    constructor(grid, solution, group) {
         this.board = grid;
         this.solution = solution;
         this.groups = group;
-        this.val = val;
         this.notes = new Notes();
         this.myStack = new Stack();
         this.takingNotes = false;
@@ -29,7 +28,7 @@ class KSudokuScreen {
                 number.className = "num";
                 //number.addEventListener("click", this.selectedNum);
                 number.classList.add("number");
-                document.getElementById("values").appendChild(number);
+                document.getElementsByClassName("values")[0].appendChild(number);
             } else {
                 // delete button
                 let number = document.createElement("div");
@@ -38,13 +37,14 @@ class KSudokuScreen {
                 number.className = "num";
                 //number.addEventListener("click", this.selectedNum);
                 number.classList.add("number");
-                document.getElementById("values").appendChild(number);
+                document.getElementsByClassName("values")[0].appendChild(number);
             }
         }
         
         // Creates the 9x9 grid
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
+                console.log("we're here");
                 let tile = document.createElement("div");
                 tile.id = row.toString() + "." + col.toString();
                 tile.className = "tile";
@@ -61,47 +61,60 @@ class KSudokuScreen {
     
                 //tile.addEventListener("click", this.selectedTile);
                 tile.classList.add("cell");
-                document.getElementById("grid").append(tile);
+                document.getElementById("grid1").append(tile);
 
                 let cage = document.createElement("div");
                 cage.id = "c" + row.toString() + "." + col.toString();
                 cage.className = "cage";
                 cage.classList.add("cage");
-                if (this.board[row][col] != "-") {
+                if (this.board[row][col] != "-" && this.board[row][col] != "0") {
                     cage.innerText = this.board[row][col];
                 }
                 tile.appendChild(cage);
-                if (this.board[row][col] == "-") {
+                if (this.board[row][col] == "-" || this.board[row][col] == "0") {
                     this.notes.addKNotes(row, col);
                 }
             }
         }
 
         // the grid is initially set up with a cage around every cell.
-        // After this check which cels are in the same group and remove the borders between them. 
+        // After this check which cels are in the same group and remove the borders between them.
+
         let count = 0;
-        for (const group of this.groups) {
+        for (const group in this.groups) {
+            const dict = this.groups[group];
+            const CageSum = Object.keys(dict)[0]; 
+            const values = Object.values(dict)[0];
             let sum = document.createElement("div");
-            sum.innerText = this.val[count];
+            sum.innerText = CageSum;
             sum.classList.add("sumsquare");
-            document.getElementById(group[0]).appendChild(sum);
+            document.getElementById(values[0][0] + "." + values[0][1]).appendChild(sum);
             count += 1;
-            for (let i = 0; i < group.length; i++) {
-                for (let j = i+1; j < group.length; j++) {
+            for (let i = 0; i < values.length; i++) {
+                document.getElementById(values[0][0] + "." + values[0][1]).setAttribute("cageNum", group);
+                for (let j = i+1; j < values.length; j++) {
+
                     // removes left and right borders.
-                    if (group[i][0] === group[j][0]) {
-                        document.getElementById("c" + group[i]).classList.add("removeRight");
-                        document.getElementById("c" + group[j]).classList.add("removeLeft");
-                        document.getElementById(group[i]).classList.add("removeRightPadding");
-                        document.getElementById(group[j]).classList.add("removeLeftPadding");
+                    if (values[i][0] === values[j][0]) {
+                        if (values[i][1] < values[j][1]) {
+                            document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeRight");
+                            document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeLeft");
+                            document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeRightPadding");
+                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeLeftPadding");
+                        } else {
+                            document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeLeft");
+                            document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeRight");
+                            document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeLeftPadding");
+                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");                       
+                        }
                     }
 
                     // removes top and bottom borders.
-                    if (group[i][2] === group[j][2]) {
-                        document.getElementById("c" + group[i]).classList.add("removeBottom");
-                        document.getElementById("c" + group[j]).classList.add("removeTop");
-                        document.getElementById(group[i]).classList.add("removeBottomPadding");
-                        document.getElementById(group[j]).classList.add("removeTopPadding");
+                    if (values[i][1] === values[j][1]) {
+                        document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeBottom");
+                        document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeTop");
+                        document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeBottomPadding");
+                        document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeTopPadding");
                     }
                 }
             }
@@ -242,7 +255,7 @@ class KSudokuScreen {
                     }
                 }
             }
-            console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
+            //console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
         }
         this.myStack.displayStack();
 
@@ -260,14 +273,14 @@ class KSudokuScreen {
 
         // removes buttons as puzzle is completed.
         document.getElementsByClassName("buttons")[0].style.display = "none";   
-        document.getElementById("values").style.display = "none";
+        document.getElementsByClassName("values")[0].style.display = "none";
         document.getElementById("complete").style.display = "block";
 
     }
 
     // keeping track of the current and previous selected square
     selectedTile(id) {
-        console.log(id);
+        //console.log(id);
         let coordinates = id.split(".");
         this.prev_row = this.sel_row;
         this.prev_col = this.sel_col;
@@ -284,7 +297,7 @@ class KSudokuScreen {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 let all = document.getElementById("c" + row + "." + col);
-                if (all.innerText === tile.innerText && all.innerText != "") {
+                if (all.childNodes.length == 1 && all.innerText === tile.innerText && all.innerText != "") {
                     all.classList.add("selectedSquare");
                 } else {
                     all.classList.remove("selectedSquare");
@@ -292,6 +305,36 @@ class KSudokuScreen {
             }
         }
         tile.classList.add("selected-tile");
+    }
+
+    // changes the sum of the cage 
+    changeCageSum(id) {
+        let tile = document.getElementById(this.sel_row + "." + this.sel_col);
+        let sumElement = tile.querySelector(".sumsquare");
+        let num = id.id;
+        let cage = this.groups[parseInt(tile.getAttribute("cagenum"))];
+        const values = Object.values(cage)[0];
+        if (sumElement != null) {
+            if (num > 0 && num < 10) {
+                sumElement.innerText += num;
+                const newval = sumElement.innerText;
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = {[newval]: values };
+            } else {
+                sumElement.innerText = "";
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = {0: values };
+            }
+        }
+    }
+
+    autoComplete() {
+        console.log(this.solution)
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];
+                this.board[i][j] = this.solution[i][j]
+            }
+        }
+        this.isComplete();
     }
 }
 export { KSudokuScreen };

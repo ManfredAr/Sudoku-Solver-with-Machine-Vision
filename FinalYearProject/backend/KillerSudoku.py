@@ -57,7 +57,8 @@ class KillerSudoku:
         for cage_number, cage_dict in self.cages.items():
             for cage_sum, cells in cage_dict.items():
                 for cell in cells:
-                    self.cellCage[cell] = cage_number
+                    #print(cell)
+                    self.cellCage[(cell[0],cell[1])] = cage_number
         
 
     def getCages(self):

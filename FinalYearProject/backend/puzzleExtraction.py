@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from PIL import Image
+from backend.NumberRecognition import NumberRecognition
 
 class PuzzleExtraction:
     '''
@@ -16,21 +17,27 @@ class PuzzleExtraction:
         image - the image which will be processed
         '''
         self.image = image
+        self.digitRecognition = NumberRecognition()
 
     
-    def getCells(self):
+    def ConvertToArray(self):
         processedImage = self.ConvertAndCrop()
-        edgePoints = self.getBorder(processedImage)
+        edgePoints, _ = self.getBorder(processedImage)
         straightenedImage = self.straightenImage(processedImage, edgePoints)
         cells = self.CellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
-        return final_arr
+        return self.digitRecognition.ConvertToArray(final_arr)
+    
 
     def ConvertAndCrop(self):
         '''
         Converts the image to a grayscale image and run some noise reduction methods.  
         '''
-        image = cv2.imread(self.image)
+        image_bytes = self.image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        self.image_copy = image
+
 
         # some images give an EXIF orientation tag
         # which causes incorrect rotation in images
@@ -49,7 +56,7 @@ class PuzzleExtraction:
         except Exception:
             pass
 
-        if image.shape[0] > 1000 and image.shape[1] > 100:
+        if image.shape[0] > 1000 and image.shape[1] > 1000:
             image = self.resizeImage(image)
 
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -111,7 +118,7 @@ class PuzzleExtraction:
         # gets the corners of the puzzle.
         edgePoints = cv2.approxPolyDP(puzzleContour, ep, True)
 
-        return edgePoints
+        return edgePoints, self.image_copy
     
 
     def straightenImage(self, processedImage, edges):

@@ -1,0 +1,129 @@
+.UploadContainer {
+    color: white;
+}
+
+.puzzleType {
+    display: flex;
+    flex-direction: column;
+}
+
+.heading {
+    margin-bottom: 10px;
+}
+
+.options label {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+.options, .uploadImage, .submit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+  }
+
+.invisible {
+    display: none;
+}
+
+.sudoku {
+    color: black !important;
+}
+
+.set, .set1 {
+    text-align: center;
+    padding: 50px;
+}
+
+.play button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0) !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    #grid {
+        height: 320px;
+        width: 320px;
+    }
+
+    .cell {
+        height: 35px;
+        width: 35px;
+        padding: 5px;
+    }
+
+    .noteCell {
+        height: 7px;
+        width: 7px;
+        font-size: 6px;
+    }
+
+    #values {
+        width: 320px;
+        height: 50px;
+    }
+
+    .number {
+        /* the dimensions of each individual number buttons */
+        width: 32px; 
+        height: 32px;
+        font-size: 20px;
+    }
+}
+
+/* Styling for smaller screens */
+/* all these stylings simply changes the dimension of the elements */
+@media (max-width: 768px) {
+    #grid1 {
+        height: 320px;
+        width: 320px;
+    }
+
+    .tile {
+        height: 35px;
+        width: 35px;
+    }
+
+    .cage {
+        font-size: 10px;
+        border: 1px dashed black;
+        padding: 3px;   
+    }
+
+    .noteCell {
+        height: 7px;
+        width: 7px;
+        font-size: 6px;
+    }
+
+    .sumsquare {
+        height: 10px;
+        width: 10px;
+        font-size: 8px;
+    }
+
+    .values {
+        width: 320px;
+        height: 50px;
+    }
+
+    .number {
+        width: 32px; 
+        height: 32px;
+        font-size: 20px;
+    }
+}
