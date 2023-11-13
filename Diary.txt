@@ -51,6 +51,7 @@ So far I have fully tested the current play sudoku and the home pages. I have pa
 Next, I will work on finishing of the frontend testing, work on adding a section on machine vision and also try to fix the machine vision code 
 give better results.  
 
+
 Week 7 - 08/11/2023:
 This week I have been working on the report to get it ready for the submission. I have added a section on machine vision, software engineering,
 introduction and conclusion. However, there are a few section which need to be improved.
