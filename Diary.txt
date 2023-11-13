@@ -45,8 +45,14 @@ Next I will work on the frontend to integrate the machine vision into the fronte
 frontend design.
 
 
-Week 6 - 02/10/2023:
+Week 6 - 02/11/2023:
 This week I have integrating the machine vision code into the frontend. I have also started to test the frontend through the use of selenium.
 So far I have fully tested the current play sudoku and the home pages. I have partially tested the killer sudoku page. 
 Next, I will work on finishing of the frontend testing, work on adding a section on machine vision and also try to fix the machine vision code 
 give better results.  
+
+
+Week 7 - 08/11/2023:
+This week I have been working on the report to get it ready for the submission. I have added a section on machine vision, software engineering,
+introduction and conclusion. However, there are a few section which need to be improved.
+Next, I will work on adding all my references and generally getting the report in a good state.
