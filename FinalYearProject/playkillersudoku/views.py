@@ -1,8 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
 def playKillerSudoku(request):
-    # retrieving the saved killer sudoku puzzle information
+    '''
+    Returns a killer Sudoku puzzle if saved in the session table otherwise a new
+    puzzle is returned.
+    '''
     try:
         grid = request.session['Sarray']
         cages = request.session['Scage']

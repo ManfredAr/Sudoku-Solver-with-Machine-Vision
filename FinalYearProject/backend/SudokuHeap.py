@@ -1,7 +1,7 @@
 import heapq
 import itertools
 
-class heap:
+class SudokuHeap:
     '''
     This class is an implementation of a priority queue 
     to order the cells in order of the smallest domain first.

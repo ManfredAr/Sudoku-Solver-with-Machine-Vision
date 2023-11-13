@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from backend.NumberRecognition import NumberRecognition
 
-class PuzzleExtraction:
+class SudokuExtraction:
     '''
     This class is responsible for the processing of an image to extract the individual
     cells of the puzzle. 
@@ -20,16 +20,16 @@ class PuzzleExtraction:
         self.digitRecognition = NumberRecognition()
 
     
-    def ConvertToArray(self):
-        processedImage = self.ConvertAndCrop()
+    def convertToArray(self):
+        processedImage = self.convertAndCrop()
         edgePoints, _ = self.getBorder(processedImage)
         straightenedImage = self.straightenImage(processedImage, edgePoints)
-        cells = self.CellExtraction(straightenedImage)
+        cells = self.cellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
         return self.digitRecognition.ConvertToArray(final_arr)
     
 
-    def ConvertAndCrop(self):
+    def convertAndCrop(self):
         '''
         Converts the image to a grayscale image and run some noise reduction methods.  
         '''
@@ -151,7 +151,7 @@ class PuzzleExtraction:
         return output
 
 
-    def CellExtraction(self, image):   
+    def cellExtraction(self, image):   
         '''
         Extracts all the cells from the image 
 

@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from backend.puzzleExtraction import PuzzleExtraction
+from backend.SudokuExtraction import SudokuExtraction
 from backend.NumberRecognition import NumberRecognition
 
 
@@ -17,25 +17,25 @@ class KillerSudokuExtraction:
         image - the image which will be processed
         '''
         self.image = image
-        self.extraction = PuzzleExtraction(image)
+        self.extraction = SudokuExtraction(image)
         self.digitRecognition = NumberRecognition()
 
     
-    def ConvertToPuzzle(self):
+    def convertToPuzzle(self):
         '''
         Converts the image of the puzzle into the grid and the cages.
 
         Returns the grid and the dictionary containing the cages.
         '''
-        processedImage = self.extraction.ConvertAndCrop()
+        processedImage = self.extraction.convertAndCrop()
         edgePoints, image = self.extraction.getBorder(processedImage)
         print(image)
         self.image = image
         straightenedImage, original = self.straightenImage(processedImage, edgePoints)
-        cells, cageSums = self.CellExtraction(straightenedImage, original)
+        cells, cageSums = self.cellExtraction(straightenedImage, original)
         cages = self.getPuzzle(cells, cageSums)
         self.cages = [cages[i:i+9] for i in range(0, len(cages), 9)]
-        cages = self.constructGrid()
+        cages = self.constructCages()
 
         grid = [["-","-","-","-","-","-","-","-","-"],
                 ["-","-","-","-","-","-","-","-","-"], 
@@ -50,7 +50,7 @@ class KillerSudokuExtraction:
 
         return grid, cages
 
-    def constructGrid(self):
+    def constructCages(self):
         '''
         Constructs the cages found withing the puzzle. 
 
@@ -183,7 +183,7 @@ class KillerSudokuExtraction:
         # improving the image resolution
         high_res = cv2.detailEnhance(cell, sigma_s=15, sigma_r=0.7)
         gray = cv2.cvtColor(high_res, cv2.COLOR_BGR2GRAY)
-        blurred = cv2.GaussianBlur(gray, (3,3), 0)
+        #blurred = cv2.GaussianBlur(gray, (3,3), 0)
         canny = cv2.Canny(gray, 160, 255, 1)
         contours, hierarchy = cv2.findContours(canny.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnt = sorted(contours, key=cv2.contourArea, reverse=True)
@@ -255,7 +255,7 @@ class KillerSudokuExtraction:
     
 
 
-    def CellExtraction(self, image, original):   
+    def cellExtraction(self, image, original):   
         '''
         Extracts all the cells from the image 
 
