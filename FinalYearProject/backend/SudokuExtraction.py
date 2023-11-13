@@ -26,6 +26,7 @@ class SudokuExtraction:
         straightenedImage = self.straightenImage(processedImage, edgePoints)
         cells = self.cellExtraction(straightenedImage)
         final_arr = self.processCells(cells)
+       
         return self.digitRecognition.ConvertToArray(final_arr)
     
 
@@ -35,8 +36,8 @@ class SudokuExtraction:
         '''
         image_bytes = self.image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
-        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        self.image_copy = image
+        self.image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        self.image_copy = self.image
 
 
         # some images give an EXIF orientation tag
@@ -48,19 +49,20 @@ class SudokuExtraction:
                 if exif is not None and 274 in exif:
                     orientation = exif[274]
                     if orientation == 3:
-                        image = cv2.rotate(image, cv2.ROTATE_180)
+                        self.image = cv2.rotate(self.image, cv2.ROTATE_180)
                     elif orientation == 6:
-                        image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+                        self.image = cv2.rotate(self.image, cv2.ROTATE_90_CLOCKWISE)
                     elif orientation == 8:
-                        image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                        self.image = cv2.rotate(self.image, cv2.ROTATE_90_COUNTERCLOCKWISE)
         except Exception:
             pass
 
-        if image.shape[0] > 1000 and image.shape[1] > 1000:
+        image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+
+        if self.image.shape[0] > 1000 and self.image.shape[1] > 1000:
+            self.image = self.resizeImage(self.image)
             image = self.resizeImage(image)
-
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
+        
         # applying adaptive threshold to the block
         threshold = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 0)
 
@@ -81,7 +83,8 @@ class SudokuExtraction:
         max_width = 1000
         max_height = 1000
 
-        height, width, _ = image.shape
+        height = image.shape[0]
+        width = image.shape[1]
 
         # Calculate the scale factors
         width_scale = max_width / width
@@ -141,14 +144,24 @@ class SudokuExtraction:
 
         # creating a 450 by 450 template image
         dst = np.array([[0, 0], [450, 0], [450, 450], [0, 450]], dtype='float32')
+        edgePoints = self.sortPoints(edgePoints)
 
         # Calculate the perspective transformation matrix
         M = cv2.getPerspectiveTransform(edgePoints, dst)
 
         # Apply the perspective transformation to the image
-        output = cv2.warpPerspective(processedImage, M, (450, 450))
+        output = cv2.warpPerspective(self.image, M, (450, 450))
 
         return output
+
+    def sortPoints(self, edges):
+        coords = edges[edges[:, 0, 1].argsort()]
+        if coords[0][0][0] > coords[1][0][0]:
+            coords[0, 0], coords[1, 0] = coords[1, 0].copy(), coords[0, 0].copy()
+        if coords[2][0][0] < coords[3][0][0]:
+            coords[2, 0], coords[3, 0] = coords[3, 0].copy(), coords[2, 0].copy()
+
+        return coords
 
 
     def cellExtraction(self, image):   
@@ -173,7 +186,8 @@ class SudokuExtraction:
             for x in range(0, 450, cell_width):
                 # getting each 50x50 block from the image
                 block = image[y:y+cell_height, x:x+cell_width]
-                
+                block = cv2.detailEnhance(block, sigma_s=20, sigma_r=1.0)
+                block = cv2.cvtColor(block, cv2.COLOR_BGR2GRAY)
                 # Appending the extracted block to the cells array
                 cells.append(block)
 
@@ -198,8 +212,10 @@ class SudokuExtraction:
             new_height = 50 - 2 * 2
             new_width = 50 - 2 * 2
             cropped_image = cells[i][2:2 + new_height, 2:2 + new_width]
+            blurred = cv2.GaussianBlur(cropped_image, (3,3), 0)
+            threshold = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 0)
+            contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-            contours, _ = cv2.findContours(cropped_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
             # Only process cells with more than one contour.
             if len(contours) > 1:
@@ -207,6 +223,8 @@ class SudokuExtraction:
 
                 # check if the contour is centered and the right size for a digit.
                 x, y, w, h = cv2.boundingRect(cnt[1])
+                canvas = np.ones((46, 46), dtype=np.uint8) * 255
+                a = cv2.drawContours(canvas, cnt, 0, (0,255,0), 1)
                 if h >= 46 // 2 and self.isCentered(x, y, w, h) == True:
                     digit_Cells.append(cropped_image[y:y + h, x:x + w])
                 else:
