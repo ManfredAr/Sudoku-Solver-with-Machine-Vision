@@ -29,7 +29,6 @@ class KillerSudokuExtraction:
         '''
         processedImage = self.extraction.convertAndCrop()
         edgePoints, image = self.extraction.getBorder(processedImage)
-        print(image)
         self.image = image
         straightenedImage, original = self.straightenImage(processedImage, edgePoints)
         cells, cageSums = self.cellExtraction(straightenedImage, original)

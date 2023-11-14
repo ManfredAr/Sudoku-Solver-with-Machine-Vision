@@ -1,6 +1,4 @@
 import math
-import os
-from django.conf import settings
 import keras
 import cv2
 import numpy as np
@@ -18,9 +16,7 @@ class NumberRecognition:
         '''
         Constructor for the class, it instantiates the trained model so it can make predictions.
         '''
-
-        #model_file_path = os.path.join(settings.STATIC_ROOT, 'NumbersRecognition.h5')
-        self.model = keras.models.load_model("backend/NumberRecognition.h5")
+        self.model = keras.models.load_model("backend/newModel.h5")
 
     def ConvertToArray(self, arr):
         '''
@@ -93,7 +89,7 @@ class NumberRecognition:
         # padding the image to get it in a 28x28 shape.
         colsPadding = (int(math.ceil((28-cols)/2.0)),int(math.floor((28-cols)/2.0)))
         rowsPadding = (int(math.ceil((28-rows)/2.0)),int(math.floor((28-rows)/2.0)))
-        image = np.lib.pad(image[:, :],(rowsPadding,colsPadding),'constant')
+        image = np.lib.pad(image,(rowsPadding,colsPadding),'constant')
 
         shiftx, shifty = self.getBestShift(image)
 

@@ -37,6 +37,7 @@ class SudokuExtraction:
         image_bytes = self.image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         self.image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        #self.image = cv2.imread(self.image)
         self.image_copy = self.image
 
 
@@ -187,9 +188,16 @@ class SudokuExtraction:
                 # getting each 50x50 block from the image
                 block = image[y:y+cell_height, x:x+cell_width]
                 block = cv2.detailEnhance(block, sigma_s=20, sigma_r=1.0)
-                block = cv2.cvtColor(block, cv2.COLOR_BGR2GRAY)
+                
+                se = cv2.getStructuringElement(cv2.MORPH_RECT, (4,4))
+                bg = cv2.morphologyEx(block, cv2.MORPH_DILATE, se)
+                out_gray = cv2.divide(block, bg, scale=255)
+
+                # Convert out_gray to grayscale
+                out_gray = cv2.cvtColor(out_gray, cv2.COLOR_BGR2GRAY)
+                out_binary = cv2.threshold(out_gray, 0, 255, cv2.THRESH_OTSU)[1]
                 # Appending the extracted block to the cells array
-                cells.append(block)
+                cells.append(out_binary)
 
         return cells
     
@@ -212,10 +220,8 @@ class SudokuExtraction:
             new_height = 50 - 2 * 2
             new_width = 50 - 2 * 2
             cropped_image = cells[i][2:2 + new_height, 2:2 + new_width]
-            blurred = cv2.GaussianBlur(cropped_image, (3,3), 0)
-            threshold = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 0)
+            threshold = cv2.adaptiveThreshold(cropped_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 37, 0)
             contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
 
             # Only process cells with more than one contour.
             if len(contours) > 1:
@@ -223,9 +229,7 @@ class SudokuExtraction:
 
                 # check if the contour is centered and the right size for a digit.
                 x, y, w, h = cv2.boundingRect(cnt[1])
-                canvas = np.ones((46, 46), dtype=np.uint8) * 255
-                a = cv2.drawContours(canvas, cnt, 0, (0,255,0), 1)
-                if h >= 46 // 2 and self.isCentered(x, y, w, h) == True:
+                if h >= 46 // 2 and (x > 2 and x + w < 44) and (y > 2 and y + h < 44) and h*w < 1500 and h < 40 and w < 30 and self.isCentered(x, y, w, h) == True:
                     digit_Cells.append(cropped_image[y:y + h, x:x + w])
                 else:
                     digit_Cells.append(-1)

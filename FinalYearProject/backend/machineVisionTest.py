@@ -3,5 +3,5 @@ from NumberRecognition import NumberRecognition
 import cv2
 #from KillerSudokuExtraction import KillerSudokuExtraction
 
-a = SudokuExtraction(".\MachineVisionImages\Sudoku2.png")
+a = SudokuExtraction(".\MachineVisionImages\Sudoku6.jpg")
 print(a.convertToArray())
