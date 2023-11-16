@@ -47,11 +47,14 @@ class NumberRecognition:
         '''
         pred_arr = []
         for i in range(len(arr)):
-            gray_image = cv2.cvtColor(arr[i], cv2.COLOR_BGR2GRAY)
-            processedImages = self.preprocess(gray_image)
+            processedImages = self.preprocess(arr[i])
             img = processedImages.reshape((1, 28, 28, 1))
             prediction = self.model.predict(img)
             pred_arr.append(int(prediction.argmax()))
+            print(int(prediction.argmax()))
+            cv2.imshow("img", processedImages)
+            cv2.waitKey()
+            cv2.destroyAllWindows()
 
         return pred_arr
 

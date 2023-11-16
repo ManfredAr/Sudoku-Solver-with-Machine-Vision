@@ -121,7 +121,7 @@ class KillerSudokuExtraction:
 
             sides = self.getCageSides(cells[i])
             for j in range(len(sides)):
-                if sides[j] > 3:
+                if sides[j] > 5:
                     current_cell[j+1] = 1
             grid.append(current_cell)
         return grid
@@ -143,7 +143,16 @@ class KillerSudokuExtraction:
         margin = 20
         #left, bottom, right, top
         sides = [0, 0, 0, 0] 
-        contours, hierarchy = cv2.findContours(cell.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)   
+        block = cv2.detailEnhance(cell, sigma_s=15, sigma_r=0.1)
+        se = cv2.getStructuringElement(cv2.MORPH_RECT, (4,4))
+        bg = cv2.morphologyEx(block, cv2.MORPH_DILATE, se)
+        out_gray = cv2.divide(block, bg, scale=255)
+
+        # Convert out_gray to grayscale
+        out_gray = cv2.cvtColor(out_gray, cv2.COLOR_BGR2GRAY)
+        out_binary = cv2.threshold(out_gray, 0, 255, cv2.THRESH_OTSU)[1]
+        contours, hierarchy = cv2.findContours(out_binary.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) 
+        
         for contour in contours:
             # get the bounding rectangle of the contour
             x, y, w, h = cv2.boundingRect(contour)
@@ -153,14 +162,14 @@ class KillerSudokuExtraction:
             center_y = y + h // 2
             
             # check if the center is within the specified margin of the sides
-            if center_x < margin and x > 0:
+            if center_x < margin and x > 2:
                 sides[0] += 1
-            elif center_x > 110 - margin and x + w < 110:
+            elif center_x > 110 - margin and x + w < 108:
                 sides[2] += 1
             
-            if center_y < margin and y > 0:
+            if center_y < margin and y > 2:
                 sides[3] += 1
-            elif center_y > 110 - margin and y + h < 110:
+            elif center_y > 110 - margin and y + h < 108:
                 sides[1] += 1
 
         return sides
@@ -180,19 +189,30 @@ class KillerSudokuExtraction:
         '''
 
         # improving the image resolution
-        high_res = cv2.detailEnhance(cell, sigma_s=15, sigma_r=0.7)
-        gray = cv2.cvtColor(high_res, cv2.COLOR_BGR2GRAY)
-        #blurred = cv2.GaussianBlur(gray, (3,3), 0)
-        canny = cv2.Canny(gray, 160, 255, 1)
+        #block = cv2.detailEnhance(cell, sigma_s=15, sigma_r=0.1)
+        se = cv2.getStructuringElement(cv2.MORPH_RECT, (8,8))
+        bg = cv2.morphologyEx(cell, cv2.MORPH_DILATE, se)
+        out_gray = cv2.divide(cell, bg, scale=255)
+
+        # Convert out_gray to grayscale
+        out_gray = cv2.cvtColor(out_gray, cv2.COLOR_BGR2GRAY)
+        out_binary = cv2.threshold(out_gray, 0, 255, cv2.THRESH_OTSU)[1]
+        canny = cv2.Canny(out_binary, 160, 255, 1)
         contours, hierarchy = cv2.findContours(canny.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnt = sorted(contours, key=cv2.contourArea, reverse=True)
         sums = []
-        current_x = 0
 
         # getting the 2 largest contours in the case of double digit numbers
         for j in range(2):
+            if j >= len(cnt):
+                continue
+            c = np.ones((110,110)) * 255
+            c = cv2.drawContours(c, cnt, j, (0,0,0), 1)
+            cv2.imshow("img", c)
+            cv2.waitKey()
+            cv2.destroyAllWindows()
             x, y, w, h = cv2.boundingRect(cnt[j])
-            roi = cell[y:y+h, x:x+w]
+            roi = out_gray[y:y+h, x:x+w]
             canvas = np.zeros_like(roi)
             canvas[:h, :w] = roi
             # filtering contours with are not digits
@@ -275,7 +295,7 @@ class KillerSudokuExtraction:
         for y in range(0, 990, cell_height):
             for x in range(0, 990, cell_width):
                 # Get each 110x110 block from the image
-                block = image[y:y+cell_height, x:x+cell_width]
+                block = original[y:y+cell_height, x:x+cell_width]
                 
                 # Append the extracted block to the cells array
                 cells.append(block)

@@ -1,7 +1,7 @@
-from SudokuExtraction import SudokuExtraction
+from KillerSudokuExtraction import KillerSudokuExtraction
 from NumberRecognition import NumberRecognition
 import cv2
 #from KillerSudokuExtraction import KillerSudokuExtraction
 
-a = SudokuExtraction(".\MachineVisionImages\Sudoku6.jpg")
-print(a.convertToArray())
+a = KillerSudokuExtraction(".\MachineVisionImages\Ksudoku1.jpg")
+print(a.convertToPuzzle())
