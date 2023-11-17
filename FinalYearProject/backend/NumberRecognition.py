@@ -51,10 +51,6 @@ class NumberRecognition:
             img = processedImages.reshape((1, 28, 28, 1))
             prediction = self.model.predict(img)
             pred_arr.append(int(prediction.argmax()))
-            print(int(prediction.argmax()))
-            cv2.imshow("img", processedImages)
-            cv2.waitKey()
-            cv2.destroyAllWindows()
 
         return pred_arr
 

@@ -30,8 +30,8 @@ class KillerSudokuExtraction:
         processedImage = self.extraction.convertAndCrop()
         edgePoints, image = self.extraction.getBorder(processedImage)
         self.image = image
-        straightenedImage, original = self.straightenImage(processedImage, edgePoints)
-        cells, cageSums = self.cellExtraction(straightenedImage, original)
+        straightenedImage = self.straightenImage(edgePoints)
+        cells, cageSums = self.cellExtraction(straightenedImage)
         cages = self.getPuzzle(cells, cageSums)
         self.cages = [cages[i:i+9] for i in range(0, len(cages), 9)]
         cages = self.constructCages()
@@ -189,34 +189,31 @@ class KillerSudokuExtraction:
         '''
 
         # improving the image resolution
-        #block = cv2.detailEnhance(cell, sigma_s=15, sigma_r=0.1)
-        se = cv2.getStructuringElement(cv2.MORPH_RECT, (8,8))
+        se = cv2.getStructuringElement(cv2.MORPH_RECT, (6,6))
         bg = cv2.morphologyEx(cell, cv2.MORPH_DILATE, se)
         out_gray = cv2.divide(cell, bg, scale=255)
 
         # Convert out_gray to grayscale
         out_gray = cv2.cvtColor(out_gray, cv2.COLOR_BGR2GRAY)
         out_binary = cv2.threshold(out_gray, 0, 255, cv2.THRESH_OTSU)[1]
-        canny = cv2.Canny(out_binary, 160, 255, 1)
+        canny = cv2.Canny(out_binary, 100, 255, 1)
         contours, hierarchy = cv2.findContours(canny.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cnt = sorted(contours, key=cv2.contourArea, reverse=True)
+        sorted_contours = sorted(contours, key=lambda x: cv2.boundingRect(x)[2] * cv2.boundingRect(x)[3], reverse=True)
         sums = []
+        can = np.ones((40,40)) * 255
 
         # getting the 2 largest contours in the case of double digit numbers
-        for j in range(2):
-            if j >= len(cnt):
-                continue
-            c = np.ones((110,110)) * 255
-            c = cv2.drawContours(c, cnt, j, (0,0,0), 1)
-            cv2.imshow("img", c)
-            cv2.waitKey()
-            cv2.destroyAllWindows()
-            x, y, w, h = cv2.boundingRect(cnt[j])
+        for j in range(len(sorted_contours)):
+            x, y, w, h = cv2.boundingRect(sorted_contours[j])
             roi = out_gray[y:y+h, x:x+w]
             canvas = np.zeros_like(roi)
             canvas[:h, :w] = roi
             # filtering contours with are not digits
-            if w * h > 80 and w * h < 1500 and  h < 40 and w < 40:
+            if h*w < 1000 and h < 35 and h > 15 and w < 25 and w > 5:
+                #can = cv2.drawContours(can, sorted_contours, j, (0,0,0), 1)
+                #cv2.imshow("image", can)
+                #cv2.waitKey()
+                #cv2.destroyAllWindows()
                 if len(sums) == 0:
                     sums.append(canvas)
                     current_x = x
@@ -235,9 +232,37 @@ class KillerSudokuExtraction:
         return int(cageSum) 
             
 
+    def isCentered(self, x1, y1, w1, h1):
+        '''
+        Checking if the given contour is centered or not
+
+        Parameters:
+        x1 - x coordinate of contour
+        y1 - y cooridnate of contour
+        w1 - width of the contour
+        h1 - hight of the contour
+
+        Returns:
+        True if centered false otherwise.
+        '''
+
+        # defining the center to be 15 x 15
+        x2, y2, w2, h2 = 15, 5, 30, 10
+
+        # Calculate the right and bottom coordinates of each rectangle
+        right1, bottom1 = y1 + w1, x1 + h1
+        right2, bottom2 = y2 + w2, x2 + h2
+
+        # Checking if there is an overlap
+        if (x1 > right2) or (x2 > right1):
+            return False 
+        if (y1 > bottom2) or (y2 > bottom1):
+            return False
+
+        return True
 
 
-    def straightenImage(self, processedImage, edges):
+    def straightenImage(self, edges):
         '''
         Givens the corners of the puzzle, it resizes the puzzle as need to fit in a 
         450x450 box. 
@@ -266,15 +291,13 @@ class KillerSudokuExtraction:
         # Calculate the perspective transformation matrix
         M = cv2.getPerspectiveTransform(edgePoints, dst)
 
-        # Apply the perspective transformation to the image
-        output1 = cv2.warpPerspective(processedImage, M, (990, 990))
-        output2 = cv2.warpPerspective(image, M, (990, 990))
+        image = cv2.warpPerspective(image, M, (990, 990))
 
-        return output1, output2
+        return image
     
 
 
-    def cellExtraction(self, image, original):   
+    def cellExtraction(self, original):   
         '''
         Extracts all the cells from the image 
 
@@ -300,6 +323,6 @@ class KillerSudokuExtraction:
                 # Append the extracted block to the cells array
                 cells.append(block)
 
-                original_cells.append(original[y:y+50, x:x+50])
+                original_cells.append(original[y:y+40, x+5:x+45])
 
         return cells, original_cells
