@@ -1,4 +1,4 @@
-from backend.heap import heap
+from backend.SudokuHeap import SudokuHeap
 
 class SudokuSolver2:
     '''
@@ -13,7 +13,7 @@ class SudokuSolver2:
         A sudoku object which contains the grid to be solved.
         '''
         self.sudoku = grid
-        self.heap = heap()
+        self.heap = SudokuHeap()
         self.removed = {}
     
     def solver(self):

@@ -19,14 +19,13 @@ class KSudokuScreen {
     CreateGame() {
         // create the possible numbers to be used as buttons .
         // the 10th is not a number its a delete number button.
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 0; i <= 10; i++) {
             // 1-9 button
             if (i != 10) {
                 let number = document.createElement("div");
                 number.id = i;
                 number.innerText = i;
                 number.className = "num";
-                //number.addEventListener("click", this.selectedNum);
                 number.classList.add("number");
                 document.getElementsByClassName("values")[0].appendChild(number);
             } else {
@@ -35,7 +34,6 @@ class KSudokuScreen {
                 number.id = "x"
                 number.innerText = "x";
                 number.className = "num";
-                //number.addEventListener("click", this.selectedNum);
                 number.classList.add("number");
                 document.getElementsByClassName("values")[0].appendChild(number);
             }
@@ -315,7 +313,7 @@ class KSudokuScreen {
         let cage = this.groups[parseInt(tile.getAttribute("cagenum"))];
         const values = Object.values(cage)[0];
         if (sumElement != null) {
-            if (num > 0 && num < 10) {
+            if (num < 10) {
                 sumElement.innerText += num;
                 const newval = sumElement.innerText;
                 this.groups[parseInt(tile.getAttribute("cagenum"))] = {[newval]: values };

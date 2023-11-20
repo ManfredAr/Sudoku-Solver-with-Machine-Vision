@@ -2,6 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 def playSudoku(request):
+    '''
+    If a Sudoku puzzle was stored then that puzzle is returned otherwise a new 
+    puzzle will be returned.
+    '''
     try:
         grid = request.session['Sarray']
         solution = request.session['Ssolution']

@@ -1,4 +1,4 @@
-from backend.puzzleExtraction import PuzzleExtraction
+from backend.SudokuExtraction import SudokuExtraction
 import unittest  
 import numpy as np
 
@@ -6,7 +6,7 @@ class Test_PuzzleExtraction(unittest.TestCase):
 
     # testing that the constructor is instantiated properly
     def test_Preprocess(self):
-        num = PuzzleExtraction(".\MachineVisionImages\Sudoku3.jpg")
+        num = SudokuExtraction(".\MachineVisionImages\Sudoku3.jpg")
         self.assertEqual(num.image, ".\MachineVisionImages\Sudoku3.jpg")
 
     ## the following tests are redundant because of changed code.

@@ -56,3 +56,17 @@ Week 7 - 08/11/2023:
 This week I have been working on the report to get it ready for the submission. I have added a section on machine vision, software engineering,
 introduction and conclusion. However, there are a few section which need to be improved.
 Next, I will work on adding all my references and generally getting the report in a good state.
+
+
+Week 8 - 14/11/23:
+This week I worked on finishing off the report to add the final sections. I have also created a new model for my digit classification code which 
+has improved the accuracy of the machine vision. 
+Next, I will work on applying these changes for the killer sudoku machine vision. I will also try to improve my solver for the killer sudoku by
+trying a different way to get the variable domains.
+
+
+Week 9 - 20/11/23
+This week I worked on improving my killer sudoku machine vision, as it was struggling my obtaining the correct cages and the cage sums. I have 
+made the algorithm more flexible at identifying these things and also incorperated the new machine learning model. Through testing I have seen the
+models accuracy improve a lot however its struggling to identify the number 1. 
+Next, I will work on trying to improve the recursive algorithm for the killer sudoku, as it currently takes too long.
