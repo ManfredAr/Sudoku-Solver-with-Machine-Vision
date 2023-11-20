@@ -1,4 +1,4 @@
-from backend.Sudoku import Sudoku
+from Sudoku import Sudoku
 
 
 class KillerSudoku:

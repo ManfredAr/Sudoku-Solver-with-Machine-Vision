@@ -1,8 +1,6 @@
 import time
-from killerSudokuSolver import KillerSudokuSolver
-from killerSudokuSolver2 import KillerSudokuSolver2
+from killerSudokuSolver3 import KillerSudokuSolver3
 from KillerSudoku import KillerSudoku
-from heap import heap
 
 grid = [[0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],
@@ -57,9 +55,16 @@ cages = {
     32 : { 13 : [(8,6), (8,7)]},
 }
 
+from itertools import permutations
 
-a = KillerSudokuSolver(KillerSudoku(grid, cages))
+
+a = KillerSudokuSolver3(KillerSudoku(grid, cages))
+#a.setupHeap()
+
+#print(a.queue.pq)
 start = time.time()
 print(a.solver())
-end = time.time()
-print(end - start)
+#print(a.queue.pq)
+#print(a.solver())
+#end = time.time()
+#print(end - start)
