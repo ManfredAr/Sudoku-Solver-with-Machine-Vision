@@ -32,13 +32,14 @@
     padding: 10px;
 }
 
-.container {
+body {
     /* adding a gradient background */
-    height: 100%;
+    height: 100vh;
+    min-height: 100vh;
     background-image: linear-gradient(rgba(136, 1, 138, 0.768), rgb(0, 28, 152));
     background-repeat: no-repeat;
     background-attachment: fixed;
-    min-height: 100vh;
+    padding-bottom: 40px;
 }
 
 .Navbar {
