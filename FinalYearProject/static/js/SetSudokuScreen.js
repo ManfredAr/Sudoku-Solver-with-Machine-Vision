@@ -79,6 +79,13 @@ class SudokuScreen {
         }
     }
 
+    // displays the answer for a cell
+    giveHint() {
+        document.getElementById(this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
+        this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
+        this.isComplete();
+    }
+
     // Used to revert the last action that was taken.
     lastAction(event) {
         let action = this.myStack.getLastAction();

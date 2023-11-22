@@ -2,6 +2,7 @@
     color: white;
 }
 
+
 .puzzleType {
     display: flex;
     flex-direction: column;
@@ -21,6 +22,15 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
+}
+
+input#imageUpload {
+    width: 200px;
+}
+
+.uploadImage {
+    display: block !important;
+    text-align: center;
 }
 
 .overlay {
@@ -55,9 +65,12 @@
 }
 
 @media (max-width: 768px) {
-    #grid {
-        height: 320px;
+    .UploadContainer {
         width: 320px;
+        justify-content: center;
+        color: white;
+        display: flex;
+        text-align: center;
     }
 
     .cell {
@@ -79,49 +92,6 @@
 
     .number {
         /* the dimensions of each individual number buttons */
-        width: 32px; 
-        height: 32px;
-        font-size: 20px;
-    }
-}
-
-/* Styling for smaller screens */
-/* all these stylings simply changes the dimension of the elements */
-@media (max-width: 768px) {
-    #grid1 {
-        height: 320px;
-        width: 320px;
-    }
-
-    .tile {
-        height: 35px;
-        width: 35px;
-    }
-
-    .cage {
-        font-size: 10px;
-        border: 1px dashed black;
-        padding: 3px;   
-    }
-
-    .noteCell {
-        height: 7px;
-        width: 7px;
-        font-size: 6px;
-    }
-
-    .sumsquare {
-        height: 10px;
-        width: 10px;
-        font-size: 8px;
-    }
-
-    .values {
-        width: 320px;
-        height: 50px;
-    }
-
-    .number {
         width: 32px; 
         height: 32px;
         font-size: 20px;

@@ -22,8 +22,12 @@
                 <label><input id="ksudoku" type="radio" name="group" value="killerSudoku"> Killer Sudoku </label><br>    
             </div>
             <div class="uploadImage">
-                <label for="imageUpload">Choose an image to upload:</label> <br/>
-                <input type="file" name="image" id="imageUpload" accept="image/*">
+                <div style="display: block;">
+                    <label for="imageUpload">Choose an image to upload:</label>
+                </div>
+                <div style="display: block;">
+                    <input type="file" name="image" id="imageUpload" accept="image/*">
+                </div>
             </div>
             <div class="submit">
                 <button id="processImage"> Process Image </button>
