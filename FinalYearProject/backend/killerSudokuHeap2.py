@@ -48,7 +48,7 @@ class KillerSudokuHeap2:
         - A tuple containing the row and column
         - A set containing all the values in the domain
         '''
-        entry = self.key_map.pop(task[3])
+        entry = self.key_map.pop(task[2])
         entry[-1] = self.REMOVED
 
 
@@ -85,7 +85,7 @@ class KillerSudokuHeap2:
         if val in item[4]:
             m_set = item[4].copy()
             m_set.remove(val)
-            self.addToHeap((len(m_set), item[1], item[3], m_set, item[5]-val))
+            self.addToHeap((len(m_set), item[1]-1, item[3], m_set, item[5]-val))
             return (item[0], item[1], item[3], item[4], item[5])
         return None
     

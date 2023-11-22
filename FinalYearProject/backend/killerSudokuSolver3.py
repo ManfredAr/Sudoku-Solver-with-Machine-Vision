@@ -41,13 +41,13 @@ class KillerSudokuSolver3:
         
         # gets the cell with the lowest domain length
         priority, cageLength, cell, domain, cageSum = queue.pop_cell()
-        if cageLength == None:
+        if priority == None:
             return True
     
-        if priority == 0:
+        if priority == 0 or cageLength == 0:
             queue.addToHeap((priority, cageLength, cell, domain, cageSum))
             return False
-
+    
         for value in domain:
             if cageLength != 1 or (cageLength == 1 and value == cageSum):
                 self.KSudoku.grid[cell[0]][cell[1]] = value
@@ -74,7 +74,7 @@ class KillerSudokuSolver3:
         col - the column the cell is in.
 
         Returns:
-        An array containing the possiblle values.
+        An array containing the possible values.
         '''
         used = set()
         cageCells = self.KSudoku.getCageCells(row, col)
@@ -152,8 +152,9 @@ class KillerSudokuSolver3:
         '''
         cageCells = set(self.KSudoku.getCageCells(cell[0], cell[1]))
         nonCageCells = self.KSudoku.getRelatedCells(cell[0], cell[1])
-
+        
         nonCageCells -= cageCells
+
         changed = []
         for i in nonCageCells:
             if self.KSudoku.grid[i[0]][i[1]] == 0:
@@ -166,4 +167,5 @@ class KillerSudokuSolver3:
                 check = self.queue.decreaseCageKey(j, val)
                 if check != None:
                     changed.append(check)
+
         return changed

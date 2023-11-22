@@ -55,14 +55,10 @@ cages = {
     32 : { 13 : [(8,6), (8,7)]},
 }
 
-from itertools import permutations
-
-
 a = KillerSudokuSolver3(KillerSudoku(grid, cages))
 #a.setupHeap()
 
-#print(a.queue.pq)
-start = time.time()
+#start = time.time()
 print(a.solver())
 #print(a.queue.pq)
 #print(a.solver())
