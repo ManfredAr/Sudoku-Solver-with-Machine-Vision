@@ -64,13 +64,28 @@ input#imageUpload {
     font-weight: bold;
 }
 
+.disable {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+ }
+
 @media (max-width: 768px) {
-    .UploadContainer {
+    .puzzleType {
         width: 320px;
-        justify-content: center;
-        color: white;
+    }
+
+    .UploadContainer {
         display: flex;
-        text-align: center;
+        align-items: center;
+        justify-content: center;
     }
 
     .cell {
