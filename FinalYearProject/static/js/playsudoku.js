@@ -56,6 +56,7 @@ window.onload = function() {
     document.getElementById("enableNotes").addEventListener("click", () => SetScreen.activeNotes());
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
     document.getElementById("solve").addEventListener("click", () => SetScreen.autoComplete());
+    document.getElementById("hint").addEventListener("click", () => SetScreen.giveHint());
     document.getElementsByClassName("bg")[0].classList.toggle("invisible");
 }
 

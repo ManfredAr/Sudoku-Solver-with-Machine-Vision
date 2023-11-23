@@ -276,6 +276,13 @@ class KSudokuScreen {
 
     }
 
+    // displays the answer for a cell
+    giveHint() {
+        document.getElementById("c" + this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
+        this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
+        this.isComplete();
+    }
+
     // keeping track of the current and previous selected square
     selectedTile(id) {
         //console.log(id);

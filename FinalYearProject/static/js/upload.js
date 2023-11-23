@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // displaying a spinner
         document.getElementById('overlay').classList.add("overlay")
         document.getElementById('overlay').classList.remove("invisible")
+        document.getElementById('cover').classList.add("disable");
+
         const inputElement = document.getElementById('imageUpload');
         const selectedFile = inputElement.files[0];
         let s = document.getElementById("sudoku");
@@ -58,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // removing the spinner
                 document.getElementById('overlay').classList.add("invisible");
                 document.getElementById('overlay').classList.remove("overlay");
+                document.getElementById('cover').classList.remove("disable");
             };
             xhr.send(formData);
         } else {
@@ -66,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // removing the spinner
             document.getElementById('overlay').classList.add("invisible");
             document.getElementById('overlay').classList.remove("overlay");
+            document.getElementById('cover').classList.remove("disable");
         }
     });
 
@@ -84,6 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // this function sends the puzzle to the backend for solving
     // and redirects the user to the relevant screen to play the puzzle.
     function sendToBackend(puzzle) {
+
+        // displaying spinner
+        document.getElementById('overlay').classList.add("overlay")
+        document.getElementById('overlay').classList.remove("invisible")
+        document.getElementById('cover').classList.add("disable");
+
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const formData = new FormData();
         if (puzzle == "sudoku") {
@@ -115,6 +125,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else {
                     // incorrect puzzle displays and alert.
+                    document.getElementById('overlay').classList.add("invisible");
+                    document.getElementById('overlay').classList.remove("overlay");
+                    document.getElementById('cover').classList.remove("disable");
                     console.error('Request failed:', xhr.status);
                     alert("The puzzle was incorrect");
                 }
