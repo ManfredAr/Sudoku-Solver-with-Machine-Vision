@@ -12,7 +12,7 @@ Features:
 - Machine Vision to enter puzzles
 
 Specification:
-The project is developed using Python 3.8.5 so please make sure that is the version you are running the code with.
+The project is developed using Python 3.9.1 so please make sure that is the version you are running the code with.
 
 How to run
 
@@ -22,4 +22,4 @@ How to run
   the command py manage.py runserver. Now to view the website go to this link "http://127.0.0.1:8000/".
 
 - to run the TTD tests use this command "py -m unittest discover -s "./test" -p "test*.py"".
-- to run the frontend testing use this command. Note to run the frontend testing the website should already be running first.
+- to run the frontend testing use this command "py manage.py tests". Note to run the frontend testing the website should already be running first.

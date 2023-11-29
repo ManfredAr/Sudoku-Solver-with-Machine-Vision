@@ -70,3 +70,10 @@ This week I worked on improving my killer sudoku machine vision, as it was strug
 made the algorithm more flexible at identifying these things and also incorperated the new machine learning model. Through testing I have seen the
 models accuracy improve a lot however its struggling to identify the number 1. 
 Next, I will work on trying to improve the recursive algorithm for the killer sudoku, as it currently takes too long.
+
+
+Week 10 - 29/11/23
+This week I have been working on getting my project in a good state to prepare for the interim submission. I have been preparing for the
+presentation and recorded the demo video as well. In the report I have added an appendix which contains the user manual, links to my UML
+diagrams and demo video.  
+Next I will work on trying to add reasoning techniques into my solver to provide the user with better hints.
