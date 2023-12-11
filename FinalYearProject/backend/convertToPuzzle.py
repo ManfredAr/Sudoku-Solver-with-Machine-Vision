@@ -3,7 +3,7 @@ from backend.Sudoku import Sudoku
 from backend.SudokuSolver2 import SudokuSolver2
 
 from backend.KillerSudoku import KillerSudoku
-from backend.killerSudokuSolver2 import KillerSudokuSolver2
+from backend.killerSudokuSolver3 import KillerSudokuSolver3
 
 class convertToPuzzle:
     '''
@@ -85,7 +85,7 @@ class convertToPuzzle:
         if self.Ksudoku.checkValid() == False:
             return False, False, False
         
-        self.solver = KillerSudokuSolver2(self.Ksudoku)
+        self.solver = KillerSudokuSolver3(self.Ksudoku)
 
         solution = self.solver.solver()
 

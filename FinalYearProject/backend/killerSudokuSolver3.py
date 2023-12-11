@@ -1,4 +1,4 @@
-from killerSudokuHeap2 import KillerSudokuHeap2
+from backend.killerSudokuHeap2 import KillerSudokuHeap2
 
 class KillerSudokuSolver3:
     '''
@@ -14,6 +14,7 @@ class KillerSudokuSolver3:
         '''
         self.KSudoku = killerSudoku
         self.queue = KillerSudokuHeap2()
+        self.time = 0
         
 
     def solver(self):
@@ -26,6 +27,7 @@ class KillerSudokuSolver3:
         '''
         self.setupHeap()
         if self.solve(self.queue) == True:
+            print(self.time)
             return self.KSudoku.grid
         return False
     
@@ -44,18 +46,17 @@ class KillerSudokuSolver3:
         if priority == None:
             return True
     
-        if priority == 0 or cageLength == 0:
+        if priority <= 0 or cageLength <= 0:
             queue.addToHeap((priority, cageLength, cell, domain, cageSum))
             return False
     
         for value in domain:
-            if cageLength != 1 or (cageLength == 1 and value == cageSum):
-                self.KSudoku.grid[cell[0]][cell[1]] = value
-                updatedCells = self.decreaseKeys(cell, value)
-                if self.solve(queue):
-                    return True
-                self.KSudoku.grid[cell[0]][cell[1]] = 0
-                queue.increaseKey(updatedCells)
+            self.KSudoku.grid[cell[0]][cell[1]] = value
+            updatedCells = self.decreaseKeys(cell, value, cageLength, cageSum)
+            if self.solve(queue):
+                return True
+            self.KSudoku.grid[cell[0]][cell[1]] = 0
+            queue.increaseKey(updatedCells)
 
         # if backtracking occurs then insert the cell and its values back into the queue
         # since it was the first element just it back in the first index.
@@ -139,8 +140,7 @@ class KillerSudokuSolver3:
 
 
 
-    def decreaseKeys(self, cell, val):
-        
+    def decreaseKeys(self, cell, val, cageLength, cageSum):
         '''
         It updates the cells in the queue to reduce the domains due to a guess being made.
 
@@ -164,7 +164,9 @@ class KillerSudokuSolver3:
 
         for j in cageCells:
             if self.KSudoku.grid[j[0]][j[1]] == 0:
-                check = self.queue.decreaseCageKey(j, val)
+                upLim = self.upperLimit(cageLength-1, cageSum-val)
+                lowLim = self.lowerLimit(cageLength-1, cageSum-val)
+                check = self.queue.decreaseCageKey(j, val, lowLim, upLim)
                 if check != None:
                     changed.append(check)
 

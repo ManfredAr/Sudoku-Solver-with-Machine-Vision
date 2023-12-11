@@ -70,7 +70,7 @@ class KillerSudokuHeap2:
     
 
 
-    def decreaseCageKey(self, cell, val):
+    def decreaseCageKey(self, cell, val, lowLim, upLim):
         '''
         Goes through all the cells in the given cells row, column and 3x3 box and
         updates them if the values assigned is contained in their domain.
@@ -82,12 +82,12 @@ class KillerSudokuHeap2:
         An array containing tuples with the row, column and value of the cells which were updated.
         '''
         item = self.key_map[cell]
-        if val in item[4]:
-            m_set = item[4].copy()
+        m_set = item[4].copy()
+        if val in m_set:
             m_set.remove(val)
-            self.addToHeap((len(m_set), item[1]-1, item[3], m_set, item[5]-val))
-            return (item[0], item[1], item[3], item[4], item[5])
-        return None
+        m_set = {i for i in m_set if i <= upLim and i >= lowLim}
+        self.addToHeap((len(m_set), item[1]-1, item[3], m_set, item[5]-val))
+        return (item[0], item[1], item[3], item[4], item[5])
     
 
     def decreaseNonCageKey(self, cell, val):

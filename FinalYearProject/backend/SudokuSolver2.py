@@ -1,4 +1,4 @@
-from SudokuHeap import SudokuHeap
+from backend.SudokuHeap import SudokuHeap
 
 class SudokuSolver2:
     '''
