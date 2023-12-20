@@ -1,4 +1,5 @@
 from backend.SudokuHeap import SudokuHeap
+from backend.domain import Domain
 
 class SudokuSolver2:
     '''
@@ -15,6 +16,7 @@ class SudokuSolver2:
         self.sudoku = grid
         self.heap = SudokuHeap()
         self.removed = {}
+        self.domain = Domain(grid.grid)
     
     def solver(self):
         '''
@@ -67,43 +69,6 @@ class SudokuSolver2:
         pq.addToHeap(self.removed[(cell[0], cell[1])])
         return False
 
-    
-
-    def getDomain(self, row, col):
-        '''
-        Returns all the values which do not break any constraint rules for the cell.
-
-        Parameters:
-        row - the row of the cell
-        col - the column of the cell
-
-        Returns:
-        A set containing the possible valid numbers
-        '''
-        used = []
-
-        for i in range(9):
-            #get all values in the row
-            if self.sudoku.grid[row][i] > 0:
-                used.append(self.sudoku.grid[row][i])
-
-            # get all values in the column
-            if self.sudoku.grid[i][col] > 0:
-                used.append(self.sudoku.grid[i][col])
-
-
-        #get all values in the box
-        box_row = (row // 3) * 3
-        col_box = (col // 3) * 3
-
-        for i in range(box_row, box_row + 3):
-            for j in range(col_box, col_box + 3):
-                used.append(self.sudoku.grid[i][j])
-
-        # getting all unique values
-        used = set(used)
-        return set([1,2,3,4,5,6,7,8,9]) - used
-    
 
     def setupHeap(self):
         '''
@@ -112,5 +77,5 @@ class SudokuSolver2:
         for i in range(9):
             for j in range(9):
                 if self.sudoku.grid[i][j] == 0:
-                    values = self.getDomain(i, j)
+                    values = self.domain.getDomain(i, j)
                     self.heap.addToHeap((len(values), (i,j), values))
