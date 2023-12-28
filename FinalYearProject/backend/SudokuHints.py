@@ -112,10 +112,70 @@ class SudokuHints:
                     singleCells.append(self.domains[i][col])
         
         return None
+    
+
+    def checkObviousTriples(self):
+        for i in range(0, 9):
+            row = self.checkTriplesInRow(i)
+            if row is not None:
+                return row
+            col = self.checkTriplesInColumn(i)
+            if col is not None:
+                return col
+            box = self.checkTriplesInBox(i//3, i%3)
+            if box is not None:
+                return box
+        return None
+
+    def checkTriplesInRow(self, row):
+        for i in range(9):
+            triples = []
+            ints = set()
+            for j in range(i, 9):
+                if self.domains[row][j] != -1 and len(self.domains[row][j]) <= 3:
+                    if len(ints.union(self.domains[row][j])) <= 3:
+                        triples.append((row,j))
+                        ints = ints.union(self.domains[row][j])
+            if len(triples) == 3:
+                return ("obvious triples in row", triples, ints)
+
+        return None
+    
+    
+    def checkTriplesInColumn(self, col):
+        for i in range(9):
+            triples = []
+            ints = set()
+            for j in range(i, 9):
+                if self.domains[j][col] != -1 and len(self.domains[j][col]) <= 3:
+                    if len(ints.union(self.domains[j][col])) <= 3:
+                        triples.append((j, col))
+                        ints = ints.union(self.domains[j][col])
+            if len(triples) == 3:
+                return ("obvious triples in column", triples, ints)
+
+        return None
+    
+
+    def checkTriplesInBox(self, row, col):    
+        for i in range(row*3, (row*3)+3):
+            for j in range(col*3, (col*3)+3):
+                triples = []
+                ints = set()
+                for a in range(row*3, (row*3)+3):
+                    for b in range(col*3, (col*3)+3):
+                        if self.domains[a][b] != -1 and len(self.domains[a][b]) <= 3:
+                            if len(ints.union(self.domains[a][b])) <= 3:
+                                triples.append((a, b))
+                                ints = ints.union(self.domains[a][b])
+                if len(triples) == 3:
+                    return ("obvious triples in box", triples, ints)
+                
+        return None     
+
 
 
     def checkHiddenSingles(self):
-
         for i in range(0, 9):
             row = self.hiddenSingleRow(i)
             if row is not None:
@@ -127,6 +187,7 @@ class SudokuHints:
             if box is not None:
                 return box
         return None
+
 
     def hiddenSingleRow(self, row):
         for num in range(1, 10):
@@ -172,11 +233,184 @@ class SudokuHints:
                 return ("Hidden single in box", at, num)
             
         return None
+    
+
+    def checkHiddenPair(self):
+
+        for i in range(0, 9):
+            row = self.hiddenPairColumn(i)
+            if row is not None:
+                return row
+            col = self.hiddenPairColumn(i)
+            if col is not None:
+                return col
+            box = self.hiddenPairColumn(i//3, i%3)
+            if box is not None:
+                return box
+        return None
+    
+
+    def hiddenPairRow(self, row):
+        double = {}
+        for num in range(1, 10):
+            at = []
+            for i in range(0, 9):
+                if self.domains[row][i] != -1 and num in self.domains[row][i]:
+                    at.append((row, i))
+            if len(at) == 2:
+                if tuple(at) in double:
+                    for a in at:
+                        self.domains[a[0]][a[1]] = {double[tuple(at)], num}
+                    return ("hidden pair in row", at, double[tuple(at)], num)
+                else: 
+                    double[tuple(at)] = num
+        return None
 
 
+    def hiddenPairColumn(self, col):
+        double = {}
+        for num in range(1, 10):
+            at = []
+            for i in range(0, 9):
+                if self.domains[i][col] != -1 and num in self.domains[i][col]:
+                    at.append((i, col))
+            if len(at) == 2:
+                if tuple(at) in double:
+                    for a in at:
+                        self.domains[a[0]][a[1]] = {double[tuple(at)], num}
+                    return ("hidden pair in column", at, double[tuple(at)], num)
+                else: 
+                    double[tuple(at)] = num
+        return None
 
-                
+
+    def hiddenPairBox(self, row, col):
+        double = {}
+        for num in range(1, 10):
+            at = []
+            for i in range(row*3, (row*3)+3):
+                for j in range(col*3, (col*3)+3):
+                    if self.domains[i][j] != -1 and num in self.domains[i][j]:
+                        at.append((i, j))          
+            if len(at) == 2:
+                if tuple(at) in double:
+                    for a in at:
+                        self.domains[a[0]][a[1]] = {double[tuple(at)], num}
+                    return ("hidden pair in box", at, double[tuple(at)], num)
+                else: 
+                    double[tuple(at)] = num
+        return None
+    
+
+    def checkHiddenTriple(self):
+
+        for i in range(0, 9):
+            row = self.hiddenTripleRow(i)
+            if row is not None:
+                return row
+            col = self.hiddenTripleColumn(i)
+            if col is not None:
+                return col
+            box = self.hiddenTripleBox(i//3, i%3)
+            if box is not None:
+                return box
+        return None
 
 
+    def hiddenTripleRow(self, row):
+        triplesCells = []
+        tripleNums = []
+        for num in range(1, 10):
+            at = []
+            for j in range(9):
+                if self.domains[row][j] != -1 and num in self.domains[row][j]: 
+                    at.append((row, j))
+            if len(at) <= 3 and len(at) != 0:
+              if len(at) <= 3 and len(at) != 0:
+                if len(triplesCells) != 0:
+                    change = False
+                    for i in range(len(triplesCells)):
+                        if triplesCells[i].issubset(set(at)) or set(at).issubset(triplesCells[i]):
+                            triplesCells[i] = triplesCells[i].union(set(at))
+                            tripleNums[i] = tripleNums[i].union(set([num]))
+                            change = True
+                            
+                    if change == False:
+                        triplesCells.append(set(at))
+                        tripleNums.append(set([num]))
+                else:
+                    triplesCells.append(set(at))
+                    tripleNums.append(set([num]))
 
+        return self.find_triples(triplesCells, tripleNums, "row")
+
+
+    def hiddenTripleColumn(self, col):
+        triplesCells = []
+        tripleNums = []
+        for num in range(1, 10):
+            at = []
+            for j in range(9):
+                if self.domains[j][col] != -1 and num in self.domains[j][col]: 
+                    at.append((j, col))
+            if len(at) <= 3 and len(at) != 0:
+                if len(triplesCells) != 0:
+                    change = False
+                    for i in range(len(triplesCells)):
+                        if triplesCells[i].issubset(set(at)) or set(at).issubset(triplesCells[i]):
+                            triplesCells[i] = triplesCells[i].union(set(at))
+                            tripleNums[i] = tripleNums[i].union(set([num]))
+                            change = True
+                            
+                    if change == False:
+                        triplesCells.append(set(at))
+                        tripleNums.append(set([num]))
+                else:
+                    triplesCells.append(set(at))
+                    tripleNums.append(set([num]))
+
+        return self.find_triples(triplesCells, tripleNums, "column")
+    
+
+    def hiddenTripleBox(self, row, col):
+        triplesCells = []
+        tripleNums = []
+        for num in range(1, 10):
+            at = []
+            for i in range(row*3, (row*3)+3):
+                for j in range(col*3, (col*3)+3):
+                    if self.domains[i][j] != -1 and num in self.domains[i][j]: 
+                        at.append((i, j))
+            if len(at) <= 3 and len(at) != 0:
+                if len(triplesCells) != 0:
+                    change = False
+                    for i in range(len(triplesCells)):
+                        if triplesCells[i].issubset(set(at)) or set(at).issubset(triplesCells[i]):
+                            triplesCells[i] = triplesCells[i].union(set(at))
+                            tripleNums[i] = tripleNums[i].union(set([num]))
+                            change = True
+                            
+                    if change == False:
+                        triplesCells.append(set(at))
+                        tripleNums.append(set([num]))
+                else:
+                    triplesCells.append(set(at))
+                    tripleNums.append(set([num]))
+
+        return self.find_triples(triplesCells, tripleNums, "box")
+    
+
+    def find_triples(self, triplesCells, tripleNums, unit):
+        for a in range(len(triplesCells)):
+            numbers = tripleNums[a]
+            for b in range(a+1, len(triplesCells)):
+                if triplesCells[a] == triplesCells[b]:
+                    numbers = numbers.union(tripleNums[b])
+            if len(triplesCells[a]) == 3 and len(numbers) == 3:
+                difference = {1,2,3,4,5,6,7,8,9} - numbers
+                for cell in triplesCells[a]:
+                    self.domains[cell[0]][cell[1]] = self.domains[cell[0]][cell[1]] - difference
+                reponse = "hidden triple in " + unit
+                return (reponse, triplesCells[a], numbers)
         
+        return None
