@@ -133,6 +133,16 @@ class Test_Domain(unittest.TestCase):
             ["-","9","-","2","-","3","6","5","4"],
             ["-","-","3","-","-","9","8","2","1"],
             ["-","-","-","-","8","-","9","3","7"]]
+    
+    grid14=[["9","3","-","-","5","-","-","-","-"],
+            ["-","-","-","6","3","-","-","9","5"],
+            ["8","5","6","-","-","2","-","-","-"],
+            ["-","-","3","1","8","-","5","7","-"],
+            ["-","-","5","-","2","-","9","8","-"],
+            ["-","8","-","-","-","5","-","-","-"],
+            ["-","-","-","8","-","-","1","5","9"],
+            ["5","-","8","2","1","-","-","-","4"],
+            ["-","-","-","5","6","-","-","-","8"]]
 
     def test_constructor(self):
         sudoku = SudokuHints(self.grid)
@@ -215,3 +225,12 @@ class Test_Domain(unittest.TestCase):
     def test_checkHiddenTriplesColumn(self):
         sudoku = SudokuHints(self.grid12)
         self.assertEqual(sudoku.hiddenTripleColumn(5), ("hidden triple in column", {(5,5), (3,5), (7,5)}, {2,5,6}))
+
+    def test_checkPointingCellsRows(self):
+        sudoku = SudokuHints(self.grid13)
+        self.assertEqual(sudoku.pointingCellsRow(0,2), ("pointing cells in row", {2}, 2))
+
+    def test_checkPointingCellsColumn(self):
+        sudoku = SudokuHints(self.grid14)
+        self.assertEqual(sudoku.pointingCellsColumn(2,1), ("pointing cells in column", {5}, 3))
+

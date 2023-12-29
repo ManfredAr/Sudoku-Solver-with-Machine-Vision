@@ -414,3 +414,47 @@ class SudokuHints:
                 return (reponse, triplesCells[a], numbers)
         
         return None
+    
+
+    def checkPointingCells(self):
+        for i in range(0, 9):
+            row = self.pointingCellsRow(i//3, i%3)
+            if row is not None:
+                return row
+            col = self.pointingCellsColumn(i//3, i%3)
+            if col is not None:
+                return col
+        return None
+
+    def pointingCellsRow(self, row, col):
+        for num in range(1, 10):
+            occur = []
+            for i in range(row*3, (row*3)+3):
+                for j in range(col*3, (col*3)+3):
+                    if self.domains[i][j] != -1 and num in self.domains[i][j]:
+                        occur.append(i)
+            
+            if len(set(occur)) == 1: 
+                for i in range(9):
+                    if self.domains[occur[0]][i] != -1 and i > col*3 and i < (col*3) + 3:
+                        self.domains[occur[0]][i] = self.domains[occur[0]][i].remove(num)
+                return ("pointing cells in row", set(occur), num)
+
+        return None
+
+
+    def pointingCellsColumn(self, row, col):
+        for num in range(1, 10):
+            occur = []
+            for i in range(row*3, (row*3)+3):
+                for j in range(col*3, (col*3)+3):
+                    if self.domains[i][j] != -1 and num in self.domains[i][j]:
+                        occur.append(j)
+            
+            if len(set(occur)) == 1: 
+                for i in range(9):
+                    if self.domains[i][occur[0]] != -1 and i > col*3 and i < (col*3) + 3:
+                        self.domains[occur[0]][i] = self.domains[i][occur[0]].remove(num)
+                return ("pointing cells in column", set(occur), num)
+
+        return None
