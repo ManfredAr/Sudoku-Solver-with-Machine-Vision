@@ -69,12 +69,12 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousSingle(self):
         sudoku = SudokuHints(self.grid1)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains), ("Obvious single", 0, 0, 4))
+        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[1], ("Obvious single", 0, 0, 4))
 
     def test_nocheckObviousSingle(self):
         sudoku = SudokuHints(self.grid2)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains), None)
+        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[0], None)
 
     def test_checkObviousPairsBox(self):
         sudoku = SudokuHints(self.grid3)

@@ -13,15 +13,15 @@ class HiddenSinglePairTriple:
         A tuple containing the technique used, the row, column and the actual number.
         '''
         for i in range(0, 9):
-            row, domain = self.hiddenSingleRow(i, domain)
+            row, grid = self.hiddenSingleRow(i, domain)
             if row is not None:
-                return domain, row
-            col, domain = self.hiddenSingleColumn(i, domain)
+                return grid, row
+            col, grid = self.hiddenSingleColumn(i, domain)
             if col is not None:
-                return domain, col
-            box, domain = self.hiddenSingleBox(i//3, i%3, domain)
+                return grid, col
+            box, grid = self.hiddenSingleBox(i//3, i%3, domain)
             if box is not None:
-                return domain, box
+                return grid, box
         return None, None
 
 
@@ -110,15 +110,15 @@ class HiddenSinglePairTriple:
         A tuple containing the technique used, the row, column and the actual number.
         '''
         for i in range(0, 9):
-            row, domain = self.hiddenPairColumn(i, domain)
+            row, grid = self.hiddenPairRow(i, domain)
             if row is not None:
-                return domain, row
-            col, domain = self.hiddenPairColumn(i, domain)
+                return grid, row
+            col, grid = self.hiddenPairColumn(i, domain)
             if col is not None:
-                return domain, col
-            box, domain = self.hiddenPairColumn(i//3, i%3, domain)
+                return grid, col
+            box, grid = self.hiddenPairBox(i//3, i%3, domain)
             if box is not None:
-                return domain, box
+                return grid, box
         return None, None
     
 
@@ -210,15 +210,15 @@ class HiddenSinglePairTriple:
         A tuple containing the technique used, the row, column and the actual number.
         '''
         for i in range(0, 9):
-            row, domain = self.hiddenTripleRow(i, domain)
+            row, grid = self.hiddenTripleRow(i, domain)
             if row is not None:
-                return domain, row
-            col, domain = self.hiddenTripleColumn(i, domain)
+                return grid, row
+            col, grid = self.hiddenTripleColumn(i, domain)
             if col is not None:
-                return domain, col
-            box, domain = self.hiddenTripleBox(i//3, i%3, domain)
+                return grid, col
+            box, grid = self.hiddenTripleBox(i//3, i%3, domain)
             if box is not None:
-                return domain, box
+                return grid, box
         return None, None
 
 

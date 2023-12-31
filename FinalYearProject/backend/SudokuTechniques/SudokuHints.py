@@ -28,6 +28,9 @@ class SudokuHints:
 
         domain = Domain(self.grid)
         self.domains = domain.getAllDomains()
+        self.ObviousSinglePairTriple = ObviousSinglePairTriple()
+        self.HiddenSinglePairTriple = HiddenSinglePairTriple()
+        self.PointingCells = PointingCells()
 
 
 
@@ -41,43 +44,48 @@ class SudokuHints:
         '''
         output = []
         while True:
-            domain, ObviousSingle = ObviousSinglePairTriple.checkObviousSingle(self.domains)
+            domain, ObviousSingle = self.ObviousSinglePairTriple.checkObviousSingle(self.domains)
             if domain != None:
                 self.domain = domain
                 output.append(ObviousSingle)
                 break
-            domain, ObviousPair = ObviousSinglePairTriple.checkObviousPairs(self.domain)
+            domain, ObviousPair = self.ObviousSinglePairTriple.checkObviousPairs(self.domains)
             if domain != None:
-                self.domain = domain
-                output.append(ObviousPair)
-                continue
-            domain, ObviousTriple = ObviousSinglePairTriple.checkObviousTriple(self.domain)
+                if ObviousPair not in output:
+                    self.domain = domain
+                    output.append(ObviousPair)
+                    continue
+            domain, ObviousTriple = self.ObviousSinglePairTriple.checkObviousTriples(self.domains)
             if domain != None:
-                self.domain = domain
-                output.append(ObviousTriple)
-                continue
-            domain, HiddenSingle = HiddenSinglePairTriple.checkHiddenSingles(self.domain)
+                if ObviousTriple not in output:
+                    self.domain = domain
+                    output.append(ObviousTriple)
+                    continue
+            domain, HiddenSingle = self.HiddenSinglePairTriple.checkHiddenSingles(self.domains)
             if domain != None:
-                self.domain = domain
-                output.append(HiddenSingle)
-                continue
-            domain, HiddenPair = HiddenSinglePairTriple.checkHiddenPair(self.domain)
+                if HiddenSingle not in output:
+                    self.domain = domain
+                    output.append(HiddenSingle)
+                    continue
+            domain, HiddenPair = self.HiddenSinglePairTriple.checkHiddenPair(self.domains)
             if domain != None:
-                self.domain = domain
-                output.append(HiddenPair)
-                continue
-            domain, HiddenTriple = HiddenSinglePairTriple.checkHiddenTriple(self.domain)
+                if HiddenPair not in output:
+                    self.domain = domain
+                    output.append(HiddenPair)
+                    continue
+            domain, HiddenTriple = self.HiddenSinglePairTriple.checkHiddenTriple(self.domains)
             if domain != None:
-                self.domain = domain
-                output.append(HiddenTriple)
-                continue
-            domain, PointingCells = PointingCells.checkPointingCells(self.domain)
+                if HiddenTriple not in output:
+                    self.domain = domain
+                    output.append(HiddenTriple)
+                    continue
+            domain, PointingCells = self.PointingCells.checkPointingCells(self.domains)
             if domain != None:
-                self.domain = domain
-                output.append(PointingCells)
-                continue
+                if PointingCells not in output:
+                    self.domain = domain
+                    output.append(PointingCells)
+                    continue
             return "No technique applied"
-
         return output
             
             

@@ -12,12 +12,12 @@ class PointingCells:
         A tuple containing the technique used, the row, column and the actual number.
         '''
         for i in range(0, 9):
-            row, domain = self.pointingCellsRow(i//3, i%3, domain)
+            row, grid = self.pointingCellsRow(i//3, i%3, domain)
             if row is not None:
-                return domain, row
-            col, domain = self.pointingCellsColumn(i//3, i%3, domain)
+                return grid, row
+            col, grid = self.pointingCellsColumn(i//3, i%3, domain)
             if col is not None:
-                return domain, col
+                return grid, col
         return None, None
 
     def pointingCellsRow(self, row, col, domain):

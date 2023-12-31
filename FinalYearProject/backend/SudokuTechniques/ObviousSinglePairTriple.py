@@ -14,9 +14,9 @@ class ObviousSinglePairTriple:
         '''
         for i in range(9):
             for j in range(9):
-                if len(domain[i][j]) == 1:
-                    return ("Obvious single", i, j, next(iter(domain[i][j])))
-        return None
+                if domain[i][j] != -1 and len(domain[i][j]) == 1:
+                    return domain, ("Obvious single", i, j, next(iter(domain[i][j])))
+        return None, None
     
     
     def checkObviousPairs(self, domain):
@@ -28,15 +28,15 @@ class ObviousSinglePairTriple:
         A tuple containing the technique used, the row, column and the actual number.
         '''
         for i in range(0, 9):
-            row, domain = self.checkPairsInRow(i, domain)
+            row, grid = self.checkPairsInRow(i, domain)
             if row is not None:
-                return domain, row
-            col, domain = self.checkPairsInColumn(i, domain)
+                return grid, row
+            col, grid = self.checkPairsInColumn(i, domain)
             if col is not None:
-                return domain, col
-            box, domain = self.checkPairsInBox(i//3, i%3, domain)
+                return grid, col
+            box, grid = self.checkPairsInBox(i//3, i%3, domain)
             if box is not None:
-                return domain, box
+                return grid, box
         return None, None
             
 
@@ -134,15 +134,15 @@ class ObviousSinglePairTriple:
         A tuple containing the technique used, the row, column and the actual number.
         '''
         for i in range(0, 9):
-            row, domain = self.checkTriplesInRow(i, domain)
+            row, grid = self.checkTriplesInRow(i, domain)
             if row is not None:
-                return domain, row
-            col, domain = self.checkTriplesInColumn(i, domain)
+                return grid, row
+            col, grid = self.checkTriplesInColumn(i, domain)
             if col is not None:
-                return domain, col
-            box, domain = self.checkTriplesInBox(i//3, i%3, domain)
+                return grid, col
+            box, grid = self.checkTriplesInBox(i//3, i%3, domain)
             if box is not None:
-                return domain, box
+                return grid, box
         return None, None
     
 
