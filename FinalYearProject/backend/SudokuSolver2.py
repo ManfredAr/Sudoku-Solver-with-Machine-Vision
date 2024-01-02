@@ -18,6 +18,7 @@ class SudokuSolver2:
         self.removed = {}
         self.domain = Domain(grid.grid)
     
+
     def solver(self):
         '''
         Tries to find a solution to the puzzle.
@@ -68,6 +69,57 @@ class SudokuSolver2:
         
         pq.addToHeap(self.removed[(cell[0], cell[1])])
         return False
+    
+
+    def SolutionFinder(self):
+        '''
+        Tries to find the number of solution to the puzzle.
+
+        Returns
+        The number of solutions
+        '''
+        self.setupHeap()
+        return self.NumberOfSolutions(self.heap)
+
+
+    def NumberOfSolutions(self, pq):
+        '''
+        Recursively tries to add values into the grid to complete it.
+
+        Returns:
+        - The number of solutions found.
+        '''  
+        # getting the cell with the smallest domain
+        length, count, cell, domain = pq.pop_cell()
+        self.removed[cell] = (length, cell, domain)
+
+        # a valid solution is found.
+        if length is None:
+            return 1 
+        
+        # current path doesn't lead to a solution so backtrack.
+        if length == 0:
+            pq.addToHeap(self.removed[(cell[0], cell[1])])
+            return 0
+
+        total_solutions = 0
+        for value in domain:
+            self.sudoku.grid[cell[0]][cell[1]] = value
+            # updating domains for affected cells.
+            updated_cells = pq.decreaseKey(cell[0], cell[1], value)
+
+            # incrementing number of solutions found
+            total_solutions += self.NumberOfSolutions(pq)
+
+            # resetting the grid and queue to before a value was assigned.
+            self.sudoku.grid[cell[0]][cell[1]] = 0
+            pq.increaseKey(updated_cells)
+            updated_cells = []
+
+        pq.addToHeap(self.removed[(cell[0], cell[1])])
+        return total_solutions
+
+
 
 
     def setupHeap(self):
