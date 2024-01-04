@@ -25,7 +25,6 @@ class SudokuScreen {
                 number.id = i;
                 number.innerText = i;
                 number.className = "num";
-                //number.addEventListener("click", this.selectedNum);
                 number.classList.add("number");
                 document.getElementById("values").appendChild(number);
             } else {
@@ -34,12 +33,11 @@ class SudokuScreen {
                 number.id = "x"
                 number.innerText = "x";
                 number.className = "num";
-                //number.addEventListener("click", this.selectedNum);
                 number.classList.add("number");
                 document.getElementById("values").appendChild(number);
             }
         }
-        
+
         // Creates the 9x9 grid
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
@@ -49,17 +47,17 @@ class SudokuScreen {
                 if (this.board[row][col] != "-" && this.board[row][col] != "0") {
                     tile.innerText = this.board[row][col];
                 }
-    
+
                 // adding vertical rows for the 3x3 mini boxes
                 if (row == 2 || row == 5) {
                     tile.classList.add("horizontal");
                 }
-    
+
                 // adding horizontal times for the mini boxes
                 if (col == 2 || col == 5) {
                     tile.classList.add("vertical");
                 }
-    
+
                 tile.classList.add("cell");
                 document.getElementById("grid").append(tile);
                 if (this.board[row][col] == "-" || this.board[row][col] == "0") {
@@ -75,7 +73,7 @@ class SudokuScreen {
         if (this.takingNotes) {
             this.takingNotes = false;
         } else {
-            this.takingNotes= true;
+            this.takingNotes = true;
         }
     }
 
@@ -119,8 +117,8 @@ class SudokuScreen {
                         } else {
                             element.classList.add("incorrectGuess");
                         }
-                    }  
-                } 
+                    }
+                }
             } else if (action[0] == "note") {
                 // If the last action was to add a not.
                 let prev = parseInt(action[3]);
@@ -150,7 +148,7 @@ class SudokuScreen {
         if (!this.takingNotes) {
             let tile = document.getElementById(this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
-            
+
             if (children == 9) {
                 tile.innerHTML = "";
             }
@@ -190,7 +188,7 @@ class SudokuScreen {
             }
         } else {
             // If a cell already contains a guess then notes cannot be added.
-            if (document.getElementById(this.sel_row + "." + this.sel_col).childElementCount == 9) { 
+            if (document.getElementById(this.sel_row + "." + this.sel_col).childElementCount == 9) {
                 document.getElementById(this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
                 let idx = element.innerText;
                 if (idx != "x") {
@@ -226,7 +224,7 @@ class SudokuScreen {
             }
         }
         // removes the number buttons as the puzzle is completed.
-        document.getElementsByClassName("buttons")[0].style.display = "none";   
+        document.getElementsByClassName("buttons")[0].style.display = "none";
         document.getElementById("values").style.display = "none";
         document.getElementById("complete").style.display = "block";
 

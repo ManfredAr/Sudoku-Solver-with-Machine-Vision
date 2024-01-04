@@ -1,44 +1,41 @@
 import { SudokuScreen } from "./SetSudokuScreen.js";
-
-// board and solution are currently hardcoded
-// but will eventually be replaced with generated puzzles.
-var board = [
-            ["-","9","2","-","-","5","7","6","-"],
-            ["6","-","7","4","-","3","1","-","-"],
-            ["1","3","8","-","6","7","4","-","2"],
-            ["-","7","-","2","3","-","6","1","5"],
-            ["-","1","-","5","-","6","2","4","7"],
-            ["2","6","5","-","4","-","8","3","9"],
-            ["5","-","-","1","9","2","-","7","4"],
-            ["9","-","3","-","7","-","5","2","1"],
-            ["7","-","1","-","-","4","9","-","6"]
-];
-
-var solution = [
-            ["4","9","2","8","1","5","7","6","3"],
-            ["6","5","7","4","2","3","1","9","8"],
-            ["1","3","8","9","6","7","4","5","2"],
-            ["8","7","4","2","3","9","6","1","5"],
-            ["3","1","9","5","8","6","2","4","7"],
-            ["2","6","5","7","4","1","8","3","9"],
-            ["5","8","6","1","9","2","3","7","4"],
-            ["9","4","3","6","7","8","5","2","1"],
-            ["7","2","1","3","5","4","9","8","6"]
-];
+import { GetPuzzle } from "./getPuzzle.js";
 
 var SetScreen = null;
+var PuzzleGenerator = null
+var board = null;
+var solution = null;
 
 // on load the screen should be set up with the grid and the buttons.
-window.onload = function() {
-    document.getElementsByClassName("bg")[0].classList.toggle("invisible");
+window.onload = function () {
+    document.getElementsByClassName("bg")[0].classList.add("invisible");
     if (gridData != "-1") {
-        console.log("nop");
+        document.getElementsByClassName("play")[0].classList.remove("remove");
         board = gridData;
         solution = solutionData;
-        console.log(gridData);
-        console.log(solutionData);    
+        setPuzzle(board, solution);
+    } else {
+        document.getElementsByClassName("difficulty")[0].classList.remove("remove");
+        document.getElementById("dif-easy").addEventListener("click", () => generatePuzzle("easy"));
+        document.getElementById("dif-medium").addEventListener("click", () => generatePuzzle("medium"));
+        document.getElementById("dif-hard").addEventListener("click", () => generatePuzzle("hard"));
+        document.getElementById("dif-expert").addEventListener("click", () => generatePuzzle("expert"));
+        document.getElementsByClassName("bg")[0].classList.remove("invisible");
     }
+}
 
+function setcallback(data) {
+    console.log("done");
+    setPuzzle(data["grid"], data['solution']);
+}
+
+function generatePuzzle(difficulty) {
+    PuzzleGenerator = new GetPuzzle(difficulty);
+    PuzzleGenerator.requestPuzzle(setcallback);
+}
+
+function setPuzzle(board, solution) {
+    console.log(board, solution);
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
 
@@ -57,8 +54,7 @@ window.onload = function() {
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
     document.getElementById("solve").addEventListener("click", () => SetScreen.autoComplete());
     document.getElementById("hint").addEventListener("click", () => SetScreen.giveHint());
-    document.getElementsByClassName("bg")[0].classList.toggle("invisible");
+    document.getElementsByClassName("difficulty")[0].classList.add("remove");
+    document.getElementsByClassName("play")[0].classList.remove("remove");
+    document.getElementsByClassName("bg")[0].classList.remove("invisible");
 }
-
-
-

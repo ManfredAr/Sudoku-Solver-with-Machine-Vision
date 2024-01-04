@@ -38,19 +38,21 @@ class SudokuGenerator:
         A 2D array containing the unque Sudoku puzzle.
         '''
         self.filledGrid()
-        solution = copy.deepcopy(self.grid)
-        if difficulty == "easy":
-            self.removeNumbers(self.easy)
-        elif difficulty == "medium":
-            self.removeNumbers(self.medium)
-        elif difficulty == "hard":
-            self.removeNumbers(self.hard)
-        elif difficulty == "expert":
-            self.removeNumbers(self.expert)
-        else:
-            return None, None
+        self.solution = copy.deepcopy(self.grid)
+        uniquePuzzle = False
+        while uniquePuzzle != True:
+            if difficulty == "easy":
+                uniquePuzzle = self.removeNumbers(self.easy)
+            elif difficulty == "medium":
+                uniquePuzzle = self.removeNumbers(self.medium)
+            elif difficulty == "hard":
+                uniquePuzzle = self.removeNumbers(self.hard)
+            elif difficulty == "expert":
+                uniquePuzzle = self.removeNumbers(self.expert)
+            else:
+                return None, None
         
-        return self.grid, solution
+        return self.grid, self.solution
         
             
         
@@ -63,6 +65,7 @@ class SudokuGenerator:
         options = [1,2,3,4,5,6,7,8,9]
         random.shuffle(options)
         
+        # getting random values for top left, middle and bottom right boxes as they do not interact.
         for i in range(0, 3):
             for j in range(0, 3):
                 self.grid[i][j] = options[(i*3)+j]
@@ -90,25 +93,31 @@ class SudokuGenerator:
         parameters:
         difficulty: A 2D array containing the number of cells to be removed. 
         '''
+        
         random.shuffle(difficulty)
         emptyCells = difficulty[0]
-        
+        cells = [(i, j) for i in range(9) for j in range(9)]    
+
+
         for i in range(emptyCells):
             while True:
-                x = random.randint(0, 8)
-                y = random.randint(0, 8)
-                if self.grid[x][y] == 0:
-                    continue
+                # if the current grid cannot be reduced any further then a reset is needed.
+                if len(cells) == 0:
+                    self.grid = copy.deepcopy(self.solution)
+                    return False
+                x, y = random.choice(cells)
+                cells.remove((x,y))
+
+                removed_value = self.grid[x][y]
+                self.grid[x][y] = 0
+
+                # checking for unique solution after each removal
+                SolutionFinder = SudokuSolver2(Sudoku(copy.deepcopy(self.grid)))
+                solutions = SolutionFinder.SolutionFinder()
+
+                if solutions == 1:
+                    break
                 else:
-                    removed_value = self.grid[x][y]
-                    self.grid[x][y] = 0
-
-                    # Check for unique solution after each removal
-                    self.sudokuSolver.sudoku.grid = copy.deepcopy(self.grid)
-                    solutions = self.sudokuSolver.SolutionFinder()
-
-                    if solutions == 1:
-                        break
-                    else:
-                        # if not a unique solution, revert the change
-                        self.grid[x][y] = removed_value
+                    # if not a unique solution, revert the change
+                    self.grid[x][y] = removed_value
+        return True

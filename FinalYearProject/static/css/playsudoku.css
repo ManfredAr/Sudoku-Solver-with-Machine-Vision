@@ -8,14 +8,24 @@
     flex-wrap: wrap;
 }
 
-.play {
+.play,
+.difficulty {
     padding-top: 30px;
+}
+
+.choices {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.difficulty h1 {
+    text-align: center;
 }
 
 /*The css for each individual cell in the grid*/
 .cell {
     /* the dimensions of the cells */
-    width: 60px; 
+    width: 60px;
     height: 60px;
     border: 1px solid lightgray;
 
@@ -42,7 +52,7 @@
 
 .number {
     /* the dimensions of each individual number buttons */
-    width: 60px; 
+    width: 60px;
     height: 50px;
     border: 1px solid black;
     margin: 2px;
@@ -75,9 +85,12 @@
 }
 
 /* removing the borders from the buttons. */
-#enableNotes, #undo, #solve, #hint {
+#enableNotes,
+#undo,
+#solve,
+#hint {
     border: 0;
-    border-radius: 10px;    
+    border-radius: 10px;
     padding: 10px;
 }
 
@@ -89,7 +102,10 @@
 }
 
 /*Adding a gap between the notes and undo button*/
-.back, .note, .complete, .hints{
+.back,
+.note,
+.complete,
+.hints {
     padding: 10px;
 }
 
@@ -106,8 +122,8 @@
     font-size: 12px;
     display: flex;
     justify-content: center;
-    align-items: center;    
- 
+    align-items: center;
+
 }
 
 
@@ -119,6 +135,10 @@
 /* change the color of the selected cell */
 .selectedSquare {
     background-color: rgb(63, 191, 220);
+}
+
+.remove {
+    display: none;
 }
 
 /* centre the congratulations message */
@@ -157,7 +177,7 @@
 
     .number {
         /* the dimensions of each individual number buttons */
-        width: 32px; 
+        width: 32px;
         height: 32px;
         font-size: 20px;
     }
