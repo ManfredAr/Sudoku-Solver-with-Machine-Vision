@@ -1,4 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+from backend.SudokuGenerator import SudokuGenerator
 
 # Create your views here.
 def playSudoku(request):
@@ -13,3 +15,13 @@ def playSudoku(request):
         return render(request, "playsudoku/playsudoku.html", {"grid":grid, "solution":solution})  
     except:
         return render(request, "playsudoku/playsudoku.html", {"grid":-1, "solution":-1})
+    
+
+def genSudoku(request):
+    if request.method == "POST":
+        gen = SudokuGenerator()
+        puzzle, solution = gen.generate(request.POST.get("difficulty"))
+        for i in range(len(puzzle)):
+            puzzle[i] = [str(x) if x != 0 else '-' for x in puzzle[i]]
+            solution[i] = [str(x) if x != 0 else '-' for x in solution[i]]
+        return JsonResponse({'grid': puzzle, "solution":solution})

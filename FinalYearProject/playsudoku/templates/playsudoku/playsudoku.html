@@ -1,6 +1,6 @@
 {% extends "home/home.html" %}
 {% load static %}
-{% block style %} 
+{% block style %}
 <script>
     var gridData = JSON.parse('{{ grid|safe }}');
     var solutionData = JSON.parse('{{ solution|safe }}');
@@ -12,14 +12,35 @@
 {% endblock %}
 
 {% block content %}
-<div class="play">
+<div class="difficulty remove">
+    <div class="menu">
+        <h1>Choose the difficulty of the puzzle</h1>
+    </div>
+    <div class="choices">
+        {% csrf_token %}
+        <div class="easy">
+            <Button id="dif-easy"> easy </Button>
+        </div>
+        <div class="medium">
+            <Button id="dif-medium"> medium </Button>
+        </div>
+        <div class="hard">
+            <Button id="dif-hard"> hard </Button>
+        </div>
+        <div class="expert">
+            <Button id="dif-expert"> expert </Button>
+        </div>
+    </div>
+</div>
+
+<div class="play remove">
     <div id="grid"></div> </br>
 
     <div class="buttons">
-        <div class="note"> 
+        <div class="note">
             <Button id="enableNotes"> Notes </Button>
-        </div> 
-    
+        </div>
+
         <div class="back">
             <Button id="undo"> Undo </Button> </br>
         </div>
@@ -33,7 +54,7 @@
         </div>
     </div>
 
-    <div id="complete" style="display: none;"> 
+    <div id="complete" style="display: none;">
         <h1 style="padding: 20px;">Congratulations!</h1>
         <div class="choices">
             <span><a href="/home"><button>Home</button></a></span></br>

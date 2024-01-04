@@ -85,3 +85,33 @@ class Test_Sudoku(unittest.TestCase):
         solver.heap.pq = []
         solver.setupHeap()
         self.assertEqual(len(solver.heap.pq), 58)
+
+    # testing that SolutionFinder returns one for unique puzzles.
+    def test_numSolutions(self):
+        solver = SudokuSolver2(Sudoku([[0,9,0,8,0,0,0,6,0],
+                                        [6,0,7,0,2,0,1,0,0],
+                                        [0,3,0,0,0,7,0,0,0],
+                                        [8,0,4,0,0,9,0,1,0],
+                                        [0,0,0,5,0,0,2,0,0],
+                                        [0,6,0,0,0,0,0,0,0],
+                                        [0,0,0,0,9,0,0,0,4],
+                                        [0,0,3,0,0,0,0,0,0],
+                                        [7,0,1,0,0,4,0,8,0]]))
+        solver.heap.pq = []
+        solver.setupHeap()
+        self.assertEqual(solver.SolutionFinder(), 1)
+
+    # testing that SolutionFinder does not returns one for non unique puzzles.
+    def test_validNumSolutions(self):
+        solver = SudokuSolver2(Sudoku([[9,2,6,5,7,1,4,8,3],
+                                       [3,5,1,4,8,6,2,7,9],
+                                       [8,7,4,9,2,3,5,1,6],
+                                       [5,8,2,3,6,7,1,9,4],
+                                       [1,4,9,2,5,8,3,6,7],
+                                       [7,6,3,1,0,0,8,2,5],
+                                       [2,3,8,7,0,0,6,5,1],
+                                       [6,1,7,8,3,5,9,4,2],
+                                       [4,9,5,6,1,2,7,3,8]]))
+        solver.heap.pq = []
+        solver.setupHeap()
+        self.assertEqual(solver.SolutionFinder(), 2)
