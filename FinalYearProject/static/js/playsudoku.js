@@ -25,13 +25,12 @@ window.onload = function () {
 }
 
 function setcallback(data) {
-    console.log("done");
     setPuzzle(data["grid"], data['solution']);
 }
 
 function generatePuzzle(difficulty) {
     PuzzleGenerator = new GetPuzzle(difficulty);
-    PuzzleGenerator.requestPuzzle(setcallback);
+    PuzzleGenerator.requestSudokuPuzzle(setcallback);
 }
 
 function setPuzzle(board, solution) {
