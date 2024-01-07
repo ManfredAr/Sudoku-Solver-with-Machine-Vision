@@ -1,6 +1,6 @@
 from backend.KillerSudoku import KillerSudoku
 from backend.killerSudokuSolver import KillerSudokuSolver
-from backend.killerSudokuSolver2 import KillerSudokuSolver2
+from backend.killerSudokuSolver3 import KillerSudokuSolver3
 import unittest
 
 class Test_KSudokuSolver(unittest.TestCase):
@@ -24,7 +24,7 @@ class Test_KSudokuSolver(unittest.TestCase):
 
         6 : { 14 : [(1,0), (2,0), (2,1)] },
         7 : { 14 : [(1,2), (2,2), (3,2)] },
-        8 : { 2 : [(1,6)] } ,
+        8 : { 2 : [(1,6)] },
         9 : { 12 : [(1,3), (2,3)] },
 
         10 : { 8 : [(2,6)] },
@@ -57,10 +57,37 @@ class Test_KSudokuSolver(unittest.TestCase):
         32 : { 13 : [(7,6), (7,7)] },
         33 : { 20 : [(7,8), (8,6), (8,7), (8,8)] },
     }
+
+
+    multipleGrid = [[9,2,6,5,7,1,4,8,3],
+                    [3,5,1,4,8,6,2,7,9],
+                    [8,7,4,9,2,3,5,1,6],
+                    [5,8,2,3,6,7,1,9,4],
+                    [1,4,9,2,5,8,3,6,7],
+                    [7,6,3,1,0,0,8,2,5],
+                    [2,3,8,7,0,0,6,5,1],
+                    [6,1,7,8,3,5,9,4,2],
+                    [4,9,5,6,1,2,7,3,8]]
+    
+    multiplecages = {
+        1 : {45 : [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6),(0,7),(0,8)]},
+        2 : {45 : [(1,0),(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8)]},
+        3 : {45 : [(2,0),(2,1),(2,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,8)]},
+        4 : {45 : [(3,0),(3,1),(3,2),(3,3),(3,4),(3,5),(3,6),(3,7),(3,8)]},
+        5 : {45 : [(4,0),(4,1),(4,2),(4,3),(4,4),(4,5),(4,6),(4,7),(4,8)]},
+        6 : {17 : [(5,0),(5,1),(5,2),(5,3)]},
+        7 : {13 : [(5,4),(5,5)]},
+        8 : {15 : [(5,6),(5,7),(5,8)]},
+        9 : {20 : [(6,0),(6,1),(6,2),(6,3)]},
+        10 : {13 : [(6,4),(6,5)]},
+        11 : {12 : [(6,6),(6,7),(6,8)]},
+        12 : {45 : [(7,0),(7,1),(7,2),(7,3),(7,4),(7,5),(7,6),(7,7),(7,8)]},
+        13 : {45 : [(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8)]},
+    }
     
     # testing that the constructor stores the killer sudoku object properly
     def test_Constructor(self):
-        solver = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver3(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver.KSudoku.grid, self.grid)
         self.assertEqual(solver.KSudoku.cages, self.cages)
         self.assertEqual(len(solver.KSudoku.cellCage), 81)
@@ -91,7 +118,7 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing the correct domain is returned
     def test_getDomain(self):
-        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                                 [0,0,0,5,9,8,0,1,6],
                                                 [0,1,2,0,0,0,0,5,0],
                                                 [0,0,0,4,0,7,0,9,0],
@@ -105,21 +132,23 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing is a cell is the last cage to be filled or on its own its values becames the cage sum
     def test_getLastDomain(self):
-        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
-                                                [0,0,0,5,9,8,0,1,6],
-                                                [0,1,2,0,0,0,0,5,0],
-                                                [0,0,0,4,0,7,0,9,0],
-                                                [0,4,0,0,0,5,0,6,0],
-                                                [0,0,0,0,0,0,0,2,0],
-                                                [6,0,0,0,7,0,5,0,4],
-                                                [1,5,0,0,0,0,6,0,2],
-                                                [0,7,0,2,0,0,0,8,9]], self.cages))
+        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+                                                   [0,0,0,5,9,8,0,1,6],
+                                                   [0,1,2,0,0,0,0,5,0],
+                                                   [0,0,0,4,0,7,0,9,0],
+                                                   [0,4,0,0,0,5,0,6,0],
+                                                   [0,0,0,0,0,0,0,2,0],
+                                                   [6,0,0,0,7,0,5,0,4],
+                                                   [1,5,0,0,0,0,6,0,2],
+                                                   [0,7,0,2,0,0,0,8,9]], self.cages))
+        solver.setupHeap()
+        #print(solver.queue.pq)
         self.assertEqual(solver.getDomain(1, 1), set([3]))
         
 
     # testing the pq contains all the empty cells.
     def test_setupHeap(self):
-        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                                     [0,0,0,5,9,8,0,1,6],
                                                     [0,1,2,0,0,0,0,5,0],
                                                     [0,0,0,4,0,7,0,9,0],
@@ -134,7 +163,7 @@ class Test_KSudokuSolver(unittest.TestCase):
 
     # testing the killer sudoku grid is solved correctly
     def test_correctSolution(self):
-        solver2 = KillerSudokuSolver2(KillerSudoku(self.grid, self.cages))
+        solver2 = KillerSudokuSolver3(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver2.solver(), [[5, 8, 6, 1, 3, 2, 9, 4, 7],
                                             [4, 3, 7, 5, 9, 8, 2, 1, 6],
                                             [9, 1, 2, 7, 6, 4, 8, 5, 3],
@@ -148,7 +177,7 @@ class Test_KSudokuSolver(unittest.TestCase):
 
     # testing that decrease keys returns all the orginal values of te changed keys
     def test_decreaseKeys(self):
-        solver = KillerSudokuSolver2(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                             [0,0,0,5,9,8,0,1,6],
                                             [0,1,2,0,0,0,0,5,0],
                                             [0,0,0,4,0,7,0,9,0],
@@ -161,4 +190,16 @@ class Test_KSudokuSolver(unittest.TestCase):
         poppedCell = solver.queue.pop_cell()
         solver.KSudoku.grid[0][0] = 5
         # this only changes the domain of one cell 
-        self.assertEqual(solver.decreaseKeys(poppedCell[1], 5), [(4, (3, 0), {8, 2, 3, 5})])
+        self.assertEqual(solver.decreaseKeys(poppedCell[2], 5, poppedCell[3], poppedCell[4]), [(4, 2, (3, 0), {8, 2, 3, 5}, 10)])
+
+
+    # testing that a unique puzzle returns 1
+    def test_uniquePuzzle(self):
+        solver = KillerSudokuSolver3(KillerSudoku(self.grid, self.cages))
+        self.assertEqual(solver.SolutionFinder(), 1)
+
+
+    # testing that a non unique puzzle does not return 1
+    def test_uniquePuzzle(self):
+        solver = KillerSudokuSolver3(KillerSudoku(self.multipleGrid, self.multiplecages))
+        self.assertEqual(solver.SolutionFinder(), 2)

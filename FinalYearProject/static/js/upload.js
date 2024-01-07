@@ -4,10 +4,10 @@ import { KSudokuScreen } from "./SetKSudokuScreen.js"
 var sudokuInstance = null;
 var ksudokuInstance = null;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     // eventlistener for the submit button
-    document.getElementById('processImage').addEventListener('click', function(event) {
+    document.getElementById('processImage').addEventListener('click', function (event) {
         event.preventDefault();
 
         // displaying a spinner
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(selectedFile)
             const formData = new FormData();
             formData.append('image', selectedFile);
-            
+
             // checking which puzzle was selected.
             const sudokuRadio = document.getElementById('sudoku');
             if (sudokuRadio.checked) {
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             xhr.open('POST', '/Upload/uploadImage/');
             xhr.setRequestHeader('X-CSRFToken', csrfToken);
 
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     // directing data to the correct machine vision code (sudoku or kiler sudoku).
                     if (xhr.status === 200) {
@@ -73,13 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.getElementById("set").addEventListener('click', function(event) {
+    document.getElementById("set").addEventListener('click', function (event) {
         event.preventDefault();
         sendToBackend("sudoku");
     });
 
 
-    document.getElementById("set1").addEventListener('click', function(event) {
+    document.getElementById("set1").addEventListener('click', function (event) {
         event.preventDefault();
         sendToBackend("ksudoku");
     });
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 // processing the response.
                 if (xhr.status === 200) {
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         };
-        xhr.send(formData); 
+        xhr.send(formData);
     }
 });
 

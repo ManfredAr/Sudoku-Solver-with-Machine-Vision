@@ -81,6 +81,7 @@ class KillerSudokuSolver3:
         cageCells = self.KSudoku.getCageCells(row, col)
         nonCageCells = self.KSudoku.getRelatedCells(row, col)
         cageSum = self.KSudoku.getCageSum(row, col)
+        nonZeroCageCells = 0
 
         for i in nonCageCells:
             if self.KSudoku.grid[i[0]][i[1]] > 0:
@@ -90,14 +91,58 @@ class KillerSudokuSolver3:
             if self.KSudoku.grid[i[0]][i[1]] != 0:
                 cageSum = cageSum - self.KSudoku.grid[i[0]][i[1]]
                 used.add(self.KSudoku.grid[i[0]][i[1]])
+                nonZeroCageCells += 1
 
-        upLim = self.upperLimit(len(cageCells), cageSum)
-        lowLim = self.lowerLimit(len(cageCells), cageSum)
+        upLim = self.upperLimit(len(cageCells) - nonZeroCageCells, cageSum)
+        lowLim = self.lowerLimit(len(cageCells) - nonZeroCageCells, cageSum)
         validGuesses = set([1,2,3,4,5,6,7,8,9]) - used
         validGuesses = {i for i in validGuesses if i <= upLim and i >= lowLim}
 
         return validGuesses
 
+
+    def SolutionFinder(self):
+        '''
+        Tries to find the number of solution to the puzzle.
+
+        Returns
+        The number of solutions
+        '''
+        self.setupHeap()
+        return self.NumberOfSolutions(self.queue)
+
+
+    def NumberOfSolutions(self, queue):
+        '''
+        Recursively tries to add values into the grid to complete it.
+
+        Returns:
+        - The number of solutions found.
+        '''  
+
+        # gets the cell with the lowest domain length
+        priority, cageLength, cell, domain, cageSum = queue.pop_cell()
+        if priority is None:
+            return 1  # solution found so try find other solutions.
+
+        if priority <= 0 or cageLength <= 0:
+            queue.addToHeap((priority, cageLength, cell, domain, cageSum))
+            return 0  # solution not found so backtrack
+
+        total_solutions = 0
+        for value in domain:
+            self.KSudoku.grid[cell[0]][cell[1]] = value
+            updated_cells = self.decreaseKeys(cell, value, cageLength, cageSum)
+
+            total_solutions += self.solve(queue)
+
+            # resetting the grid and queue to before a value was assigned.
+            self.KSudoku.grid[cell[0]][cell[1]] = 0
+            queue.increaseKey(updated_cells)
+
+        # putting cell back into the queue        
+        queue.addToHeap((priority, cageLength, cell, domain, cageSum))
+        return total_solutions
 
 
 
@@ -131,12 +176,11 @@ class KillerSudokuSolver3:
         '''
         Goes through the entire grid and inserts each empty cell into the priority queue.
         '''
-        for cage_number, cage_dict in self.KSudoku.cages.items():
-            for cage_sum, cells in cage_dict.items():
-                values = self.getDomain(cells[0][0],cells[0][1])
-                for cell in cells:
-                    self.queue.addToHeap((len(values), len(self.KSudoku.getCageCells(cell[0], cell[1])), (cell[0],cell[1]), values, cage_sum))
-
+        for i in range(9):
+            for j in range(9):
+                if self.KSudoku.grid[i][j] == 0:
+                    values = self.getDomain(i, j)
+                    self.queue.addToHeap((len(values), len(self.KSudoku.getCageCells(i, j)), (i,j), values, self.KSudoku.getCageSum(i,j)))
 
 
 

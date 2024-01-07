@@ -1,5 +1,6 @@
 from backend.SudokuGenerator import SudokuGenerator
-from backend.killerSudokuSolver2 import KillerSudokuSolver2
+from backend.killerSudokuSolver3 import KillerSudokuSolver3
+from backend.KillerSudoku import KillerSudoku
 import random
 import copy
 
@@ -16,18 +17,32 @@ class killerSudokuGenerator:
         self.originalGrid = self.sudokuGen.grid
         self.grid = copy.deepcopy(self.sudokuGen.grid)
         self.count = 0
+        self.difficulty = None
 
     def generate(self, difficulty):
-        if difficulty == "easy":
-            self.generateCages(self.easy)
-        elif difficulty == "medium":
-            self.generateCages(self.medium)
-        elif difficulty == "hard":
-            self.generateCages(self.hard)
-        elif difficulty == "expert":
-            self.generateCages(self.expert)
-        else:
-            return None, None
+        while True:
+            if difficulty == "easy":
+                self.difficulty = "easy"
+                self.generateCages(self.easy)
+            elif difficulty == "medium":
+                self.difficulty = "medium"
+                self.generateCages(self.medium)
+            elif difficulty == "hard":
+                self.difficulty = "hard"
+                self.generateCages(self.hard)
+            elif difficulty == "expert":
+                self.difficulty = "expert"
+                self.generateCages(self.expert)
+            else:
+                return None, None
+            
+            grid = [[0 for _ in range(9)] for _ in range(9)]
+            kSudoku = KillerSudokuSolver3(KillerSudoku(grid, self.cages))
+            if kSudoku.SolutionFinder() != 1:
+                self.cages = {}
+                self.grid = copy.deepcopy(self.sudokuGen.grid)
+            else:
+                break
         
         return self.originalGrid, self.cages
 
@@ -67,6 +82,10 @@ class killerSudokuGenerator:
         cells - the cells not already in cages. 
         '''
         while len(cells) != 0:
+            if self.difficulty == "expert":
+                triple = self.findConnectCells(3, cells[0], [])
+                if triple != -1 and len(triple) == 3:
+                    cells = self.addCage(triple, cells)
             pairs = self.findConnectCells(2, cells[0], [])
             if pairs != -1 and len(pairs) == 2:
                 cells = self.addCage(pairs, cells)

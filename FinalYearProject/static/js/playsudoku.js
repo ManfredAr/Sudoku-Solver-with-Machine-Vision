@@ -25,16 +25,27 @@ window.onload = function () {
 }
 
 function setcallback(data) {
+    /**
+     * A simple callback which instantiates the play sudoku screen with
+     * the generated puzzle.
+     */
     setPuzzle(data["grid"], data['solution']);
 }
 
+
 function generatePuzzle(difficulty) {
+    /**
+     * Creates an instance of the sudoku generator and 
+     * instantiates the play sudoku screen.
+     */
     PuzzleGenerator = new GetPuzzle(difficulty);
     PuzzleGenerator.requestSudokuPuzzle(setcallback);
 }
 
 function setPuzzle(board, solution) {
-    console.log(board, solution);
+    /**
+     * Sets up the play sudoku screen and adds the appropriate event handlers to buttons.
+     */
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
 

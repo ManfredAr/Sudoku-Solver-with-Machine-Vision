@@ -38,7 +38,7 @@ class KSudokuScreen {
                 document.getElementsByClassName("values")[0].appendChild(number);
             }
         }
-        
+
         // Creates the 9x9 grid
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
@@ -51,12 +51,12 @@ class KSudokuScreen {
                 if (row == 2 || row == 5) {
                     tile.classList.add("horizontal");
                 }
-    
+
                 // adding horizontal times for the mini boxes
                 if (col == 2 || col == 5) {
                     tile.classList.add("vertical");
                 }
-    
+
                 //tile.addEventListener("click", this.selectedTile);
                 tile.classList.add("cell");
                 document.getElementById("grid1").append(tile);
@@ -81,7 +81,7 @@ class KSudokuScreen {
         let count = 0;
         for (const group in this.groups) {
             const dict = this.groups[group];
-            const CageSum = Object.keys(dict)[0]; 
+            const CageSum = Object.keys(dict)[0];
             const values = Object.values(dict)[0];
             let sum = document.createElement("div");
             sum.innerText = CageSum;
@@ -90,7 +90,7 @@ class KSudokuScreen {
             count += 1;
             for (let i = 0; i < values.length; i++) {
                 document.getElementById(values[0][0] + "." + values[0][1]).setAttribute("cageNum", group);
-                for (let j = i+1; j < values.length; j++) {
+                for (let j = i + 1; j < values.length; j++) {
 
                     // removes left and right borders.
                     if (values[i][0] === values[j][0]) {
@@ -103,7 +103,7 @@ class KSudokuScreen {
                             document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeLeft");
                             document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeRight");
                             document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeLeftPadding");
-                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");                       
+                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");
                         }
                     }
 
@@ -119,14 +119,14 @@ class KSudokuScreen {
         }
     }
 
-    
+
     // toggles the notes button
     activeNotes(event) {
         document.getElementById("enableNotes").classList.toggle("activeButton");
         if (this.takingNotes) {
             this.takingNotes = false;
         } else {
-            this.takingNotes= true;
+            this.takingNotes = true;
         }
     }
 
@@ -163,8 +163,8 @@ class KSudokuScreen {
                         } else {
                             element.classList.add("incorrectGuess");
                         }
-                    }  
-                } 
+                    }
+                }
             } else if (action[0] == "note") {
                 // If the last action was to add a not.
                 let prev = parseInt(action[3]);
@@ -195,7 +195,7 @@ class KSudokuScreen {
         if (!this.takingNotes) {
             let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
-            
+
             if (children == 9) {
                 tile.innerHTML = "";
             }
@@ -236,7 +236,7 @@ class KSudokuScreen {
         } else {
             // If a cell already contains a guess then notes cannot be added.
             if (document.getElementById("c" + this.sel_row + "." + this.sel_col).childElementCount == 9) {
-                document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess"); 
+                document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
                 let idx = element.innerText;
                 if (idx != "x") {
                     let noteTile = document.getElementById(this.sel_row + "." + this.sel_col + "." + parseInt(idx));
@@ -270,7 +270,7 @@ class KSudokuScreen {
         }
 
         // removes buttons as puzzle is completed.
-        document.getElementsByClassName("buttons")[0].style.display = "none";   
+        document.getElementsByClassName("buttons")[0].style.display = "none";
         document.getElementsByClassName("values")[0].style.display = "none";
         document.getElementById("complete").style.display = "block";
 
@@ -323,16 +323,19 @@ class KSudokuScreen {
             if (num < 10) {
                 sumElement.innerText += num;
                 const newval = sumElement.innerText;
-                this.groups[parseInt(tile.getAttribute("cagenum"))] = {[newval]: values };
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = { [newval]: values };
             } else {
                 sumElement.innerText = "";
-                this.groups[parseInt(tile.getAttribute("cagenum"))] = {0: values };
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = { 0: values };
             }
         }
     }
 
+
     autoComplete() {
-        console.log(this.solution)
+        /*
+        Fills the grid with the solution.
+        */
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];

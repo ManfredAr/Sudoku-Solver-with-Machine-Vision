@@ -28,17 +28,28 @@ window.onload = function () {
 
 
 function setcallback(data) {
+    /**
+     * A simple callback which instantiates the play killer sudoku screen with
+     * the generated puzzle.
+     */
     setPuzzle(data["grid"], data['solution'], data['cages']);
 }
 
 
 function generatePuzzle(difficulty) {
+    /**
+     * Creates an instance of the killer sudoku generator and 
+     * instantiates the play killer sudoku screen.
+     */
     PuzzleGenerator = new GetPuzzle(difficulty);
     PuzzleGenerator.requestKillerSudokuPuzzle(setcallback);
 }
 
 
 function setPuzzle(board, solution, cages) {
+    /**
+     * Sets up the play killer sudoku screen and adds the appropriate event handlers to buttons.
+     */
     SetScreen = new KSudokuScreen(board, solution, cages);
     SetScreen.CreateGame();
 
