@@ -34,6 +34,10 @@ window.onload = function () {
  */
 function setcallback(data) {
     setPuzzle(data["grid"], data['solution'], data['cages']);
+    // removing the spinner
+    document.getElementById('overlay').classList.add("invisible");
+    document.getElementById('overlay').classList.remove("overlay");
+    document.getElementById('cover').classList.remove("disable");
 }
 
 /**
@@ -43,6 +47,11 @@ function setcallback(data) {
  * @param {string} difficulty - easy, medium, hard, expert. 
  */
 function generatePuzzle(difficulty) {
+    // displaying a spinner
+    document.getElementById('overlay').classList.add("overlay");
+    document.getElementById('overlay').classList.remove("invisible");
+    document.getElementById('cover').classList.add("disable");
+
     PuzzleGenerator = new GetPuzzle(difficulty);
     PuzzleGenerator.requestKillerSudokuPuzzle(setcallback);
 }
@@ -50,9 +59,9 @@ function generatePuzzle(difficulty) {
 /**
  * Sets up the play killer sudoku screen and adds the appropriate event handlers to buttons.
  * 
- * @param {*} board - an empty 2d 9x9 grid 
- * @param {*} solution - the 2d array containing the solution
- * @param {*} cages 
+ * @param {array} board - an empty 2d 9x9 grid 
+ * @param {array} solution - the 2d array containing the solution
+ * @param {dictionary} cages 
  */
 function setPuzzle(board, solution, cages) {
     SetScreen = new KSudokuScreen(board, solution, cages);

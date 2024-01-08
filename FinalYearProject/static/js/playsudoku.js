@@ -32,6 +32,11 @@ window.onload = function () {
  */
 function setcallback(data) {
     setPuzzle(data["grid"], data['solution']);
+
+    // removing the spinner
+    document.getElementById('overlay').classList.add("invisible");
+    document.getElementById('overlay').classList.remove("overlay");
+    document.getElementById('cover').classList.remove("disable");
 }
 
 /**
@@ -41,6 +46,11 @@ function setcallback(data) {
  * @param {string} difficulty - easy, medium, hard, expert.
  */
 function generatePuzzle(difficulty) {
+    // displaying a spinner
+    document.getElementById('overlay').classList.add("overlay");
+    document.getElementById('overlay').classList.remove("invisible");
+    document.getElementById('cover').classList.add("disable");
+
     PuzzleGenerator = new GetPuzzle(difficulty);
     PuzzleGenerator.requestSudokuPuzzle(setcallback);
 }

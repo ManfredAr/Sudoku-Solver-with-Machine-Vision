@@ -1,38 +1,41 @@
+/* add a white text color. */
 .UploadContainer {
     color: white;
 }
 
-
+/* displays the cells in the puzzles in rows. */
 .puzzleType {
     display: flex;
     flex-direction: column;
 }
 
+/* adds margin below the heading */
 .heading {
     margin-bottom: 10px;
 }
 
+/* puts options on the same line */
 .options label {
     display: inline-block;
     margin-left: 10px;
-  }
+}
 
-.options, .uploadImage, .submit{
+/* displays content in center. */
+.options,
+.uploadImage,
+.submit {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
 }
 
+/* sets the input width  */
 input#imageUpload {
     width: 200px;
 }
 
-.uploadImage {
-    display: block !important;
-    text-align: center;
-}
-
+/* displays the spinner */
 .overlay {
     position: absolute;
     top: 50%;
@@ -42,28 +45,14 @@ input#imageUpload {
     padding: 20px;
     border-radius: 10px;
     z-index: 1000;
-  }
+}
 
+/* makes the div invisible */
 .invisible {
     display: none;
 }
 
-.sudoku {
-    color: black !important;
-}
-
-.set, .set1 {
-    text-align: center;
-    padding: 50px;
-}
-
-.play button {
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0) !important;
-    font-size: 20px;
-    font-weight: bold;
-}
-
+/* blurs the background and disbale all features. */
 .disable {
     position: fixed;
     width: 100%;
@@ -75,8 +64,29 @@ input#imageUpload {
     justify-content: center;
     align-items: center;
     z-index: 999;
- }
+}
 
+/* sets black text color */
+.sudoku {
+    color: black !important;
+}
+
+/* aligns texts and adds padding. */
+.set,
+.set1 {
+    text-align: center;
+    padding: 50px;
+}
+
+/* adds a black text and black background. */
+.play button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0) !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* css for smaller screens */
 @media (max-width: 768px) {
     .puzzleType {
         width: 320px;
@@ -107,7 +117,7 @@ input#imageUpload {
 
     .number {
         /* the dimensions of each individual number buttons */
-        width: 32px; 
+        width: 32px;
         height: 32px;
         font-size: 20px;
     }
