@@ -24,28 +24,34 @@ window.onload = function () {
     }
 }
 
+/**
+ * A simple callback which instantiates the play sudoku screen with
+ * the generated puzzle.
+ * 
+ * @param {dictionary} data - contains the response from the backend. 
+ */
 function setcallback(data) {
-    /**
-     * A simple callback which instantiates the play sudoku screen with
-     * the generated puzzle.
-     */
     setPuzzle(data["grid"], data['solution']);
 }
 
-
+/**
+ * Creates an instance of the sudoku generator and 
+ * instantiates the play sudoku screen.
+ * 
+ * @param {string} difficulty - easy, medium, hard, expert.
+ */
 function generatePuzzle(difficulty) {
-    /**
-     * Creates an instance of the sudoku generator and 
-     * instantiates the play sudoku screen.
-     */
     PuzzleGenerator = new GetPuzzle(difficulty);
     PuzzleGenerator.requestSudokuPuzzle(setcallback);
 }
 
+/**
+ * Sets up the play sudoku screen and adds the appropriate event handlers to buttons.
+ * 
+ * @param {array} board - a 2d array containing the puzzle
+ * @param {array} solution - a 2d array containing the answer.
+ */
 function setPuzzle(board, solution) {
-    /**
-     * Sets up the play sudoku screen and adds the appropriate event handlers to buttons.
-     */
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
 

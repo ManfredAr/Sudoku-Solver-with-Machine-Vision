@@ -1,89 +1,89 @@
+/**
+ * This class implemented the notes features for the puzzles.
+ */
 class Notes {
-    /**
-     * This class implemented the notes features for the puzzles.
-     */
 
+    /**
+     *  constructor which creates an array to keep track of notes.
+     */
     constructor() {
-        /**
-         *  constructor which creates an array to keep track of notes.
-         */
         this.notesArray = new Array(81);
         for (let i = 0; i < 81; i++) {
             this.notesArray[i] = new Array(9).fill(0);
         }
     }
 
+    /**
+     * returns the notes of the row and col provided in the parameters.
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     * @param {int} idx the note to be checked.
+     */
     getNote(row, col, idx) {
-        /**
-         * returns the notes of the row and col provided in the parameters.
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         * @param idx the note to be checked.
-         */
         return this.notesArray[(row * 9) + col][idx - 1]
     }
 
+    /**
+     * sets the notes provided in the parameters.
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     * @param {int} idx the note to be set.
+     */
     setNote(row, col, idx) {
-        /**
-         * sets the notes provided in the parameters.
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         * @param idx the note to be set.
-         */
         this.notesArray[(row * 9) + col][idx - 1] = idx;
     }
 
+    /**
+     * removes the notes at specific cell.
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     * @param {int} idx the note to be checked.
+     */
     removeNote(row, col, idx) {
-        /**
-         * removes the notes at specific cell.
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         * @param idx the note to be checked.
-         */
         this.notesArray[(row * 9) + col][idx - 1] = 0;
     }
 
+    /**
+     * clears all notes for a particlar cell.
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     */
     clearNotes(row, col) {
-        /**
-         * clears all notes for a particlar cell.
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         */
         this.notesArray[(row * 9) + col] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
 
+    /**
+   * Used to undo a clear notes action but adding back in the notes for a cell.
+   * 
+   * @param {int} row the row of the cell.
+   * @param {int} col the column of the cell.
+   * @param {array} array an array containg the notes to be added back in.
+   */
     addCellNotes(row, col, array) {
-        /**
-         * Used to undo a clear notes action but adding back in the notes for a cell.
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         * @param array an array containg the notes to be added back in.
-         */
         this.notesArray[(row * 9) + col] = array;
     }
 
+    /**
+     * returns all the notes for a particular cell. 
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     */
     getCellNotes(row, col) {
-        /**
-         * returns all the notes for a particular cell. 
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         */
         return this.notesArray[(row * 9) + col];
     }
 
+    /**
+     * generates the html elements for the note cells. 
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     */
     addNotes(row, col) {
-        /**
-         * generates the html elements for the note cells. 
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         */
         let currentTile = document.getElementById(row + "." + col);
         currentTile.innerHTML = "";
         for (let idx = 1; idx <= 9; idx++) {
@@ -100,13 +100,13 @@ class Notes {
         }
     }
 
+    /**
+     * adding notes for killer sudoku.
+     * 
+     * @param {int} row the row of the cell.
+     * @param {int} col the column of the cell.
+     */
     addKNotes(row, col) {
-        /**
-         * adding notes for killer sudoku.
-         * 
-         * @param row the row of the cell.
-         * @param col the column of the cell.
-         */
         let currentTile = document.getElementById("c" + row + "." + col);
         currentTile.innerHTML = "";
         for (let idx = 1; idx <= 9; idx++) {

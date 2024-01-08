@@ -147,6 +147,16 @@ class KillerSudokuSolver3:
 
 
     def upperLimit(self, numVariables, cageSum):
+        '''
+        Finds the upper limit of the cage depending on the number of variables and cage sum.
+
+        parameters:
+        numVariable - int containing the number of variables in the cage.
+        cageSum - int containt the sum of the cage.
+
+        returns:
+        the upper limit the cell can contain.
+        '''
         lowSum = (0,1,3,6,10,15,21,28,36,45)
         upper = 9
         while True:
@@ -160,6 +170,16 @@ class KillerSudokuSolver3:
 
 
     def lowerLimit(self, numVariables, cageSum):
+        '''
+        Finds the lower limit of the cage depending on the number of variables and cage sum.
+
+        parameters:
+        numVariable - int containing the number of variables in the cage.
+        cageSum - int containt the sum of the cage.
+
+        returns:
+        the lower limit the cell can contain.
+        '''
         highSum = (0,9,17,24,30,35,39,42,44,45)
         lower = 1
         while True:

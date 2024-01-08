@@ -84,9 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
         sendToBackend("ksudoku");
     });
 
-    // when a user is happy with the puzzle they can set it. 
-    // this function sends the puzzle to the backend for solving
-    // and redirects the user to the relevant screen to play the puzzle.
+
+    /**
+     * Sends the puzzle uploaded by the user to the backend to get a solutions and direct the user to the 
+     * play screen.
+     * 
+     * @param {string} puzzle - the type of puzzle, sudoku or killer sudoku.
+     */
     function sendToBackend(puzzle) {
 
         // displaying spinner
@@ -137,7 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// uses the setSudokuScreen class to allow the user to interact with the puzzle 
+
+/**
+ * uses the setSudokuScreen class to display the Sudoku puzzle and appropriate buttons on the screen.
+ * 
+ * @param {array} puzzle - the Sudoku puzzle. 
+ */
 function displaySudokuPuzzle(puzzle) {
     sudokuInstance = new SudokuScreen(puzzle, [-1]);
     sudokuInstance.CreateGame();
@@ -156,7 +165,12 @@ function displaySudokuPuzzle(puzzle) {
     }
 }
 
-// uses the setKSudokuScreen class to allow the user to interact with the puzzle 
+/**
+ * uses the setKSudokuScreen class to display the puzzle and appropriate buttons on the screen.
+ * 
+ * @param {array} puzzle - the puzzle 
+ * @param {dictionary} cages - the cages each containing the cells and cage sum
+ */
 function displayKSudokuPuzzle(puzzle, cages) {
     ksudokuInstance = new KSudokuScreen(puzzle, [], cages);
     ksudokuInstance.CreateGame();

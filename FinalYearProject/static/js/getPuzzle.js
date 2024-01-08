@@ -1,24 +1,24 @@
+/**
+ * This class is responsible for retrieving the generated sudoku and killer sudoku puzzles 
+ * from the backend. 
+ */
 class GetPuzzle {
-    /**
-     * This class is responsible for retrieving the generated sudoku and killer sudoku puzzles 
-     * from the backend. 
-     */
 
+    /**
+     * Instantiates the class with the difficulty.
+     * 
+     * @param {string} difficulty the selected difficulty of the puzzle to be generated.
+     */
     constructor(difficulty) {
-        /**
-         * Instantiates the class.
-         * 
-         * @param difficulty the selected difficulty of the puzzle to be generated.
-         */
         this.difficulty = difficulty;
     }
 
+    /**
+     * Sends a request to the backend to generate a new sudoku puzzle
+     * 
+     * @param {callback} callback a callback which will handle the response from the backend.
+     */
     requestSudokuPuzzle(callback) {
-        /**
-         * Sends a request to the backend to generate a new sudoku puzzle
-         * 
-         * @param callback a callback which will handle the response from the backend.
-         */
         const formData = new FormData();
         formData.append('difficulty', this.difficulty);
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -40,12 +40,12 @@ class GetPuzzle {
         xhr.send(formData);
     }
 
+    /**
+     * Sends a request to the backend to generate a new killer sudoku puzzle
+     * 
+     * @param callback a callback which will handle the response from the backend.
+     */
     requestKillerSudokuPuzzle(callback) {
-        /**
-         * Sends a request to the backend to generate a new killer sudoku puzzle
-         * 
-         * @param callback a callback which will handle the response from the backend.
-         */
         const formData = new FormData();
         formData.append('difficulty', this.difficulty);
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;

@@ -26,30 +26,35 @@ window.onload = function () {
     }
 }
 
-
+/**
+ * A simple callback which instantiates the play killer sudoku screen with
+ * the generated puzzle.
+ * 
+ * @param {dictionary} data - the dictionary containing the response from the backend.
+ */
 function setcallback(data) {
-    /**
-     * A simple callback which instantiates the play killer sudoku screen with
-     * the generated puzzle.
-     */
     setPuzzle(data["grid"], data['solution'], data['cages']);
 }
 
-
+/**
+ * Creates an instance of the killer sudoku generator and 
+ * instantiates the play killer sudoku screen.
+ * 
+ * @param {string} difficulty - easy, medium, hard, expert. 
+ */
 function generatePuzzle(difficulty) {
-    /**
-     * Creates an instance of the killer sudoku generator and 
-     * instantiates the play killer sudoku screen.
-     */
     PuzzleGenerator = new GetPuzzle(difficulty);
     PuzzleGenerator.requestKillerSudokuPuzzle(setcallback);
 }
 
-
+/**
+ * Sets up the play killer sudoku screen and adds the appropriate event handlers to buttons.
+ * 
+ * @param {*} board - an empty 2d 9x9 grid 
+ * @param {*} solution - the 2d array containing the solution
+ * @param {*} cages 
+ */
 function setPuzzle(board, solution, cages) {
-    /**
-     * Sets up the play killer sudoku screen and adds the appropriate event handlers to buttons.
-     */
     SetScreen = new KSudokuScreen(board, solution, cages);
     SetScreen.CreateGame();
 

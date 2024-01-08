@@ -5,8 +5,14 @@ import random
 import copy
 
 class killerSudokuGenerator:
+    '''
+    This class is responsible for generating killer sudoku puzzles. 
+    '''
 
     def __init__(self):
+        '''
+        The constructor for the class to create instances. 
+        '''
         self.easy = {"3" : [5,6,7], "4" : [1,2,3], "5" : [0]}
         self.medium = {"3" : [8,9], "4" : [2,3,4], "5" : [0]}
         self.hard = {"3" : [6,7,8], "4" : [4,5], "5" : [1,2]}
@@ -20,6 +26,12 @@ class killerSudokuGenerator:
         self.difficulty = None
 
     def generate(self, difficulty):
+        '''
+        generates a killer sudoku puzzle which includes the grid and the cages.
+
+        parameters:
+        difficulty - a string containing the difficulty the user has chosen.
+        '''
         while True:
             if difficulty == "easy":
                 self.difficulty = "easy"
@@ -48,6 +60,13 @@ class killerSudokuGenerator:
 
 
     def generateCages(self, difficulty):
+        '''
+        Generates the cages for a particular grid. The cage sizes will depend 
+        of the difficulty.
+
+        parameters:
+        difficulty - a dictionary containing the cage lengths.
+        '''
         cells = [(i, j) for i in range(9) for j in range(9)]  
 
         three = random.choice(difficulty["3"])
@@ -82,10 +101,11 @@ class killerSudokuGenerator:
         cells - the cells not already in cages. 
         '''
         while len(cells) != 0:
-            if self.difficulty == "expert":
+            if self.difficulty == "expert": # adding bigger cages for hard difficulties.
                 triple = self.findConnectCells(3, cells[0], [])
                 if triple != -1 and len(triple) == 3:
                     cells = self.addCage(triple, cells)
+                    continue
             pairs = self.findConnectCells(2, cells[0], [])
             if pairs != -1 and len(pairs) == 2:
                 cells = self.addCage(pairs, cells)
@@ -107,6 +127,7 @@ class killerSudokuGenerator:
             self.grid[i[0]][i[1]] = -1
             allCells.remove((i[0], i[1]))
 
+        # sorting cells to easily display.
         cells = sorted(cells, key=lambda point: (point[0], point[1]))
         self.cages[self.count] = {count : cells}
         self.count += 1
@@ -128,14 +149,14 @@ class killerSudokuGenerator:
         '''
         if num == 0:
             return set()
-        
-        if cell[0] < 0 or cell[0] > 8 or cell [1] < 0 or cell[1] > 8 or self.grid[cell[0]][cell[1]] == -1 or self.grid[cell[0]][cell[1]] in visited:
+        if cell[0] < 0 or cell[0] > 8 or cell[1] < 0 or cell[1] > 8 or self.grid[cell[0]][cell[1]] == -1 or self.grid[cell[0]][cell[1]] in visited:
             return -1
-        
+
         current_cells = set([cell])
         visited.append(self.grid[cell[0]][cell[1]])
-        nextCell = random.choice([0, 1, 2, 3])
         
+        # creating cages using randomness to avoid similar puzzles.
+        nextCell = random.choice([0, 1, 2, 3])
         response = None
         for i in range(4):
             if nextCell == 0:
