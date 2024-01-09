@@ -1,8 +1,19 @@
 import { Notes } from "./notes.js";
 import { Stack } from "./stack.js";
 
+/**
+ * This class is responsible for initialising the Killer Sudoku elements on the screen as well
+ * as implemening the features of the games. 
+ */
 class KSudokuScreen {
 
+    /**
+     * The constructor for the class.
+     * 
+     * @param {2d array} grid - an empty 9x9 grid 
+     * @param {2d array} solution - the 9x9 solution grid
+     * @param {dictionary} group - the cages and their cage sums. 
+     */
     constructor(grid, solution, group) {
         this.board = grid;
         this.solution = solution;
@@ -16,6 +27,10 @@ class KSudokuScreen {
         this.prev_col = 0;
     }
 
+    /**
+     * Initialises the elements on the screen. Creates the input buttons, the playing grid, 
+     * and the cages for cells 
+     */
     CreateGame() {
         // create the possible numbers to be used as buttons .
         // the 10th is not a number its a delete number button.
@@ -38,7 +53,7 @@ class KSudokuScreen {
                 document.getElementsByClassName("values")[0].appendChild(number);
             }
         }
-        
+
         // Creates the 9x9 grid
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
@@ -51,13 +66,12 @@ class KSudokuScreen {
                 if (row == 2 || row == 5) {
                     tile.classList.add("horizontal");
                 }
-    
+
                 // adding horizontal times for the mini boxes
                 if (col == 2 || col == 5) {
                     tile.classList.add("vertical");
                 }
-    
-                //tile.addEventListener("click", this.selectedTile);
+
                 tile.classList.add("cell");
                 document.getElementById("grid1").append(tile);
 
@@ -81,7 +95,7 @@ class KSudokuScreen {
         let count = 0;
         for (const group in this.groups) {
             const dict = this.groups[group];
-            const CageSum = Object.keys(dict)[0]; 
+            const CageSum = Object.keys(dict)[0];
             const values = Object.values(dict)[0];
             let sum = document.createElement("div");
             sum.innerText = CageSum;
@@ -90,10 +104,10 @@ class KSudokuScreen {
             count += 1;
             for (let i = 0; i < values.length; i++) {
                 document.getElementById(values[0][0] + "." + values[0][1]).setAttribute("cageNum", group);
-                for (let j = i+1; j < values.length; j++) {
+                for (let j = i + 1; j < values.length; j++) {
 
                     // removes left and right borders.
-                    if (values[i][0] === values[j][0]) {
+                    if (values[i][0] === values[j][0] && ((values[i][1] === (values[j][1] + 1)) || (values[i][1] === (values[j][1] - 1)))) {
                         if (values[i][1] < values[j][1]) {
                             document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeRight");
                             document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeLeft");
@@ -103,12 +117,12 @@ class KSudokuScreen {
                             document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeLeft");
                             document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeRight");
                             document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeLeftPadding");
-                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");                       
+                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");
                         }
                     }
 
                     // removes top and bottom borders.
-                    if (values[i][1] === values[j][1]) {
+                    if (values[i][1] === values[j][1] && ((values[i][0] === (values[j][0] + 1)) || (values[i][0] === (values[j][0] - 1)))) {
                         document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeBottom");
                         document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeTop");
                         document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeBottomPadding");
@@ -119,19 +133,22 @@ class KSudokuScreen {
         }
     }
 
-    
-    // toggles the notes button
-    activeNotes(event) {
+    /**
+     * toggles the notes button to allow user to input notes. 
+     */
+    activeNotes() {
         document.getElementById("enableNotes").classList.toggle("activeButton");
         if (this.takingNotes) {
             this.takingNotes = false;
         } else {
-            this.takingNotes= true;
+            this.takingNotes = true;
         }
     }
 
-    // Used to revert the last action that was taken.
-    lastAction(event) {
+    /**
+     * Reverts the last action that was taken.
+     */
+    lastAction() {
         let action = this.myStack.getLastAction();
         if (action != null) {
             // retrieves information about the last action
@@ -163,8 +180,8 @@ class KSudokuScreen {
                         } else {
                             element.classList.add("incorrectGuess");
                         }
-                    }  
-                } 
+                    }
+                }
             } else if (action[0] == "note") {
                 // If the last action was to add a not.
                 let prev = parseInt(action[3]);
@@ -188,14 +205,19 @@ class KSudokuScreen {
         }
     }
 
-    // updating the currently selected square to the select number
+    /**
+     * Updates the currently selected cell to the selected number. This can be either to add a note or 
+     * to make guess.
+     * 
+     * @param {div} element - the selected div element.
+     */
     selectedNum(element) {
         console.log("hi");
         console.log("c" + this.sel_row + "." + this.sel_col);
         if (!this.takingNotes) {
             let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
-            
+
             if (children == 9) {
                 tile.innerHTML = "";
             }
@@ -236,11 +258,10 @@ class KSudokuScreen {
         } else {
             // If a cell already contains a guess then notes cannot be added.
             if (document.getElementById("c" + this.sel_row + "." + this.sel_col).childElementCount == 9) {
-                document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess"); 
+                document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
                 let idx = element.innerText;
                 if (idx != "x") {
                     let noteTile = document.getElementById(this.sel_row + "." + this.sel_col + "." + parseInt(idx));
-                    //console.log(sel_row + "." + sel_col + "." + parseInt(idx));
                     if (noteTile.innerText === idx) {
                         noteTile.innerText = "";
                         this.notes.removeNote(this.sel_row, this.sel_col, idx - 0)
@@ -253,13 +274,18 @@ class KSudokuScreen {
                     }
                 }
             }
-            //console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
         }
         this.myStack.displayStack();
 
         this.isComplete();
     }
 
+    /**
+     * Checks whether the user has correctly completed the grid. If correct 
+     * the input buttons are removed and a message is displayed. 
+     * 
+     * @returns None is returned if the puzzle waa not completed correctly.
+     */
     isComplete() {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
@@ -270,22 +296,27 @@ class KSudokuScreen {
         }
 
         // removes buttons as puzzle is completed.
-        document.getElementsByClassName("buttons")[0].style.display = "none";   
+        document.getElementsByClassName("buttons")[0].style.display = "none";
         document.getElementsByClassName("values")[0].style.display = "none";
         document.getElementById("complete").style.display = "block";
 
     }
 
-    // displays the answer for a cell
+    /**
+     * Inserts the corerct answer for a cell into the selected cell.
+     */
     giveHint() {
         document.getElementById("c" + this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
         this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
         this.isComplete();
     }
 
-    // keeping track of the current and previous selected square
+    /**
+     * keeps track of the current and previous cells which were selected.
+     * 
+     * @param {div} id - of the selected element. 
+     */
     selectedTile(id) {
-        //console.log(id);
         let coordinates = id.split(".");
         this.prev_row = this.sel_row;
         this.prev_col = this.sel_col;
@@ -312,7 +343,12 @@ class KSudokuScreen {
         tile.classList.add("selected-tile");
     }
 
-    // changes the sum of the cage 
+
+    /**
+     * changes the sum of the cage when uploading a puzzle.
+     * 
+     * @param {string} id - the id of the cell which needs the cage sum to be changed.  
+     */
     changeCageSum(id) {
         let tile = document.getElementById(this.sel_row + "." + this.sel_col);
         let sumElement = tile.querySelector(".sumsquare");
@@ -323,16 +359,18 @@ class KSudokuScreen {
             if (num < 10) {
                 sumElement.innerText += num;
                 const newval = sumElement.innerText;
-                this.groups[parseInt(tile.getAttribute("cagenum"))] = {[newval]: values };
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = { [newval]: values };
             } else {
                 sumElement.innerText = "";
-                this.groups[parseInt(tile.getAttribute("cagenum"))] = {0: values };
+                this.groups[parseInt(tile.getAttribute("cagenum"))] = { 0: values };
             }
         }
     }
 
+    /**
+     * Fills the grid with the solution.
+     */
     autoComplete() {
-        console.log(this.solution)
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];

@@ -24,18 +24,44 @@ window.onload = function () {
     }
 }
 
+/**
+ * A simple callback which instantiates the play sudoku screen with
+ * the generated puzzle.
+ * 
+ * @param {dictionary} data - contains the response from the backend. 
+ */
 function setcallback(data) {
-    console.log("done");
     setPuzzle(data["grid"], data['solution']);
+
+    // removing the spinner
+    document.getElementById('overlay').classList.add("invisible");
+    document.getElementById('overlay').classList.remove("overlay");
+    document.getElementById('cover').classList.remove("disable");
 }
 
+/**
+ * Creates an instance of the sudoku generator and 
+ * instantiates the play sudoku screen.
+ * 
+ * @param {string} difficulty - easy, medium, hard, expert.
+ */
 function generatePuzzle(difficulty) {
+    // displaying a spinner
+    document.getElementById('overlay').classList.add("overlay");
+    document.getElementById('overlay').classList.remove("invisible");
+    document.getElementById('cover').classList.add("disable");
+
     PuzzleGenerator = new GetPuzzle(difficulty);
-    PuzzleGenerator.requestPuzzle(setcallback);
+    PuzzleGenerator.requestSudokuPuzzle(setcallback);
 }
 
+/**
+ * Sets up the play sudoku screen and adds the appropriate event handlers to buttons.
+ * 
+ * @param {array} board - a 2d array containing the puzzle
+ * @param {array} solution - a 2d array containing the answer.
+ */
 function setPuzzle(board, solution) {
-    console.log(board, solution);
     SetScreen = new SudokuScreen(board, solution);
     SetScreen.CreateGame();
 

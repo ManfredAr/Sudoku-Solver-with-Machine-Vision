@@ -1,8 +1,18 @@
 import { Notes } from "./notes.js";
 import { Stack } from "./stack.js";
 
+/**
+ * This class is responsible for initialising the Sudoku elements on the screen as well
+ * as implemening the features of the games. 
+ */
 class SudokuScreen {
 
+    /**
+     * The constructor for the class.
+     * 
+     * @param {array} grid - contains the partial grid. 
+     * @param {array} solution - contains the solution to the puzzle.
+     */
     constructor(grid, solution) {
         this.board = grid;
         this.solution = solution;
@@ -15,6 +25,9 @@ class SudokuScreen {
         this.prev_col = 0;
     }
 
+    /**
+     * Initialises the elements on the screen. Creates the input buttons and the playing grid, 
+     */
     CreateGame() {
         // create the possible numbers to be used as buttons .
         // the 10th is not a number its a delete number button.
@@ -67,7 +80,9 @@ class SudokuScreen {
         }
     }
 
-    // toggles the notes button
+    /**
+     * toggles the notes button to allow user to input notes. 
+     */
     activeNotes(event) {
         document.getElementById("enableNotes").classList.toggle("activeButton");
         if (this.takingNotes) {
@@ -77,14 +92,18 @@ class SudokuScreen {
         }
     }
 
-    // displays the answer for a cell
+    /**
+     * Inserts the corerct answer for a cell into the selected cell.
+     */
     giveHint() {
         document.getElementById(this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
         this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
         this.isComplete();
     }
 
-    // Used to revert the last action that was taken.
+    /**
+     * Reverts the last action that was taken.
+     */
     lastAction(event) {
         let action = this.myStack.getLastAction();
         if (action != null) {
@@ -142,9 +161,13 @@ class SudokuScreen {
         }
     }
 
-    // updating the currently selected square to the select number
+    /**
+     * Updates the currently selected cell to the selected number. This can be either to add a note or 
+     * to make guess.
+     * 
+     * @param {div} element - the selected div element.
+     */
     selectedNum(element) {
-        //console.log(this.sel_row + "." + this.sel_col);
         if (!this.takingNotes) {
             let tile = document.getElementById(this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
@@ -213,8 +236,12 @@ class SudokuScreen {
         this.isComplete();
     }
 
-    // checks whether the user has correctly completed the puzzle
-    isComplete() {
+    /**
+     * Checks whether the user has correctly completed the grid. If correct 
+     * the input buttons are removed and a message is displayed. 
+     * 
+     * @returns None is returned if the puzzle waa not completed correctly.
+     */    isComplete() {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
                 if (this.board[a][b] != this.solution[a][b]) {
@@ -230,7 +257,12 @@ class SudokuScreen {
 
     }
 
-    // keeping track of the current and previous selected square
+
+    /**
+     * keeps track of the current and previous cells which were selected.
+     * 
+     * @param {div} id - of the selected element. 
+     */
     selectedTile(id) {
         //console.log(id);
         let coordinates = id.split(".");
@@ -259,6 +291,9 @@ class SudokuScreen {
         tile.classList.add("selected-tile");
     }
 
+    /**
+     * Fills the grid with the solution.
+     */
     autoComplete() {
         console.log(this.solution)
         for (let i = 0; i < 9; i++) {

@@ -1,7 +1,7 @@
 {% extends "home/home.html" %}
 {%load static%}
 
-{% block style %} 
+{% block style %}
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/upload.css' %}">
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/killersudoku.css' %}">
 <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/playsudoku.css' %}">
@@ -20,7 +20,7 @@
             {% csrf_token %}
             <div class="options">
                 <label><input id="sudoku" type="radio" name="group" value="sudoku"> Sudoku </label><br>
-                <label><input id="ksudoku" type="radio" name="group" value="killerSudoku"> Killer Sudoku </label><br>    
+                <label><input id="ksudoku" type="radio" name="group" value="killerSudoku"> Killer Sudoku </label><br>
             </div>
             <div class="uploadImage">
                 <div style="display: block;">

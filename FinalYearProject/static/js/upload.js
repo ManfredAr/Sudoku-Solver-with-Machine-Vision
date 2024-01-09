@@ -4,10 +4,10 @@ import { KSudokuScreen } from "./SetKSudokuScreen.js"
 var sudokuInstance = null;
 var ksudokuInstance = null;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     // eventlistener for the submit button
-    document.getElementById('processImage').addEventListener('click', function(event) {
+    document.getElementById('processImage').addEventListener('click', function (event) {
         event.preventDefault();
 
         // displaying a spinner
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(selectedFile)
             const formData = new FormData();
             formData.append('image', selectedFile);
-            
+
             // checking which puzzle was selected.
             const sudokuRadio = document.getElementById('sudoku');
             if (sudokuRadio.checked) {
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             xhr.open('POST', '/Upload/uploadImage/');
             xhr.setRequestHeader('X-CSRFToken', csrfToken);
 
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     // directing data to the correct machine vision code (sudoku or kiler sudoku).
                     if (xhr.status === 200) {
@@ -73,20 +73,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.getElementById("set").addEventListener('click', function(event) {
+    document.getElementById("set").addEventListener('click', function (event) {
         event.preventDefault();
         sendToBackend("sudoku");
     });
 
 
-    document.getElementById("set1").addEventListener('click', function(event) {
+    document.getElementById("set1").addEventListener('click', function (event) {
         event.preventDefault();
         sendToBackend("ksudoku");
     });
 
-    // when a user is happy with the puzzle they can set it. 
-    // this function sends the puzzle to the backend for solving
-    // and redirects the user to the relevant screen to play the puzzle.
+
+    /**
+     * Sends the puzzle uploaded by the user to the backend to get a solutions and direct the user to the 
+     * play screen.
+     * 
+     * @param {string} puzzle - the type of puzzle, sudoku or killer sudoku.
+     */
     function sendToBackend(puzzle) {
 
         // displaying spinner
@@ -112,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 // processing the response.
                 if (xhr.status === 200) {
@@ -133,11 +137,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         };
-        xhr.send(formData); 
+        xhr.send(formData);
     }
 });
 
-// uses the setSudokuScreen class to allow the user to interact with the puzzle 
+
+/**
+ * uses the setSudokuScreen class to display the Sudoku puzzle and appropriate buttons on the screen.
+ * 
+ * @param {array} puzzle - the Sudoku puzzle. 
+ */
 function displaySudokuPuzzle(puzzle) {
     sudokuInstance = new SudokuScreen(puzzle, [-1]);
     sudokuInstance.CreateGame();
@@ -156,7 +165,12 @@ function displaySudokuPuzzle(puzzle) {
     }
 }
 
-// uses the setKSudokuScreen class to allow the user to interact with the puzzle 
+/**
+ * uses the setKSudokuScreen class to display the puzzle and appropriate buttons on the screen.
+ * 
+ * @param {array} puzzle - the puzzle 
+ * @param {dictionary} cages - the cages each containing the cells and cage sum
+ */
 function displayKSudokuPuzzle(puzzle, cages) {
     ksudokuInstance = new KSudokuScreen(puzzle, [], cages);
     ksudokuInstance.CreateGame();

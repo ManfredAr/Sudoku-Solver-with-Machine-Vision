@@ -77,3 +77,15 @@ This week I have been working on getting my project in a good state to prepare f
 presentation and recorded the demo video as well. In the report I have added an appendix which contains the user manual, links to my UML
 diagrams and demo video.  
 Next I will work on trying to add reasoning techniques into my solver to provide the user with better hints.
+
+
+Week 16 - 2/01/24
+This week I worked on adding some of the logical Sudoku techniques into my program. I have added obvious singles/pairs/triples, hidden singles/pairs/triples,
+and pointing cells. For now this is all I need as there are many technique which wold take up too much time.
+Next, I will work on generating Sudoku and killer Sudoku puzzles and integrating it into the frontend.
+
+
+Wekk 17 - 8/01/24
+This week I worked on generating Sudoku and Killer Sudoku puzzles. I have also hooked It up to the frontend. The puzzles generation has been tested in 
+both frontend and backend. In addition I have added some more testing for other features as well as documentation especially for the javascript code.
+Next, I will work on writing my report for generating puzzles and also implement the new Sudoku hints into the frontend.

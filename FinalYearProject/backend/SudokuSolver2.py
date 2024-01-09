@@ -36,6 +36,9 @@ class SudokuSolver2:
         '''
         Recursively tries to add values into the grid to complete it.
 
+        parameters:
+        pq - a queue object which is initialised with the grid.
+
         Returns:
         True if a solution was found, False otherwise
         '''
@@ -85,6 +88,9 @@ class SudokuSolver2:
     def NumberOfSolutions(self, pq):
         '''
         Recursively tries to add values into the grid to complete it.
+
+        parameters:
+        pq - a queue object which is initialised with the grid.
 
         Returns:
         - The number of solutions found.
