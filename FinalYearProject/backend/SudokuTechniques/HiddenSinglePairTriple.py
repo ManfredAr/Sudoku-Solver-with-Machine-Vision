@@ -46,7 +46,8 @@ class HiddenSinglePairTriple:
                         break
             if occurrence == 1:
                 domain[at[0]][at[1]] = set([num])
-                return ("Hidden single in row", at, num), domain
+                message = f"{num} is a hidden single in row {row} in cell {at}"
+                return message, domain
             
         return None, None
     
@@ -71,7 +72,8 @@ class HiddenSinglePairTriple:
                         break
             if occurrence == 1:
                 domain[at[0]][at[1]] = set([num])
-                return ("Hidden single in column", at, num), domain
+                message = f"{num} is a hidden single in column {column} in cell {at}"
+                return message, domain
             
         return None, None
 
@@ -96,7 +98,8 @@ class HiddenSinglePairTriple:
                         occurrence += 1
             if occurrence == 1:
                 domain[at[0]][at[1]] = set([num])
-                return ("Hidden single in box", at, num), domain
+                message = f"{num} is a hidden single in box {(row, column)} in cell {at}"
+                return message, domain
             
         return None, None
     
@@ -142,7 +145,8 @@ class HiddenSinglePairTriple:
                 if tuple(at) in double:
                     for a in at:
                         domain[a[0]][a[1]] = {double[tuple(at)], num}
-                    return ("hidden pair in row", at, double[tuple(at)], num), domain
+                    message = f"{double[tuple(at)], num} are hidden pairs in row {row} in cells {at[0], at[1]}"
+                    return message, domain
                 else: 
                     double[tuple(at)] = num
         return None, None
@@ -168,7 +172,8 @@ class HiddenSinglePairTriple:
                 if tuple(at) in double:
                     for a in at:
                         domain[a[0]][a[1]] = {double[tuple(at)], num}
-                    return ("hidden pair in column", at, double[tuple(at)], num), domain
+                    message = f"{double[tuple(at)], num} are hidden pairs in column {col} in cells {at[0], at[1]}"
+                    return message, domain
                 else: 
                     double[tuple(at)] = num
         return None, None
@@ -195,7 +200,8 @@ class HiddenSinglePairTriple:
                 if tuple(at) in double:
                     for a in at:
                         domain[a[0]][a[1]] = {double[tuple(at)], num}
-                    return ("hidden pair in box", at, double[tuple(at)], num), domain
+                    message = f"{double[tuple(at)], num} are hidden pairs in box {(row, col)} in cells {at[0], at[1]}"
+                    return message, domain
                 else: 
                     double[tuple(at)] = num
         return None, None
@@ -343,8 +349,6 @@ class HiddenSinglePairTriple:
         Returns:
         A tuple containing the technique used, the row, column and the actual number.
         '''
-        #print(triplesCells)
-        #print(tripleNums)
         for a in range(len(triplesCells)):
             numbers = tripleNums[a]
             for b in range(a+1, len(triplesCells)):
@@ -354,7 +358,7 @@ class HiddenSinglePairTriple:
                 difference = {1,2,3,4,5,6,7,8,9} - numbers
                 for cell in triplesCells[a]:
                     domain[cell[0]][cell[1]] = domain[cell[0]][cell[1]] - difference
-                reponse = "hidden triple in " + unit
-                return (reponse, triplesCells[a], numbers), domain
+                message = f"{numbers} are hidden triples in {unit} in cells {list(triplesCells[a])}"
+                return message, domain
         
         return None, None

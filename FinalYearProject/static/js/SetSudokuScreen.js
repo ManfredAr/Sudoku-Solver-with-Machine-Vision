@@ -1,5 +1,6 @@
 import { Notes } from "./notes.js";
 import { Stack } from "./stack.js";
+import { GetHint } from "./getHint.js";
 
 /**
  * This class is responsible for initialising the Sudoku elements on the screen as well
@@ -96,9 +97,19 @@ class SudokuScreen {
      * Inserts the corerct answer for a cell into the selected cell.
      */
     giveHint() {
+        console.log(this.board);
+        let hintGenerator = new GetHint(this.board);
+        hintGenerator.requestSudokuHint(this.setcallback);
+
+
         document.getElementById(this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
         this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
         this.isComplete();
+    }
+
+    setcallback(data) {
+        document.getElementById("hint-text").innerText = data.hint;
+        document.getElementsByClassName("displayHint")[0].classList.remove("remove");
     }
 
     /**

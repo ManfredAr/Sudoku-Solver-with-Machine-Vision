@@ -44,10 +44,11 @@ class SudokuHints:
         '''
         output = []
         while True:
-            domain, ObviousSingle = self.ObviousSinglePairTriple.checkObviousSingle(self.domains)
+            domain, info, ObviousSingle = self.ObviousSinglePairTriple.checkObviousSingle(self.domains)
             if domain != None:
                 self.domain = domain
                 output.append(ObviousSingle)
+                output.append(info)
                 break
             domain, ObviousPair = self.ObviousSinglePairTriple.checkObviousPairs(self.domains)
             if domain != None:
@@ -85,7 +86,7 @@ class SudokuHints:
                     self.domain = domain
                     output.append(PointingCells)
                     continue
-            return "No technique applied"
+            return -1
         return output
             
             

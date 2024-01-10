@@ -41,7 +41,8 @@ class PointingCells:
                 for i in range(9):
                     if domain[occur[0]][i] != -1 and not (i >= col*3 and i <= (col*3) + 3):
                         domain[occur[0]][i].discard(num)
-                return ("pointing cells in row", set(occur), num), domain
+                message = f"{num} is a pointing cell in row {list(set(occur))}"
+                return message, domain
 
         return None, None
 
@@ -67,6 +68,7 @@ class PointingCells:
                 for i in range(9):
                     if domain[occur[0]][i] != -1 and not (i >= row*3 and i <= (row*3) + 3):
                         domain[occur[0]][i].discard(num)
-                return ("pointing cells in column", set(occur), num), domain
+                message = f"{num} is a pointing cell in column {list(set(occur))}"
+                return message, domain
 
         return None, None

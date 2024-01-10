@@ -138,7 +138,7 @@
 }
 
 .remove {
-    display: none;
+    display: none !important;
 }
 
 /* centre the congratulations message */
@@ -182,6 +182,26 @@
     z-index: 999;
 }
 
+.displayHint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hintContent {
+    background-color: white;
+    width: 540px;
+}
+
+.hintContent button {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    color: black;
+    background: none;
+    padding: none;
+    border: none;
+}
 
 @media (max-width: 768px) {
     #grid {
