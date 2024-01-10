@@ -24,6 +24,7 @@ class SudokuScreen {
         this.sel_col = 0;
         this.prev_row = 0;
         this.prev_col = 0;
+        this.setcallback = this.setcallback.bind(this);
     }
 
     /**
@@ -97,19 +98,42 @@ class SudokuScreen {
      * Inserts the corerct answer for a cell into the selected cell.
      */
     giveHint() {
-        console.log(this.board);
         let hintGenerator = new GetHint(this.board);
         hintGenerator.requestSudokuHint(this.setcallback);
-
-
-        document.getElementById(this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
-        this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
-        this.isComplete();
     }
 
     setcallback(data) {
-        document.getElementById("hint-text").innerText = data.hint;
-        document.getElementsByClassName("displayHint")[0].classList.remove("remove");
+        if (data["answer"] == -1) {
+            document.getElementById("hint-text").innerText = data.hint;
+            document.getElementsByClassName("displayHint")[0].classList.remove("remove");
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (this.board[i][j] == '-') {
+                        document.getElementById(i + "." + j).innerText = this.solution[i][j];
+                        this.board[i][j] = this.solution[i][j];
+                    }
+                }
+            }
+        } else {
+            let hint = "";
+            for (let i = 0; i < data["hint"].length; i++) {
+                hint += data["hint"][i] + "\n";
+            }
+            document.getElementById("hint-text").innerText = hint;
+            document.getElementsByClassName("displayHint")[0].classList.remove("remove");
+            let info = data["answer"];
+            let i = parseInt(info[0]);
+            let j = parseInt(info[1]);
+            console.log(info[0], info[1]);
+            document.getElementById(info[0] + "." + info[1]).innerText = info[2];
+            this.updateBoard(i, j);
+        }
+        this.isComplete();
+    }
+
+
+    updateBoard(i, j) {
+        this.board[i][j] = this.solution[i][j];
     }
 
     /**

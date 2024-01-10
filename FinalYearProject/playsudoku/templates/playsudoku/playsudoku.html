@@ -45,12 +45,16 @@
     <div id="grid"></div> </br>
 
     <div class="displayHint remove">
-        <div class="hintContent d-flex justify-content-end"">
+        <div class="hintContent d-flex flex-column justify-content-end">
             {% csrf_token %}
-            <button type=" button" id="close" class="btn-close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-            <p id="hint-text"></p>
+            <div class=" close">
+                <button type=" button" id="close" class="btn-close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="hints">
+                <p id="hint-text"></p>
+            </div>
         </div>
     </div>
 

@@ -35,5 +35,5 @@ def getHint(request):
         obj = SudokuHints(grid)
         hints = obj.getNextHint()
         if hints == -1:
-            return JsonResponse({'hint': "Found through backtracking"})
-        return JsonResponse({'hint': hints})
+            return JsonResponse({'hint': "Found through backtracking", 'answer': -1})
+        return JsonResponse({'hint': hints[:-1], 'answer':hints[-1]})

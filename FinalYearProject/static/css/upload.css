@@ -30,6 +30,11 @@
     padding: 10px;
 }
 
+.uploadImage {
+    display: flex;
+    flex-direction: column;
+}
+
 /* sets the input width  */
 input#imageUpload {
     width: 200px;

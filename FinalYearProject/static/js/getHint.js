@@ -30,7 +30,7 @@ class GetHint {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
-                    callback({ hint: response.hint });
+                    callback({ hint: response.hint, answer: response.answer });
                 } else {
                     console.error('Request failed:', xhr.status);
                 }
