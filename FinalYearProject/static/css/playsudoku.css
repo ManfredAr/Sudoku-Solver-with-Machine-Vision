@@ -8,16 +8,19 @@
     flex-wrap: wrap;
 }
 
+/* adding padding on top */
 .play,
 .difficulty {
     padding-top: 30px;
 }
 
+/* adding padding on top and centering buttons*/
 .choices {
     padding-top: 10px;
     text-align: center;
 }
 
+/* centering the title */
 .difficulty h1 {
     text-align: center;
 }
@@ -137,8 +140,9 @@
     background-color: rgb(63, 191, 220);
 }
 
+/* making a div disappear */
 .remove {
-    display: none;
+    display: none !important;
 }
 
 /* centre the congratulations message */
@@ -182,11 +186,51 @@
     z-index: 999;
 }
 
+/* making the hits position centered */
+.displayHint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* seting the width and colour of the content */
+.hintContent {
+    background-color: white;
+    width: 540px;
+    display: flex;
+}
+
+/* making the hist display in the center */
+.hints {
+    text-align: center;
+}
+
+/* setting the text clolur to black. */
+.hints p {
+    color: black !important;
+}
+
+.hintContent button {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    color: black;
+    background: none;
+    padding: none;
+    border: none;
+}
 
 @media (max-width: 768px) {
     #grid {
         height: 320px;
         width: 320px;
+    }
+
+    /* seting the width and colour of the content */
+    .hintContent {
+        background-color: white;
+        width: 320px;
+        display: flex;
     }
 
     .cell {
@@ -211,6 +255,23 @@
         /* the dimensions of each individual number buttons */
         width: 32px;
         height: 32px;
-        font-size: 20px;
+        font-size: small;
+    }
+
+    #enableNotes,
+    #undo,
+    #solve,
+    #hint {
+        border: 0;
+        border-radius: 10px;
+        padding: 5px;
+        font-size: small;
+    }
+
+    /* setting the text clolur to black. */
+    .hints p {
+        color: black !important;
+        font-size: small;
+        padding: 3px;
     }
 }

@@ -27,7 +27,7 @@ class test_PointingCells(unittest.TestCase):
     def test_checkPointingCellsRows(self):
         sudoku = SudokuHints(self.grid1)
         pointing = PointingCells()
-        self.assertEqual(pointing.pointingCellsRow(2,2,sudoku.domains)[0], ("pointing cells in row", {6}, 1))
+        self.assertEqual(pointing.pointingCellsRow(2,2,sudoku.domains)[0], "1 is a pointing cell in row [6]")
 
     def test_checkPointingCellsRowsDomains(self):
         sudoku = SudokuHints(self.grid1)
@@ -38,12 +38,12 @@ class test_PointingCells(unittest.TestCase):
     def test_checkPointingCellsColumn(self):
         sudoku = SudokuHints(self.grid2)
         pointing = PointingCells()
-        self.assertEqual(pointing.pointingCellsColumn(2,1,sudoku.domains)[0], ("pointing cells in column", {5}, 3))
+        self.assertEqual(pointing.pointingCellsColumn(2,1,sudoku.domains)[0], "3 is a pointing cell in column [5]")
 
-    def est_checkPointingCellsColumnDomain(self):
+    def test_checkPointingCellsColumnDomain(self):
         sudoku = SudokuHints(self.grid2)
         pointing = PointingCells()
-        col5 = [{1, 8}, {1, 8}, -1, {4, 9, 6}, {4,6,7}, -1, {3,4,7}, {3,7,9}, {3,4,7,9}]
+        col5 = [{8, 1, 4, 7}, {8, 1, 4, 7}, -1, {9, 4, 6}, {3, 4, 6, 7}, -1, {3, 4, 7}, {9, 3, 7}, {9, 3, 4, 7}]
         acol5 = pointing.pointingCellsColumn(2,1,sudoku.domains)[1]
         acol5 = [row[5] for row in acol5]
         self.assertEqual(acol5, col5)

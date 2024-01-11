@@ -38,6 +38,7 @@ class Test_Hints(unittest.TestCase):
 
     def test_giveHint(self):
         sudoku = SudokuHints(self.grid2)
-        self.assertEqual(sudoku.getNextHint(), [('Obvious Pairs in row', [(1, 7), (1, 8)], {3, 4}),
-                                                ('obvious triples in column', [(0, 1), (1, 1), (7, 1)], {2, 3, 5}),
-                                                ('Obvious single', 2, 1, 7)])
+        self.assertEqual(sudoku.getNextHint(), ['{3, 4} are obvious pairs row 1 in cells ((1, 7), (1, 8))', 
+                                                '{2, 3, 5} are obvious triples in column 1 in cells [(0, 1), (1, 1), (7, 1)]', 
+                                                '7 is an obvious single in cell (2, 1)',
+                                                (2,1,7)])

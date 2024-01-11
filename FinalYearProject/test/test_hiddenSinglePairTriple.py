@@ -70,7 +70,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenSinglesColumn(self):
         sudoku = SudokuHints(self.grid2)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenSingleColumn(2, sudoku.domains)[0], ("Hidden single in column", (6, 2), 1))
+        self.assertEqual(hidden.hiddenSingleColumn(2, sudoku.domains)[0], "1 is a hidden single in column 2 in cell (6, 2)")
 
     def test_checkHiddenSinglesColumnDomain(self):
         sudoku = SudokuHints(self.grid2)
@@ -83,7 +83,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenSinglesBox(self):
         sudoku = SudokuHints(self.grid2)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenSingleBox(2, 0, sudoku.domains)[0], ("Hidden single in box", (6, 2), 1))
+        self.assertEqual(hidden.hiddenSingleBox(2, 0, sudoku.domains)[0], "1 is a hidden single in box (2, 0) in cell (6, 2)")
 
     def test_checkHiddenSinglesBoxDomain(self):
         sudoku = SudokuHints(self.grid2)
@@ -96,7 +96,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenSinglesRow(self):
         sudoku = SudokuHints(self.grid1)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenSingleRow(1, sudoku.domains)[0], ("Hidden single in row", (1, 6), 2))
+        self.assertEqual(hidden.hiddenSingleRow(1, sudoku.domains)[0], "2 is a hidden single in row 1 in cell (1, 6)")
 
     def test_checkHiddenSinglesRowDomain(self):
         sudoku = SudokuHints(self.grid1)
@@ -109,7 +109,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenPairsBox(self):
         sudoku = SudokuHints(self.grid3)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenPairBox(1, 0, sudoku.domains)[0], ("hidden pair in box", [(4,0), (5,0)], 2, 6))
+        self.assertEqual(hidden.hiddenPairBox(1, 0, sudoku.domains)[0], "(2, 6) are hidden pairs in box (1, 0) in cells ((4, 0), (5, 0))")
 
     def test_checkHiddenPairsBoxDomain(self):
         sudoku = SudokuHints(self.grid3)
@@ -122,7 +122,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenPairsRow(self):
         sudoku = SudokuHints(self.grid3)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenPairRow(2, sudoku.domains)[0], ("hidden pair in row", [(2,6), (2,7)], 3, 7))
+        self.assertEqual(hidden.hiddenPairRow(2, sudoku.domains)[0], "(3, 7) are hidden pairs in row 2 in cells ((2, 6), (2, 7))")
 
     def test_checkHiddenPairsRowDomain(self):
         sudoku = SudokuHints(self.grid3)
@@ -135,7 +135,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenPairsColumn(self):
         sudoku = SudokuHints(self.grid3)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenPairColumn(0, sudoku.domains)[0], ("hidden pair in column", [(4,0), (5,0)], 2, 6))
+        self.assertEqual(hidden.hiddenPairColumn(0, sudoku.domains)[0], "(2, 6) are hidden pairs in column 0 in cells ((4, 0), (5, 0))")
 
     def test_checkHiddenPairsColumnDomain(self):
         sudoku = SudokuHints(self.grid3)
@@ -148,7 +148,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenTriplesBox(self):
         sudoku = SudokuHints(self.grid6)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenTripleBox(2, 0, sudoku.domains)[0], ("hidden triple in box", {(7,1), (8,1), (8,2)}, {2,4,5}))
+        self.assertEqual(hidden.hiddenTripleBox(2, 0, sudoku.domains)[0], "{2, 4, 5} are hidden triples in box in cells [(7, 1), (8, 1), (8, 2)]")
 
     def test_checkHiddenTriplesBoxDomain(self):
         sudoku = SudokuHints(self.grid6)
@@ -161,7 +161,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenTriplesRow(self):
         sudoku = SudokuHints(self.grid4)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenTripleRow(0, sudoku.domains)[0], ("hidden triple in row", {(0,3), (0,6), (0,8)}, {2,5,6}))
+        self.assertEqual(hidden.hiddenTripleRow(0, sudoku.domains)[0], "{2, 5, 6} are hidden triples in row in cells [(0, 8), (0, 3), (0, 6)]")
 
     def test_checkHiddenTriplesRowDomain(self):
         sudoku = SudokuHints(self.grid4)
@@ -174,7 +174,7 @@ class test_HiddenSinglePairTriple(unittest.TestCase):
     def test_checkHiddenTriplesColumn(self):
         sudoku = SudokuHints(self.grid5)
         hidden = HiddenSinglePairTriple()
-        self.assertEqual(hidden.hiddenTripleColumn(5, sudoku.domains)[0], ("hidden triple in column", {(5,5), (3,5), (7,5)}, {2,5,6}))
+        self.assertEqual(hidden.hiddenTripleColumn(5, sudoku.domains)[0], "{2, 5, 6} are hidden triples in column in cells [(5, 5), (7, 5), (3, 5)]")
 
     def test_checkHiddenTriplesColumnDomain(self):
         sudoku = SudokuHints(self.grid5)

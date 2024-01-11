@@ -69,7 +69,8 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousSingle(self):
         sudoku = SudokuHints(self.grid1)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[1], ("Obvious single", 0, 0, 4))
+        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[2], "4 is an obvious single in cell (0, 0)")
+        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[1], (0, 0, 4))
 
     def test_nocheckObviousSingle(self):
         sudoku = SudokuHints(self.grid2)
@@ -79,7 +80,7 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousPairsBox(self):
         sudoku = SudokuHints(self.grid3)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkPairsInBox(0, 1, sudoku.domains)[0], ("Obvious Pairs in box", [(1,3), (2,5)], {9,7}))
+        self.assertEqual(obviousS.checkPairsInBox(0, 1, sudoku.domains)[0], "{9, 7} are obvious pairs box (0, 1) in cells ((1, 3), (2, 5))")
 
     def test_checkObviousPairsBoxDomain(self):
         sudoku = SudokuHints(self.grid3)
@@ -92,7 +93,7 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousPairsRow(self):
         sudoku = SudokuHints(self.grid3)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkPairsInRow(7, sudoku.domains)[0], ("Obvious Pairs in row", [(7,4), (7,7)], {7,9}))
+        self.assertEqual(obviousS.checkPairsInRow(7, sudoku.domains)[0], "{9, 7} are obvious pairs row 7 in cells ((7, 4), (7, 7))")
 
     def test_checkObviousPairsRowDomain(self):
         sudoku = SudokuHints(self.grid3)
@@ -105,7 +106,7 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousPairsColumn(self):
         sudoku = SudokuHints(self.grid3)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkPairsInColumn(7, sudoku.domains)[0], ("Obvious Pairs in column", [(0,7), (7,7)], {7,9}))
+        self.assertEqual(obviousS.checkPairsInColumn(7, sudoku.domains)[0], "{9, 7} are obvious pairs column 7 in cells ((0, 7), (7, 7))")
 
     def test_checkObviousPairsColumnDomain(self):
         sudoku = SudokuHints(self.grid3)
@@ -118,7 +119,7 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousTriplesRow(self):
         sudoku = SudokuHints(self.grid4)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkTriplesInRow(4, sudoku.domains)[0], ("obvious triples in row", [(4,3), (4,4), (4,5)], {5,8,9}))
+        self.assertEqual(obviousS.checkTriplesInRow(4, sudoku.domains)[0], "{5, 8, 9} are obvious triples in row 4 in cells [(4, 3), (4, 4), (4, 5)]")
 
     def test_checkObviousTriplesRowDomain(self):
         sudoku = SudokuHints(self.grid6)
@@ -131,7 +132,7 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousTriplesColumn(self):
         sudoku = SudokuHints(self.grid5)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkTriplesInColumn(0, sudoku.domains)[0], ("obvious triples in column", [(3,0), (4,0), (5,0)], {1,5,8}))
+        self.assertEqual(obviousS.checkTriplesInColumn(0, sudoku.domains)[0], "{1, 5, 8} are obvious triples in column 0 in cells [(3, 0), (4, 0), (5, 0)]")
 
     def test_checkObviousTriplesColumnDomain(self):
         sudoku = SudokuHints(self.grid5)
@@ -144,7 +145,7 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousTriplesBox(self):
         sudoku = SudokuHints(self.grid6)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkTriplesInBox(0,0, sudoku.domains)[0], ("obvious triples in box", [(2,0), (2,1), (2,2)], {1,5,8}))
+        self.assertEqual(obviousS.checkTriplesInBox(0,0, sudoku.domains)[0], "{1, 5, 8} are obvious triples in box (0, 0) in cells [(2, 0), (2, 1), (2, 2)]")
 
     def test_checkObviousTriplesBoxDomain(self):
         sudoku = SudokuHints(self.grid6)

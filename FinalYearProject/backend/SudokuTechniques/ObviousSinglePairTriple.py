@@ -15,8 +15,9 @@ class ObviousSinglePairTriple:
         for i in range(9):
             for j in range(9):
                 if domain[i][j] != -1 and len(domain[i][j]) == 1:
-                    return domain, ("Obvious single", i, j, next(iter(domain[i][j])))
-        return None, None
+                    message = f"{next(iter(domain[i][j]))} is an obvious single in cell {(i, j)}"
+                    return domain, (i, j, next(iter(domain[i][j]))), message
+        return None, None, None
     
     
     def checkObviousPairs(self, domain):
@@ -63,7 +64,8 @@ class ObviousSinglePairTriple:
                                     domain[a][b] = domain[a][b] - domain[i][j]
                                 if domain[a][b] != -1 and domain[a][b] == domain[i][j]:
                                     cells.append((a,b))
-                        return ("Obvious Pairs in box", cells, domain[i][j]), domain
+                        message = f"{domain[i][j]} are obvious pairs box {row, col} in cells {cells[0], cells[1]}"
+                        return message, domain
                     else:
                         singleCells.append(domain[i][j])
 
@@ -91,7 +93,8 @@ class ObviousSinglePairTriple:
                             domain[row][j] = domain[row][j] - domain[row][i]
                         if domain[row][j] != -1 and domain[row][j] == domain[row][i]:
                             cells.append((row,j))
-                    return ("Obvious Pairs in row", cells, domain[row][i]), domain
+                    message = f"{domain[row][i]} are obvious pairs row {row} in cells {cells[0], cells[1]}"
+                    return message, domain
                 else:
                     singleCells.append(domain[row][i])
         return None, None
@@ -119,7 +122,8 @@ class ObviousSinglePairTriple:
                             domain[j][col] = domain[j][col] - domain[i][col]
                         if domain[j][col] != -1 and domain[j][col] == domain[i][col]:
                             cells.append((j,col))
-                    return ("Obvious Pairs in column", cells, domain[i][col]), domain
+                    message = f"{domain[i][col]} are obvious pairs column {col} in cells {cells[0], cells[1]}"
+                    return message, domain
                 else:
                     singleCells.append(domain[i][col])
         
@@ -168,7 +172,8 @@ class ObviousSinglePairTriple:
                 for a in range(i, 9):
                     if domain[row][a] != -1 and (row,a) not in triples:
                         domain[row][a] = domain[row][a] - ints
-                return ("obvious triples in row", triples, ints), domain
+                message = f"{ints} are obvious triples in row {row} in cells {triples}"
+                return message, domain
 
         return None, None
     
@@ -195,7 +200,8 @@ class ObviousSinglePairTriple:
                 for a in range(i, 9):
                     if domain[a][col] != -1 and (a,col) not in triples:
                         domain[a][col] = domain[a][col] - ints
-                return ("obvious triples in column", triples, ints), domain
+                message = f"{ints} are obvious triples in column {col} in cells {triples}"
+                return message, domain
 
         return None, None
     
@@ -225,6 +231,7 @@ class ObviousSinglePairTriple:
                         for d in range(col*3, (col*3)+3):
                             if domain[c][d] != -1 and (c,d) not in triples:
                                 domain[c][d] = domain[c][d] - ints
-                    return ("obvious triples in box", triples, ints), domain
+                    message = f"{ints} are obvious triples in box {row, col} in cells {triples}"
+                    return message, domain
                 
         return None, None
