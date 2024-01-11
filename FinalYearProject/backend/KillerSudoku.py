@@ -119,6 +119,7 @@ class KillerSudoku:
         cells = next(iter(self.cages.get(cageNum).values()))
         return cells
     
+    
     def getCageSum(self, row, col):
         '''
         Returns the sum that a cage should add up to.
