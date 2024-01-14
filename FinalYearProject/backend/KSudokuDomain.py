@@ -10,18 +10,18 @@ class KillerSudokuDomain:
         self.combinations = CageCombinations()
 
 
-#    def getAllDomains(self):
-#        domainGrid = copy.deepcopy(self.grid.copy())
-#        for i in range(len(domainGrid)):
-#            for j in range(len(domainGrid[0])):
-#                numVar = len(self.killerSudoku.getCageCells(i, j))
-#                cageSum = self.killerSudoku.getCageSum(i, j)
-#                domain = self.combinations.getDomain(numVar, cageSum)
-#                used = self.getUsedValues(i, j)
-#                domainGrid[i][j] = domain - used
-#
-#        return domain
-    
+    def getAllDomains(self):
+        domainGrid = copy.deepcopy(self.grid.copy())
+        for i in range(len(domainGrid)):
+            for j in range(len(domainGrid[0])):
+                numVar = len(self.killerSudoku.getCageCells(i, j))
+                cageSum = self.killerSudoku.getCageSum(i, j)
+                domain = self.combinations.getDomain(numVar, cageSum)
+                used = self.getUsedValues(i, j)
+                domainGrid[i][j] = domain - used
+
+        return domain
+                    
 
     def getDomain(self, row, col):
         cageCells = self.killerSudoku.getCageCells(row, col)
@@ -45,6 +45,9 @@ class KillerSudokuDomain:
 
         return combinations - used, RemainingCells, RemainingTotal  
     
+
+    def getOptions(self, cageSize, cageSum):
+        return self.combinations.getDomain(cageSize, cageSum)
 
 
     def getUsedValues(self, row, col):

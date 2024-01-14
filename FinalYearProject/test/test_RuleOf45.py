@@ -1,0 +1,83 @@
+from backend.SudokuTechniques.ruleOf45 import ruleOf45
+from backend.KillerSudoku import KillerSudoku
+import unittest  
+
+class Test_ruleOf45(unittest.TestCase):
+
+    grid = [[0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0]]
+
+    cage = {
+        1 : {13 : [(0,0),(1,0),(2,0)] },
+        2 : {7 : [(0,1),(0,2)] },
+        3 : {14 : [(0,3),(0,4)] },
+        4 : {12 : [(0,5),(0,6)] },
+        5 : {16 : [(0,7),(0,8),(1,7)] },
+        6 : {17 : [(1,1),(2,1)] },
+        7 : {9 : [(1,2),(1,3)] },
+        8 : {10 : [(1,4),(1,5)] },
+        9 : {6 : [(1,6),(2,6),(3,6)] },
+        35 : {8 : [(2,7)] },
+        10 : {14 : [(1,8),(2,8)] },
+        11 : {4 : [(2,2),(2,3)] },
+        12 : {45 : [(2,4),(3,3),(3,4),(4,3),(4,4),(4,5),(5,4),(5,5),(6,4)] },
+        13 : {7 : [(2,5), (3,5)] },
+        14 : {13 : [(3,0),(4,0)] },
+        15 : {4 : [(3,1),(3,2)] },
+        16 : {5 : [(3,7)] },
+        36 : {8 : [(3,8)] },
+        17 : {7 : [(4,1),(4,2)] },
+        18 : {7 : [(4,6),(4,7)] },
+        19 : {16 : [(4,8),(5,8)] },
+        20 : {13 : [(5,0), (5,1)] },
+        21 : {16 : [(5,2),(6,2),(7,2)] },
+        22 : {5 : [(5,3),(6,3)] },
+        23 : {5 : [(5,6), (5,7)] },
+        24 : {13 : [(6,0), (6,1),(7,0)] },
+        25 : {12 : [(6,5),(6,6)] },
+        26 : {11 : [(6,7), (7,7)] },
+        27 : {14 : [(6,8),(7,8),(8,8)] },
+        28 : {7 : [(7,1)] },
+        29 : {8 : [(8,0),(8,1)] },
+        30 : {14 : [(7,3),(7,4)] },
+        31 : {14 : [(7,5),(7,6)] },
+        32 : {17 : [(8,2),(8,3)] },
+        33 : {11 : [(8,4), (8,5)] },
+        34 : {3 : [(8,6), (8,7)] }
+    }
+
+    def test_checkRuleOf45RowsNone(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Row(0), None)
+
+
+    def test_checkRuleOf45Rows(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Row(8), [(8,8)])
+
+
+    def test_checkRuleOf45ColumnNone(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Column(0), None)
+
+
+    def test_checkRuleOf45Column(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Column(8), [(0,8)])
+
+
+    def test_checkRuleOf45BoxNone(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Box(0, 0), None)
+
+
+    def test_checkRuleOf45Box(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Box(1,2), [(3,6)])

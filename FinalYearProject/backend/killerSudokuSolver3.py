@@ -14,8 +14,6 @@ class KillerSudokuSolver3:
         '''
         self.KSudoku = killerSudoku
         self.queue = KillerSudokuHeap2()
-        self.time = 0
-        
 
     def solver(self):
         '''
@@ -27,7 +25,6 @@ class KillerSudokuSolver3:
         '''
         self.setupHeap()
         if self.solve(self.queue) == True:
-            print(self.time)
             return self.KSudoku.grid
         return False
     
