@@ -32,6 +32,9 @@ class ruleOf45:
         contained = set()
         for i in range(9):
             cageNum = self.cageLayout[row][i]
+            if self.killerSudoku.grid[row][i] != 0:
+                total -= self.killerSudoku.grid[row][i]
+                continue
             if cageNum in contained:
                 continue
             if cageNum == uncontainedCageNum:
@@ -60,6 +63,9 @@ class ruleOf45:
         contained = set()
         for i in range(9):
             cageNum = self.cageLayout[i][column]
+            if self.killerSudoku.grid[i][column] != 0:
+                total -= self.killerSudoku.grid[i][column]
+                continue
             if cageNum in contained:
                 continue
             if cageNum == uncontainedCageNum:
@@ -88,6 +94,9 @@ class ruleOf45:
         for i in range(row*3, row*3 + 3):
             for j in range(col*3, col*3 + 3):
                 cageNum = self.cageLayout[i][j]
+                if self.killerSudoku.grid[i][j] != 0:
+                    total -= self.killerSudoku.grid[i][j]
+                    continue
                 if cageNum in contained:
                     continue
                 if cageNum == uncontainedCageNum:
@@ -115,18 +124,23 @@ class ruleOf45:
         for cageSum, cells in cage.items():
             nonSelectedSum = cageSum - remainingSum
             for cell in cells:
+                if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                    nonSelectedSum -= self.killerSudoku.grid[cell[0]][cell[1]]
+                    continue
                 if cell not in inCagecells:
                     notInCageCells.append(cell)
 
         kdomain = KillerSudokuDomain(self.killerSudoku)
+
         inSelectedOptions = kdomain.getOptions(len(inCagecells), remainingSum)
-        notSelectedOptions = kdomain.getOptions(len(notInCageCells), nonSelectedSum)
+        for i in inCagecells:
+            domain[i[0]][i[1]] = domain[i[0]][i[1]].intersection(inSelectedOptions)
 
-        for i in range(inCagecells):
-            domain[i[0]][i[1]] = inSelectedOptions - domain[i[0]][i[1]]
-
-        for i in range(notInCageCells):
-            domain[i[0]][i[1]] = notSelectedOptions - domain[i[0]][i[1]]
+        if len(notInCageCells) != 0:
+            notSelectedOptions = kdomain.getOptions(len(notInCageCells), nonSelectedSum)
+            for i in notInCageCells:
+                domain[i[0]][i[1]] = domain[i[0]][i[1]].intersection(notSelectedOptions)
+ 
 
         return domain
 

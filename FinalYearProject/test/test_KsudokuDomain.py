@@ -66,13 +66,10 @@ class Test_killerSudokuDomain(unittest.TestCase):
     # testing the correct domain is returned for empty cages
     def test_getSingleDomain(self):
         domain = KillerSudokuDomain(KillerSudoku(self.grid, self.cages))
-        self.assertEqual(domain.getDomain(6, 5)[0], set([1,2,3,4,9]))
-        self.assertEqual(domain.getDomain(6, 5)[1], 3)
-        self.assertEqual(domain.getDomain(6, 5)[2], 15)
+        self.assertEqual(domain.getDomain(6, 5), set([1,2,3,4,9]))
+
 
     # testing the correct domain is returned for partially filled domains.
     def test_partiallyFilledCageGetDomain(self):
         domain = KillerSudokuDomain(KillerSudoku(self.grid, self.cages))
-        self.assertEqual(domain.getDomain(0, 8)[0], set([7]))
-        self.assertEqual(domain.getDomain(0, 8)[1], 2)
-        self.assertEqual(domain.getDomain(0, 8)[2], 16)
+        self.assertEqual(domain.getDomain(0, 8), set([7]))

@@ -1,5 +1,7 @@
 from backend.SudokuTechniques.ruleOf45 import ruleOf45
 from backend.KillerSudoku import KillerSudoku
+from backend.KSudokuDomain import KillerSudokuDomain
+import copy
 import unittest  
 
 class Test_ruleOf45(unittest.TestCase):
@@ -11,8 +13,18 @@ class Test_ruleOf45(unittest.TestCase):
             [0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
+            [0,0,2,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0]]
+    
+    grid2 = [[2,0,0,0,0,0,0,0,0],
+            [0,0,7,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [7,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [3,0,0,0,0,0,0,0,0]]
 
     cage = {
         1 : {13 : [(0,0),(1,0),(2,0)] },
@@ -53,16 +65,17 @@ class Test_ruleOf45(unittest.TestCase):
         34 : {3 : [(8,6), (8,7)] }
     }
 
+    # testing that mutiple outside cages returns none in row
     def test_checkRuleOf45RowsNone(self):
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
         self.assertEqual(ro45.checkRuleOf45Row(0), None)
-
 
     def test_checkRuleOf45Rows(self):
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
         self.assertEqual(ro45.checkRuleOf45Row(8), [(8,8)])
 
 
+    # testing that mutiple outside cages returns none in column
     def test_checkRuleOf45ColumnNone(self):
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
         self.assertEqual(ro45.checkRuleOf45Column(0), None)
@@ -73,6 +86,7 @@ class Test_ruleOf45(unittest.TestCase):
         self.assertEqual(ro45.checkRuleOf45Column(8), [(0,8)])
 
 
+    # testing that mutiple outside cages returns none in box
     def test_checkRuleOf45BoxNone(self):
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
         self.assertEqual(ro45.checkRuleOf45Box(0, 0), None)
@@ -81,3 +95,38 @@ class Test_ruleOf45(unittest.TestCase):
     def test_checkRuleOf45Box(self):
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
         self.assertEqual(ro45.checkRuleOf45Box(1,2), [(3,6)])
+
+
+    def test_checkRuleOf45RowsPartial(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid2, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Row(0), [(0,7), (0,8)])
+    
+
+    def test_checkRuleOf45ColumnPartial(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid2, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Column(0), [(6,0),(7,0)])
+
+
+    def test_checkRuleOf45BoxPartial(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid2, self.cage))
+        self.assertEqual(ro45.checkRuleOf45Box(0, 0), [(2,2)])
+
+
+    def est_reduceDomains(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid2, self.cage))
+        d = KillerSudokuDomain(KillerSudoku(self.grid2, self.cage))
+        domain = d.getAllDomains()
+        newDomain = copy.deepcopy(domain)
+        newDomain[2][2] = set([1])
+        newDomain[2][3] = set([3])
+        self.assertEqual(ro45.reduceDomains([(2,2)], 11, 1, domain), newDomain)
+
+
+    def test_reduceDomainsWithFilled(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        d = KillerSudokuDomain(KillerSudoku(self.grid, self.cage))
+        domain = d.getAllDomains()
+        newDomain = copy.deepcopy(domain)
+        newDomain[5][2] = set([8])
+        newDomain[6][2] = set([6])
+        self.assertEqual(ro45.reduceDomains([(5,2)], 21, 8, domain), newDomain)

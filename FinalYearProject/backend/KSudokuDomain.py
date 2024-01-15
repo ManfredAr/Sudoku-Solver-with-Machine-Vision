@@ -14,13 +14,11 @@ class KillerSudokuDomain:
         domainGrid = copy.deepcopy(self.grid.copy())
         for i in range(len(domainGrid)):
             for j in range(len(domainGrid[0])):
-                numVar = len(self.killerSudoku.getCageCells(i, j))
-                cageSum = self.killerSudoku.getCageSum(i, j)
-                domain = self.combinations.getDomain(numVar, cageSum)
-                used = self.getUsedValues(i, j)
-                domainGrid[i][j] = domain - used
-
-        return domain
+                if self.grid[i][j] == 0:
+                    domainGrid[i][j] = self.getDomain(i,j)
+                else:
+                    domainGrid[i][j] = -1
+        return domainGrid
                     
 
     def getDomain(self, row, col):
@@ -39,20 +37,20 @@ class KillerSudokuDomain:
                 RemainingTotal -= self.killerSudoku.grid[i[0]][i[1]]
 
         if RemainingCells == numVar:
-            return domain - used, RemainingCells, RemainingTotal    
+            return domain - used 
 
         combinations = self.combinations.getDomain(RemainingCells, RemainingTotal)
 
-        return combinations - used, RemainingCells, RemainingTotal  
+        return combinations - used
     
 
     def getOptions(self, cageSize, cageSum):
-        return self.combinations.getDomain(cageSize, cageSum)
+        return set(self.combinations.getDomain(cageSize, cageSum))
 
 
     def getUsedValues(self, row, col):
         '''
-        For a given cell find values which acnnot appear in this cell.
+        For a given cell find values which cannot appear in this cell.
 
         Parameters:
         row - the row the cell is in.
