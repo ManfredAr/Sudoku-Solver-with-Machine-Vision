@@ -15,9 +15,38 @@ class ObviousSinglePairTriple:
         for i in range(9):
             for j in range(9):
                 if domain[i][j] != -1 and len(domain[i][j]) == 1:
-                    message = f"{next(iter(domain[i][j]))} is an obvious single in cell {(i, j)}"
-                    return domain, (i, j, next(iter(domain[i][j]))), message
+                    value = next(iter(domain[i][j]))
+                    print(i, j, value)
+                    message = f"{value} is an obvious single in cell {(i, j)}"
+                    return self.reduceDomain(i, j, value, domain), (i, j, value), message
         return None, None, None
+    
+
+    def reduceDomain(self, row, col, value, domain):
+        '''
+        Removes the values set from the row, column and box. 
+
+        parameters:
+        row, col - the row and column of the cell
+        value - the value set to the cell
+        domain - the domain of each cell in a 2d array
+
+        returns:
+        A new domain which is reduced.
+        '''
+        for i in range(9):
+            if domain[row][i] != -1:
+                domain[row][i].discard(value)
+            if domain[i][col] != -1:
+                domain[i][col].discard(value)
+
+        for i in range(((row//3)*3), ((row//3)*3)+3):
+            for j in range(((col//3)*3), ((col//3)*3)+3):
+                if domain[i][j] != -1:
+                    domain[i][j].discard(value)
+
+        return domain
+
     
     
     def checkObviousPairs(self, domain):

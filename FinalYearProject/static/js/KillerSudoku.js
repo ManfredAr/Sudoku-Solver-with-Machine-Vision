@@ -78,6 +78,11 @@ function setPuzzle(board, solution, cages) {
         tiles[i].addEventListener("click", () => SetScreen.selectedTile(tiles[i].id));
     }
 
+    let close = document.getElementById("close");
+    close.addEventListener("click", function () {
+        document.getElementsByClassName("displayHint")[0].classList.add("remove");
+    });
+
     document.getElementById("enableNotes").addEventListener("click", () => SetScreen.activeNotes());
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
     document.getElementById("solve").addEventListener("click", () => SetScreen.autoComplete());

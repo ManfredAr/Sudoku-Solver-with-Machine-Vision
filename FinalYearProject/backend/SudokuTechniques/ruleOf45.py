@@ -85,6 +85,8 @@ class ruleOf45:
                         return None, None
                     uncontained.append((row,i))
                     uncontainedCageNum = cageNum
+        if len(uncontained) == 0:
+            return None, None
         message = "rule of 45 in row", row
         return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
 
@@ -134,7 +136,8 @@ class ruleOf45:
                         return None, None
                     uncontained.append((i,column))
                     uncontainedCageNum = cageNum
-
+        if len(uncontained) == 0:
+            return None, None
         message = "rule of 45 in column", column
         return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
     
@@ -186,12 +189,14 @@ class ruleOf45:
                             return None, None
                         uncontained.append((i,j))
                         uncontainedCageNum = cageNum
-
+        if len(uncontained) == 0:
+            return None, None
         message = "rule of 45 in box", (row, col)
         return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
 
 
     def reduceDomains(self, inCagecells, cageNum, remainingSum, domain):
+        print(inCagecells, cageNum, remainingSum)
         '''
         Reduces the domain of cell which are affected for the use of the rule of 45.
 
@@ -205,27 +210,36 @@ class ruleOf45:
         a new domain which is reduced to reflect the use of the technique.
         '''
         cage = self.killerSudoku.cages[cageNum]
-        notInCageCells = []
-        nonSelectedSum = 0
+        inArea = []
+        inAreaSum = remainingSum
+        notInArea = []
+        notInAreaSum = 0
         for cageSum, cells in cage.items():
-            nonSelectedSum = cageSum - remainingSum
+            notInAreaSum = cageSum - remainingSum
             for cell in cells:
-                if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
-                    nonSelectedSum -= self.killerSudoku.grid[cell[0]][cell[1]]
-                    continue
-                if cell not in inCagecells:
-                    notInCageCells.append(cell)
+                if tuple(cell) in inCagecells:
+                    if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                        inAreaSum -= self.killerSudoku.grid[cell[0]][cell[1]]
+                    else:
+                        inArea.append(cell)
+                else:
+                    if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                        notInAreaSum -= self.killerSudoku.grid[cell[0]][cell[1]]
+                    else:
+                        print(cell)
+                        notInArea.append(cell)
 
         kdomain = KillerSudokuDomain(self.killerSudoku)
-
+        print(len(inCagecells), remainingSum)
         inSelectedOptions = kdomain.getOptions(len(inCagecells), remainingSum)
         for i in inCagecells:
             if self.killerSudoku.grid[i[0]][i[1]] == 0:
                 domain[i[0]][i[1]] = domain[i[0]][i[1]].intersection(inSelectedOptions)
 
-        if len(notInCageCells) != 0:
-            notSelectedOptions = kdomain.getOptions(len(notInCageCells), nonSelectedSum)
-            for i in notInCageCells:
+        if len(notInArea) != 0:
+            print(len(notInArea), notInAreaSum)
+            notSelectedOptions = kdomain.getOptions(len(notInArea), notInAreaSum)
+            for i in notInArea:
                 if self.killerSudoku.grid[i[0]][i[1]] == 0:
                     domain[i[0]][i[1]] = domain[i[0]][i[1]].intersection(notSelectedOptions)
  

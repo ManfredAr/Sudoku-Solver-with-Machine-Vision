@@ -1,7 +1,9 @@
 import copy
+import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from backend.killerSudokuGenerator import killerSudokuGenerator
+from backend.SudokuTechniques.KillerSudokuHints import KillerSudokuHints
 
 def playKillerSudoku(request):
     '''
@@ -27,3 +29,14 @@ def genKillerSudoku(request):
             puzzle[i] = [str(x) if x != 0 else '-' for x in puzzle[i]]
             emptyGrid[i] = [str(x) if x == 0 else '-' for x in emptyGrid[i]]
         return JsonResponse({'grid': emptyGrid, "cages":cages, "solution" : puzzle})
+    
+
+def giveHint(request):
+    if request.method == "POST":
+        grid = json.loads(request.POST.get("grid"))
+        cage = json.loads(request.POST.get("cage"))
+        obj = KillerSudokuHints(grid, cage)
+        hints = obj.getNextHint()
+        if hints == -1:
+            return JsonResponse({'hint': "Found through backtracking", 'answer': -1})
+        return JsonResponse({'hint': hints[:-1], 'answer':hints[-1]})

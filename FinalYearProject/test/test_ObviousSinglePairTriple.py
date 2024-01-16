@@ -69,13 +69,33 @@ class Test_ObviousSinglePairTriple(unittest.TestCase):
     def test_checkObviousSingle(self):
         sudoku = SudokuHints(self.grid1)
         obviousS = ObviousSinglePairTriple()
-        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[2], "4 is an obvious single in cell (0, 0)")
-        self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[1], (0, 0, 4))
+        ret = obviousS.checkObviousSingle(sudoku.domains)
+        self.assertEqual(ret[2], "4 is an obvious single in cell (0, 0)")
+        self.assertEqual(ret[1], (0, 0, 4))
 
     def test_nocheckObviousSingle(self):
         sudoku = SudokuHints(self.grid2)
         obviousS = ObviousSinglePairTriple()
         self.assertEqual(obviousS.checkObviousSingle(sudoku.domains)[0], None)
+
+    # testing the domain is reduce correctly.
+    def test_reduceDomain(self):
+        sudoku = SudokuHints(self.grid2)
+        obviousS = ObviousSinglePairTriple()
+        domain = obviousS.reduceDomain(0,0,1,sudoku.domains)
+        count = 0
+        for i in range(9):
+            if domain[0][i] != -1 and 1 in domain[0][i]:
+                count += 1
+            if domain[i][0] != -1 and 1 in domain[i][0]:
+                count += 1
+
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if domain[i][j] and 1 in domain[i][j]:
+                    count += 1
+        self.assertEqual(count, 0)
+
 
     def test_checkObviousPairsBox(self):
         sudoku = SudokuHints(self.grid3)

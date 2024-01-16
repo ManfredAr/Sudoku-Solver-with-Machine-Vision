@@ -149,6 +149,7 @@ class CageCombinations:
 
 
     def getPossibility(self, cageSize, cageSum): 
+        cageSum = int(cageSum)
         if cageSize == 1:
             return [[cageSum]]
         if cageSize == 2:

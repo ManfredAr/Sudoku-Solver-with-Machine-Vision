@@ -9,8 +9,9 @@ class GetHint {
      * 
      * @param {array} grid the selected difficulty of the puzzle to be generated.
      */
-    constructor(grid) {
+    constructor(grid, cage = null) {
         this.grid = grid;
+        this.cage = cage
     }
 
     /**
@@ -25,6 +26,29 @@ class GetHint {
         const xhr = new XMLHttpRequest();
 
         xhr.open('POST', '/PlaySudoku/giveHint/');
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    callback({ hint: response.hint, answer: response.answer });
+                } else {
+                    console.error('Request failed:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send(formData);
+    }
+
+    requestKillerSudokuHint(callback) {
+        const formData = new FormData();
+        formData.append('grid', JSON.stringify(this.grid));
+        formData.append('cage', JSON.stringify(this.cage));
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/PlayKillerSudoku/giveHint/');
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
         xhr.onreadystatechange = () => {
             if (xhr.readyState === XMLHttpRequest.DONE) {

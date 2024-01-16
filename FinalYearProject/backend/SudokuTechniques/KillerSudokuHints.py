@@ -21,21 +21,30 @@ class KillerSudokuHints:
         '''
         self.grid = grid
         self.cage = cage
-
         # converts the puzzle into the correct form.
         for i in range(9):
             for j in range(9):
-                if self.grid[i][j] == '-':
+                if self.grid[i][j] == '-' or self.grid[i][j] == '':
                     self.grid[i][j] = 0
                 else:
                     self.grid[i][j] = int(self.grid[i][j])
+
+        newCage = {}
+        for cagenumber_str, cages in self.cage.items():
+            cagenumber = int(cagenumber_str)
+            new_cages = {}
+            for cagesum_str, positions in cages.items():
+                cagesum = int(cagesum_str)
+                new_cages[cagesum] = positions
+            newCage[cagenumber] = new_cages
+        self.cage = newCage
 
         domain = KillerSudokuDomain(KillerSudoku(self.grid, self.cage))
         self.domains = domain.getAllDomains()
         self.ObviousSinglePairTriple = ObviousSinglePairTriple()
         self.HiddenSinglePairTriple = HiddenSinglePairTriple()
         self.PointingCells = PointingCells()
-        self.ruleOf45 = ruleOf45()
+        self.ruleOf45 = ruleOf45(KillerSudoku(self.grid, self.cage))
 
 
 

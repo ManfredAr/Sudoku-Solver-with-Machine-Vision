@@ -111,6 +111,7 @@ class SudokuScreen {
                     if (this.board[i][j] == '-') {
                         document.getElementById(i + "." + j).innerText = this.solution[i][j];
                         this.board[i][j] = this.solution[i][j];
+                        return
                     }
                 }
             }
