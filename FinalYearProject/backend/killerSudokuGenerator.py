@@ -50,12 +50,12 @@ class killerSudokuGenerator:
             
             grid = [[0 for _ in range(9)] for _ in range(9)]
             kSudoku = KillerSudokuSolver3(KillerSudoku(grid, self.cages))
-            if kSudoku.SolutionFinder() != 1:
+            solutions = kSudoku.SolutionFinder()
+            if solutions != 1:
                 self.cages = {}
                 self.grid = copy.deepcopy(self.sudokuGen.grid)
             else:
                 break
-        
         return self.originalGrid, self.cages
 
 

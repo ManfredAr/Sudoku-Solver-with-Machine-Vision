@@ -71,12 +71,23 @@ class ruleOf45:
             for cageSum, cells in cage.items():
                 width = set()
                 inAreaFilled = []
+                outArea = 0
+                outFilledArea = 0
+                outAmount = 0
                 for cell in cells:
                     width.add(cell[0])
                     if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and cell[0] == row:
                         total += self.killerSudoku.grid[cell[0]][cell[1]]
                         inAreaFilled.append(cell)
-                if len(width) == 1:
+                    if cell[0] != row:
+                        outArea += 1
+                        if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                            outFilledArea += 1
+                            outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
+                if outArea != 0 and outArea == outFilledArea:
+                    total -= cageSum - outAmount
+                    contained.add(cageNum)
+                elif len(width) == 1:
                     total -= cageSum
                     contained.add(cageNum)
                 else:
@@ -122,11 +133,22 @@ class ruleOf45:
             for cageSum, cells in cage.items():
                 height = set()
                 inAreaFilled = []
+                outArea = 0
+                outFilledArea = 0
+                outAmount = 0
                 for cell in cells:
                     height.add(cell[1])
                     if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and cell[1] == column:
                         total += self.killerSudoku.grid[cell[0]][cell[1]]
                         inAreaFilled.append(cell)
+                    if cell[0] != column:
+                        outArea += 1
+                        if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                            outFilledArea += 1
+                            outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
+                if outArea != 0 and outArea == outFilledArea:
+                    total -= cageSum - outAmount
+                    contained.add(cageNum)
                 if len(height) == 1:
                     total -= cageSum
                     contained.add(cageNum)
@@ -175,11 +197,22 @@ class ruleOf45:
                 for cageSum, cells in cage.items():
                     boxed = set()
                     inAreaFilled = []
+                    outArea = 0
+                    outFilledArea = 0
+                    outAmount = 0
                     for cell in cells:
                         boxed.add((cell[0] // 3, cell[1] // 3))
                         if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and cell[0] // 3 == row and cell[1] // 3 == col:
                             total += self.killerSudoku.grid[cell[0]][cell[1]]
                             inAreaFilled.append(cell)
+                        if cell[0] // 3 != row or cell[1] // 3 != col:
+                            outArea += 1
+                            if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                                outFilledArea += 1
+                                outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
+                    if outArea != 0 and outArea == outFilledArea:
+                        total -= cageSum - outAmount
+                        contained.add(cageNum)
                     if len(boxed) == 1:
                         total -= cageSum
                         contained.add(cageNum)
@@ -189,14 +222,13 @@ class ruleOf45:
                             return None, None
                         uncontained.append((i,j))
                         uncontainedCageNum = cageNum
-        if len(uncontained) == 0:
+        if len(uncontained) == 0 or total == 0:
             return None, None
         message = "rule of 45 in box", (row, col)
         return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
 
 
     def reduceDomains(self, inCagecells, cageNum, remainingSum, domain):
-        print(inCagecells, cageNum, remainingSum)
         '''
         Reduces the domain of cell which are affected for the use of the rule of 45.
 
@@ -217,7 +249,7 @@ class ruleOf45:
         for cageSum, cells in cage.items():
             notInAreaSum = cageSum - remainingSum
             for cell in cells:
-                if tuple(cell) in inCagecells:
+                if tuple(cell) in inCagecells or cell in inCagecells:
                     if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
                         inAreaSum -= self.killerSudoku.grid[cell[0]][cell[1]]
                     else:
@@ -226,18 +258,15 @@ class ruleOf45:
                     if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
                         notInAreaSum -= self.killerSudoku.grid[cell[0]][cell[1]]
                     else:
-                        print(cell)
                         notInArea.append(cell)
 
         kdomain = KillerSudokuDomain(self.killerSudoku)
-        print(len(inCagecells), remainingSum)
         inSelectedOptions = kdomain.getOptions(len(inCagecells), remainingSum)
         for i in inCagecells:
             if self.killerSudoku.grid[i[0]][i[1]] == 0:
                 domain[i[0]][i[1]] = domain[i[0]][i[1]].intersection(inSelectedOptions)
 
         if len(notInArea) != 0:
-            print(len(notInArea), notInAreaSum)
             notSelectedOptions = kdomain.getOptions(len(notInArea), notInAreaSum)
             for i in notInArea:
                 if self.killerSudoku.grid[i[0]][i[1]] == 0:

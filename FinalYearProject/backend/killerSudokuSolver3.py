@@ -131,8 +131,7 @@ class KillerSudokuSolver3:
             self.KSudoku.grid[cell[0]][cell[1]] = value
             updated_cells = self.decreaseKeys(cell, value, cageLength, cageSum)
 
-            total_solutions += self.solve(queue)
-
+            total_solutions += self.NumberOfSolutions(queue)
             # resetting the grid and queue to before a value was assigned.
             self.KSudoku.grid[cell[0]][cell[1]] = 0
             queue.increaseKey(updated_cells)

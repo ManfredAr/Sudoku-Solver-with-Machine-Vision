@@ -38,6 +38,7 @@ class KillerSudokuHints:
                 new_cages[cagesum] = positions
             newCage[cagenumber] = new_cages
         self.cage = newCage
+        print(self.cage)
 
         domain = KillerSudokuDomain(KillerSudoku(self.grid, self.cage))
         self.domains = domain.getAllDomains()
@@ -63,7 +64,7 @@ class KillerSudokuHints:
                 self.domain = domain
                 output.append(ObviousSingle)
                 output.append(info)
-                break
+                return output
             domain, ObviousPair = self.ObviousSinglePairTriple.checkObviousPairs(self.domains)
             if domain != None:
                 if ObviousPair not in output:
@@ -107,7 +108,6 @@ class KillerSudokuHints:
                     output.append(ruleOf45)
                     continue
             return -1
-        return output
             
             
 
