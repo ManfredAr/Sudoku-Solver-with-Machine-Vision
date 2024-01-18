@@ -38,7 +38,6 @@ class KillerSudokuHints:
                 new_cages[cagesum] = positions
             newCage[cagenumber] = new_cages
         self.cage = newCage
-        print(self.cage)
 
         domain = KillerSudokuDomain(KillerSudoku(self.grid, self.cage))
         self.domains = domain.getAllDomains()

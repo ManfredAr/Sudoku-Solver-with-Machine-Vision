@@ -27,142 +27,25 @@ class ruleOf45:
         parameter:
         domain - a 2d array with the domains for each cell.
         '''
+
+        for i in range(1, 8):
+            for j in range(9):
+                if j+i < 9:
+                    grid, message = self.checkRuleOfKRow(j, j+i, domain)
+                    if message is not None:
+                        m = "rule of k in rows ", j, " to ", j+i
+                        return grid, m
+                    grid, message = self.checkRuleOfKRow(j, j+i, domain)
+                    if message is not None:
+                        m = "rule of k in col ", j, " to ", j+i
+                        return grid, message
+
+
         for i in range(0, 9):
-            grid, message = self.checkRuleOf45Row(i, domain)
-            if message is not None:
-                return grid, message
-            grid, message = self.checkRuleOf45Column(i, domain)
-            if message is not None:
-                return grid, message
             grid, message = self.checkRuleOf45Box(i//3, i%3, domain)
             if message is not None:
                 return grid, message
         return None, None
-
-
-    def checkRuleOf45Row(self, row, domain):
-        '''
-        Tries to apply the rule of 45 to the row.
-
-        parameters:
-        row - the row to apply the rule
-        domain - a 2d array with the domains for each cell.
-
-        returns:
-        none if technique isnt used. 
-        A new domain which is changed to reflect the technique usage.  
-        '''
-        total = 45
-        uncontainedCageNum = -1
-        uncontained = []
-        contained = set()
-        for i in range(9):
-            cageNum = self.cageLayout[row][i]
-            if self.killerSudoku.grid[row][i] != 0:
-                total -= self.killerSudoku.grid[row][i]
-                continue
-            if cageNum in contained:
-                continue
-            if cageNum == uncontainedCageNum:
-                uncontained.append((row,i))
-                continue
-
-            cage = self.killerSudoku.cages[cageNum]
-            for cageSum, cells in cage.items():
-                width = set()
-                inAreaFilled = []
-                outArea = 0
-                outFilledArea = 0
-                outAmount = 0
-                for cell in cells:
-                    width.add(cell[0])
-                    if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and cell[0] == row:
-                        total += self.killerSudoku.grid[cell[0]][cell[1]]
-                        inAreaFilled.append(cell)
-                    if cell[0] != row:
-                        outArea += 1
-                        if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
-                            outFilledArea += 1
-                            outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
-                if outArea != 0 and outArea == outFilledArea:
-                    total -= cageSum - outAmount
-                    contained.add(cageNum)
-                elif len(width) == 1:
-                    total -= cageSum
-                    contained.add(cageNum)
-                else:
-                    uncontained += inAreaFilled
-                    if uncontainedCageNum != -1:
-                        return None, None
-                    uncontained.append((row,i))
-                    uncontainedCageNum = cageNum
-        if len(uncontained) == 0:
-            return None, None
-        message = "rule of 45 in row", row
-        return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
-
-
-    def checkRuleOf45Column(self, column, domain):
-        '''
-        Tries to apply the rule of 45 to the column.
-
-        parameters:
-        column - the column to apply the rule
-        domain - a 2d array with the domains for each cell.
-
-        returns:
-        none if technique isnt used. 
-        A new domain which is changed to reflect the technique usage.  
-        '''
-        total = 45
-        uncontainedCageNum = -1
-        uncontained = []
-        contained = set()
-        for i in range(9):
-            cageNum = self.cageLayout[i][column]
-            if self.killerSudoku.grid[i][column] != 0:
-                total -= self.killerSudoku.grid[i][column]
-                continue
-            if cageNum in contained:
-                continue
-            if cageNum == uncontainedCageNum:
-                uncontained.append((i,column))
-                continue
-
-            cage = self.killerSudoku.cages[cageNum]
-            for cageSum, cells in cage.items():
-                height = set()
-                inAreaFilled = []
-                outArea = 0
-                outFilledArea = 0
-                outAmount = 0
-                for cell in cells:
-                    height.add(cell[1])
-                    if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and cell[1] == column:
-                        total += self.killerSudoku.grid[cell[0]][cell[1]]
-                        inAreaFilled.append(cell)
-                    if cell[0] != column:
-                        outArea += 1
-                        if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
-                            outFilledArea += 1
-                            outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
-                if outArea != 0 and outArea == outFilledArea:
-                    total -= cageSum - outAmount
-                    contained.add(cageNum)
-                if len(height) == 1:
-                    total -= cageSum
-                    contained.add(cageNum)
-                else:
-                    uncontained += inAreaFilled
-                    if uncontainedCageNum != -1:
-                        return None, None
-                    uncontained.append((i,column))
-                    uncontainedCageNum = cageNum
-        if len(uncontained) == 0:
-            return None, None
-        message = "rule of 45 in column", column
-        return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
-    
 
 
     def checkRuleOf45Box(self, row, col, domain):
@@ -228,6 +111,135 @@ class ruleOf45:
         return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
 
 
+    def checkRuleOfKRow(self, row1, row2, domain):
+        '''
+        Tries to apply the rule of 45 to the row.
+
+        parameters:
+        row - the row to apply the rule
+        domain - a 2d array with the domains for each cell.
+
+        returns:
+        none if technique isnt used. 
+        A new domain which is changed to reflect the technique usage.  
+        '''
+        total = 45 * ((row2 - row1) + 1) 
+        uncontainedCageNum = -1
+        uncontained = []
+        contained = set()
+        for row in range(row1, row2+1):
+            for i in range(0, 9):
+                cageNum = self.cageLayout[row][i]
+                if self.killerSudoku.grid[row][i] != 0:
+                    total -= self.killerSudoku.grid[row][i]
+                    continue
+                if cageNum in contained:
+                    continue
+                if cageNum == uncontainedCageNum:
+                    uncontained.append((row,i))
+                    continue
+
+                cage = self.killerSudoku.cages[cageNum]
+                for cageSum, cells in cage.items():
+                    width = set()
+                    inAreaFilled = []
+                    outArea = 0
+                    outFilledArea = 0
+                    outAmount = 0
+                    for cell in cells:
+                        if not (cell[0] >= row1 and cell[0] <= row2):
+                            width.add(cell[0])
+                        if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and (cell[0] >= row1 and cell[0] <= row2):
+                            total += self.killerSudoku.grid[cell[0]][cell[1]]
+                            inAreaFilled.append(cell)
+                        if not (cell[0] < row1 and cell[0] > row2):
+                            outArea += 1
+                            if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                                outFilledArea += 1
+                                outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
+                    if outArea != 0 and outArea == outFilledArea:
+                        total -= cageSum - outAmount
+                        contained.add(cageNum)
+                    elif len(width) == 0:
+                        total -= cageSum
+                        contained.add(cageNum)
+                    else:
+                        uncontained += inAreaFilled
+                        if uncontainedCageNum != -1:
+                            return None, None
+                        uncontained.append((row,i))
+                        uncontainedCageNum = cageNum
+        if len(uncontained) == 0 or total == 0:
+            return None, None
+        message = "rule of k in row", row
+        return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
+    
+
+    def checkRuleOfKColumn(self, column1, column2, domain):
+        '''
+        Tries to apply the rule of 45 to the column.
+
+        parameters:
+        column - the column to apply the rule
+        domain - a 2d array with the domains for each cell.
+
+        returns:
+        none if technique isnt used. 
+        A new domain which is changed to reflect the technique usage.  
+        '''
+        total = 45 * ((column2 - column1) + 1) 
+        uncontainedCageNum = -1
+        uncontained = []
+        contained = set()
+        for column in range(column1, column2+1):
+            for i in range(9):
+                cageNum = self.cageLayout[i][column]
+                if self.killerSudoku.grid[i][column] != 0:
+                    total -= self.killerSudoku.grid[i][column]
+                    continue
+                if cageNum in contained:
+                    continue
+                if cageNum == uncontainedCageNum:
+                    uncontained.append((i,column))
+                    continue
+
+                cage = self.killerSudoku.cages[cageNum]
+                for cageSum, cells in cage.items():
+                    height = set()
+                    inAreaFilled = []
+                    outArea = 0
+                    outFilledArea = 0
+                    outAmount = 0
+                    for cell in cells:
+                        if not (cell[1] >= column1 and cell[1] <= column2):
+                            height.add(cell[1])
+                        if self.killerSudoku.grid[cell[0]][cell[1]] != 0 and (cell[1] >= column1 and cell[1] <= column2):
+                            total += self.killerSudoku.grid[cell[0]][cell[1]]
+                            inAreaFilled.append(cell)
+                        if not (cell[1] < column1 and cell[1] > column2):
+                            outArea += 1
+                            if self.killerSudoku.grid[cell[0]][cell[1]] != 0:
+                                outFilledArea += 1
+                                outAmount += self.killerSudoku.grid[cell[0]][cell[1]]
+                    if outArea != 0 and outArea == outFilledArea:
+                        total -= cageSum - outAmount
+                        contained.add(cageNum)
+                    elif len(height) == 0:
+                        total -= cageSum
+                        contained.add(cageNum)
+                    else:
+                        uncontained += inAreaFilled
+                        if uncontainedCageNum != -1:
+                            return None, None
+                        uncontained.append((i,column))
+                        uncontainedCageNum = cageNum
+        if len(uncontained) == 0 or total == 0:
+            return None, None
+        message = "rule of k in column", column
+        return self.reduceDomains(uncontained, uncontainedCageNum, total, domain), message
+
+
+
     def reduceDomains(self, inCagecells, cageNum, remainingSum, domain):
         '''
         Reduces the domain of cell which are affected for the use of the rule of 45.
@@ -274,6 +286,3 @@ class ruleOf45:
  
 
         return domain
-
-
-        

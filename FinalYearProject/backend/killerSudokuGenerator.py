@@ -16,7 +16,7 @@ class killerSudokuGenerator:
         self.easy = {"3" : [5,6,7], "4" : [1,2,3], "5" : [0]}
         self.medium = {"3" : [8,9], "4" : [2,3,4], "5" : [0]}
         self.hard = {"3" : [6,7,8], "4" : [4,5], "5" : [1,2]}
-        self.expert = {"3" : [4,5], "4" : [3,4,5], "5" : [3,4]}
+        self.expert = {"3": [0], "4" : [3,4], "5" : [3]}
         self.cages = {}
         self.sudokuGen = SudokuGenerator()
         self.sudokuGen.filledGrid()

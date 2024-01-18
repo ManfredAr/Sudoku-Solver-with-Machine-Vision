@@ -46,6 +46,16 @@ class Test_ruleOf45(unittest.TestCase):
             [9,3,5,0,0,0,0,7,4],
             [8,6,2,4,0,0,0,0,3]]
 
+    grid5 =[[0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,1,0,0,0,0,0,0,0],
+            [0,2,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0]]
+
     cage = {
         1 : {13 : [(0,0),(1,0),(2,0)] },
         2 : {7 : [(0,1),(0,2)] },
@@ -161,7 +171,7 @@ class Test_ruleOf45(unittest.TestCase):
         d = KillerSudokuDomain(KillerSudoku(self.grid, self.cage))
         domain = d.getAllDomains()
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
-        self.assertEqual(ro45.checkRuleOf45Row(0, domain)[0], None)
+        self.assertEqual(ro45.checkRuleOfKRow(0,0, domain)[0], None)
 
 
     # testing that rule of 45 is applied properly in rows
@@ -173,7 +183,7 @@ class Test_ruleOf45(unittest.TestCase):
         newDomain[7][8] = set([1,3,5,7,6])
         newDomain[6][8] = set([1,3,5,7,6,2])
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
-        self.assertEqual(ro45.checkRuleOf45Row(8, domain)[0], newDomain)
+        self.assertEqual(ro45.checkRuleOfKRow(8,8, domain)[0], newDomain)
 
 
     # testing that mutiple outside cages returns none in column
@@ -181,7 +191,7 @@ class Test_ruleOf45(unittest.TestCase):
         ro45 = ruleOf45(KillerSudoku(self.grid, self.cage))
         d = KillerSudokuDomain(KillerSudoku(self.grid, self.cage))
         domain = d.getAllDomains()
-        self.assertEqual(ro45.checkRuleOf45Column(0,domain)[0], None)
+        self.assertEqual(ro45.checkRuleOfKColumn(0,0,domain)[0], None)
 
 
     # testing that rule of 45 is applied properly in columns
@@ -193,7 +203,7 @@ class Test_ruleOf45(unittest.TestCase):
         newDomain[0][8] = set([1])
         newDomain[0][7] = set([9,6,8,7])
         newDomain[1][7] = set([9,6,8,7])
-        self.assertEqual(ro45.checkRuleOf45Column(8,domain)[0], newDomain)
+        self.assertEqual(ro45.checkRuleOfKColumn(8,8,domain)[0], newDomain)
 
 
     # testing that mutiple outside cages returns none in box
@@ -225,7 +235,7 @@ class Test_ruleOf45(unittest.TestCase):
         newDomain[0][8] = set([1,9,8,3,7,4,6])
         newDomain[1][7] = set([6])
         ro45 = ruleOf45(KillerSudoku(self.grid2, self.cage))
-        self.assertEqual(ro45.checkRuleOf45Row(0, domain)[0], newDomain)
+        self.assertEqual(ro45.checkRuleOfKRow(0, 0, domain)[0], newDomain)
     
 
     # testing that rule of 45 is applied properly in columns with some cells filled in
@@ -237,11 +247,11 @@ class Test_ruleOf45(unittest.TestCase):
         newDomain[6][0] = set([1,8,6,4,5])
         newDomain[7][0] = set([1,8,6,4,5])
         newDomain[6][1] = set([4])
-        self.assertEqual(ro45.checkRuleOf45Column(0,domain)[0], newDomain)
+        self.assertEqual(ro45.checkRuleOfKColumn(0,0,domain)[0], newDomain)
 
 
     # testing that rule of 45 is applied properly in boxes with some cells filled in
-    def est_checkRuleOf45BoxPartial(self):
+    def test_checkRuleOf45BoxPartial(self):
         ro45 = ruleOf45(KillerSudoku(self.grid2, self.cage))
         d = KillerSudokuDomain(KillerSudoku(self.grid2, self.cage))
         domain = d.getAllDomains()
@@ -292,5 +302,15 @@ class Test_ruleOf45(unittest.TestCase):
         newDomain[4][0] = set([2,6,4,5])
         newDomain[5][0] = set([2,6,4,5])
         newDomain[4][1] = set([2])
-        self.assertEqual(ro45.checkRuleOf45Column(0,domain)[0], newDomain)
+        self.assertEqual(ro45.checkRuleOfKColumn(0,0,domain)[0], newDomain)
+        
+
+    def test_ruleofKcolumn(self):
+        ro45 = ruleOf45(KillerSudoku(self.grid5, self.cage))
+        d = KillerSudokuDomain(KillerSudoku(self.grid5, self.cage))
+        domain = d.getAllDomains()
+        newDomain = copy.deepcopy(domain)
+        newDomain[0][1] = set([3])
+        newDomain[0][2] = set([4])
+        self.assertEqual(ro45.checkRuleOfKColumn(0,1,domain)[0], newDomain)
         
