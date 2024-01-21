@@ -104,12 +104,12 @@ class SudokuScreen {
 
     setcallback(data) {
         if (data["answer"] == -1) {
-            document.getElementById("hint-text").innerText = data.hint;
             document.getElementsByClassName("displayHint")[0].classList.remove("remove");
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
                     if (this.board[i][j] == '-') {
                         document.getElementById(i + "." + j).innerText = this.solution[i][j];
+                        document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
                         this.board[i][j] = this.solution[i][j];
                         return
                     }
@@ -125,7 +125,6 @@ class SudokuScreen {
             let info = data["answer"];
             let i = parseInt(info[0]);
             let j = parseInt(info[1]);
-            console.log(info[0], info[1]);
             document.getElementById(info[0] + "." + info[1]).innerText = info[2];
             this.updateBoard(i, j);
         }

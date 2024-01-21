@@ -5,6 +5,7 @@ from backend.SudokuTechniques.HiddenSinglePairTriple import HiddenSinglePairTrip
 from backend.SudokuTechniques.ObviousSinglePairTriple import ObviousSinglePairTriple
 from backend.SudokuTechniques.PointingCells import PointingCells
 from backend.SudokuTechniques.ruleOf45 import ruleOf45
+from backend.SudokuTechniques.CageReduction import DomainReduction
 
 class KillerSudokuHints:
     '''
@@ -45,6 +46,7 @@ class KillerSudokuHints:
         self.HiddenSinglePairTriple = HiddenSinglePairTriple()
         self.PointingCells = PointingCells()
         self.ruleOf45 = ruleOf45(KillerSudoku(self.grid, self.cage))
+        self.domainReduction = DomainReduction()
 
 
 
@@ -60,50 +62,51 @@ class KillerSudokuHints:
         while True:
             domain, info, ObviousSingle = self.ObviousSinglePairTriple.checkObviousSingle(self.domains)
             if domain != None:
-                self.domain = domain
+                self.domains = domain
                 output.append(ObviousSingle)
                 output.append(info)
                 return output
             domain, ObviousPair = self.ObviousSinglePairTriple.checkObviousPairs(self.domains)
             if domain != None:
                 if ObviousPair not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(ObviousPair)
                     continue
             domain, ObviousTriple = self.ObviousSinglePairTriple.checkObviousTriples(self.domains)
             if domain != None:
                 if ObviousTriple not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(ObviousTriple)
                     continue
             domain, HiddenSingle = self.HiddenSinglePairTriple.checkHiddenSingles(self.domains)
             if domain != None:
                 if HiddenSingle not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(HiddenSingle)
                     continue
             domain, HiddenPair = self.HiddenSinglePairTriple.checkHiddenPair(self.domains)
             if domain != None:
                 if HiddenPair not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(HiddenPair)
                     continue
             domain, HiddenTriple = self.HiddenSinglePairTriple.checkHiddenTriple(self.domains)
             if domain != None:
                 if HiddenTriple not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(HiddenTriple)
                     continue
+            self.domains = self.domainReduction.checkReduction(KillerSudoku(self.grid, self.cage), self.domains)
             domain, PointingCells = self.PointingCells.checkPointingCells(self.domains)
             if domain != None:
                 if PointingCells not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(PointingCells)
                     continue
             domain, ruleOf45 = self.ruleOf45.checkRuleOf45(self.domains)
             if domain != None:
                 if ruleOf45 not in output:
-                    self.domain = domain
+                    self.domains = domain
                     output.append(ruleOf45)
                     continue
             return -1

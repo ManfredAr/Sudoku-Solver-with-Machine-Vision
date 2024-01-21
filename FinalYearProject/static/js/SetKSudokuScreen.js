@@ -314,13 +314,14 @@ class KSudokuScreen {
 
     setcallback(data) {
         if (data["answer"] == -1) {
-            document.getElementById("hint-text").innerText = data.hint;
             document.getElementsByClassName("displayHint")[0].classList.remove("remove");
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
-                    if (this.board[i][j] == '-') {
+                    console.log(this.board);
+                    if (this.board[i][j] == '-' || this.board[i][j] == 0) {
                         document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];
                         this.board[i][j] = this.solution[i][j];
+                        document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
                         return
                     }
                 }

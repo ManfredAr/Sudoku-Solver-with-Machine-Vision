@@ -1,8 +1,22 @@
 import copy
 
 class DomainReduction:
+    '''
+    This class is responsible for using cage combinations to reduce
+    the domains for cells.
+    '''
 
     def checkReduction(self, killerSudoku, domain):
+        '''
+        Tries to reduce the domains for all cells in the puzzle.
+
+        parameters:
+        killerSudoku - the killer sudoku object containing the puzzle
+        domain - a 2d array containing the domain for each cell
+
+        returns:
+        a modified domain with a reduced valuess.
+        '''
         for cageNumber, cage in killerSudoku.cages.items():
             for cageSum, cells in cage.items():
                 remaining_cells = []
@@ -20,31 +34,62 @@ class DomainReduction:
 
 
     def checkCombinations(self, cells, sums, domain):
-        tempDomains = [set() for i in range(len(cells))]
+        '''
+        Check the domains for all cages and try to look for reductions.
+
+        parameters:
+        cells - the cells in the cage
+        sums - the sum the cells should add up to
+        domain - 2d array containing the domains
+
+        returns:
+        An updated domain to reflect changed domains.
+        '''
+        tempDomains = [0 for i in range(len(cells))]
         for i in range(len(cells)):
-            tempDomains[i] = domain[cells[i][0], cells[i][1]]
-        combos = self.fit(tempDomains, 0, set(), len(cells), sums)
+            tempDomains[i] = domain[cells[i][0]][cells[i][1]]
+        combos = self.fit(tempDomains, 0, [], len(cells), sums)
         if len(combos) != 0:
             for i in range(len(cells)):
                 domain[cells[i][0]][cells[i][1]] = set([combo[i] for combo in combos])
-
         return domain
+    
 
 
     def fit(self, tempDomain, idx, used, length, total):
-        tempDomain[idx] -= used
+        '''
+        Recursively tries to find all combinations of domaisn which add up to the sum.
 
-        if idx + 1 == length or len(tempDomain[idx]) == 0 or total < 0:
-            return []
+        parameters:
+        tempDomains - the current domains of the cells in an array
+        idx - 0
+        used - an empty set
+        length - int containing the number of cell
+        total - the int contain the cage sum
+
+        returns:
+        A 2d array containing all possible combinations.
+        '''
+        # combination found so return solution
+        if idx == length and total == 0:
+            return [list(used)]
+
+        # no solution for current values so backtrack
+        if idx == length or len(tempDomain[idx]) == 0 or total < 0:
+            return None
 
         allCombos = []
 
+        # try all values 
         for num in tempDomain[idx]:
-            used.add(num)
-            used = self.fit(tempDomain, idx+1, used, length, total-num)
+            if num not in used:
+                used.append(num)
+                combo = self.fit(tempDomain, idx + 1, used, length, total - num)
 
-            if len(used) == length:
-                allCombos += list(used)
+                if combo is not None:
+                    allCombos.extend(combo)
+
+                # remove last added value
+                used.pop()
 
         return allCombos
-            
