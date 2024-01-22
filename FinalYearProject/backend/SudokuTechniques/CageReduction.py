@@ -3,7 +3,7 @@ import copy
 class DomainReduction:
     '''
     This class is responsible for using cage combinations to reduce
-    the domains for cells.
+    the domains for cells and 
     '''
 
     def checkReduction(self, killerSudoku, domain):
@@ -55,6 +55,28 @@ class DomainReduction:
         return domain
     
 
+    def findCombinations(self, cells, sums, domains):
+        '''
+        Finds all combinations within the domains which add up to the sums.
+
+        parameters:
+        cells - a 2d array with the cells involved
+        sums - the sum the cells should add up to
+        domains - a 2d array with the set containing each cells domains
+
+        returns:
+        A 2d array with sets containing the reduced domains
+        None if reductions returned empty sets.
+        '''
+        combos = self.fit(domains, 0, [], len(cells), sums)
+        
+        if combos == None or len(combos) == 0:
+            return None
+        
+        for i in range(len(cells)):
+            domains[i] = set([combo[i] for combo in combos])
+        return domains
+
 
     def fit(self, tempDomain, idx, used, length, total):
         '''
@@ -80,7 +102,7 @@ class DomainReduction:
 
         allCombos = []
 
-        # try all values 
+        # tries all values in the domains
         for num in tempDomain[idx]:
             if num not in used:
                 used.append(num)

@@ -1,5 +1,6 @@
 import heapq
 import itertools
+from backend.SudokuTechniques.CageReduction import DomainReduction
 
 class KillerSudokuHeap2:
     '''
@@ -88,6 +89,43 @@ class KillerSudokuHeap2:
         m_set = {i for i in m_set if i <= upLim and i >= lowLim}
         self.addToHeap((len(m_set), item[1]-1, item[3], m_set, item[5]-val))
         return (item[0], item[1], item[3], item[4], item[5])
+    
+
+    def reduceDomain(self, cells, killerSudoku):
+        '''
+        finds any reductions that can be made for any domains.
+
+        parameters:
+        cells - a 2d array with the cell in the cage.
+        killerSudoku - a killer sudoku object containing the puzzle. 
+
+        returns:
+        boolean whether a backtrack is needed or not.
+        '''
+        reduceCells = []
+        cellDomains = []
+        sums = 0
+        
+        for i in cells:
+            if killerSudoku.grid[i[0]][i[1]] == 0:
+                reduceCells.append(i)
+                item = self.key_map[i]
+                domain = item[4].copy()
+                cellDomains.append(domain)
+                sums = item[5]
+
+        domain = DomainReduction()
+        newDomain = domain.findCombinations(reduceCells, sums, cellDomains)
+        if newDomain == None:
+            return False
+
+        for i in range(len(reduceCells)):
+            item = self.key_map[reduceCells[i]]
+            self.addToHeap((len(newDomain[i]), item[1], item[3], newDomain[i], item[5]))
+
+        return True
+        
+
     
 
     def decreaseNonCageKey(self, cell, val):

@@ -238,7 +238,7 @@ class Test_KSudokuSolver(unittest.TestCase):
         poppedCell = solver.queue.pop_cell()
         solver.KSudoku.grid[0][0] = 5
         # this only changes the domain of one cell 
-        self.assertEqual(solver.decreaseKeys(poppedCell[2], 5, poppedCell[3], poppedCell[4]), [(4, 2, (3, 0), {8, 2, 3, 5}, 10)])
+        self.assertEqual(solver.decreaseKeys(poppedCell[2], 5, poppedCell[3], poppedCell[4])[0], [(4, 2, (3, 0), {8, 2, 3, 5}, 10)])
 
 
     # testing that a unique puzzle returns 1
@@ -248,12 +248,12 @@ class Test_KSudokuSolver(unittest.TestCase):
 
 
     # testing that a non unique puzzle does not return 1
-    def test_uniquePuzzle(self):
+    def test_NonuniquePuzzle(self):
         solver = KillerSudokuSolver3(KillerSudoku(self.multipleGrid, self.multiplecages))
         self.assertEqual(solver.SolutionFinder(), 2)
 
 
-    # testing that a puzzle with multiple solutions is not 1
+    # testing that 1 is returned
     def test_uniquePuzzle2(self):
         solver = KillerSudokuSolver3(KillerSudoku(self.test, self.cage2))
         self.assertNotEqual(solver.SolutionFinder(), 1)

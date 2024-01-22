@@ -144,14 +144,14 @@ class Test_KillerSudokuGenerator(unittest.TestCase):
         self.assertEqual(cellAmount, 81)
 
     # testing that an expert puzzles is correctly generated.
-#    def test_expertPuzzle(self):
-#        gen = killerSudokuGenerator()
-#        grid, cages = gen.generate("expert")
-#
-#        total = 0
-#        cellAmount = 0
-#        for key, inner_dict in cages.items():
-#            total += sum(inner_dict.keys())
-#           cellAmount += sum(len(cells) for cells in inner_dict.values())
-#        self.assertEqual(total, 405)
-#        self.assertEqual(cellAmount, 81)
+    def test_expertPuzzle(self):
+        gen = killerSudokuGenerator()
+        grid, cages = gen.generate("expert")
+
+        total = 0
+        cellAmount = 0
+        for key, inner_dict in cages.items():
+            total += sum(inner_dict.keys())
+            cellAmount += sum(len(cells) for cells in inner_dict.values())
+        self.assertEqual(total, 405)
+        self.assertEqual(cellAmount, 81)
