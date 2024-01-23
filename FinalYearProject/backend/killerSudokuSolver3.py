@@ -1,4 +1,5 @@
 from backend.killerSudokuHeap2 import KillerSudokuHeap2
+from backend.KSudokuDomain import KillerSudokuDomain
 import time
 
 class KillerSudokuSolver3:
@@ -26,7 +27,10 @@ class KillerSudokuSolver3:
         False if no solution was found.
         '''
         self.setupHeap()
+        s = time.time()
         if self.solve(self.queue) == True:
+            e = time.time()
+            print(e-s)
             return self.KSudoku.grid
         return False
     
@@ -68,42 +72,6 @@ class KillerSudokuSolver3:
         queue.addToHeap((priority, cageLength, cell, domain, cageSum))
         return False
     
-
-
-
-    def getDomain(self, row, col):
-        '''
-        For a given cell find the valid choices for this cell.
-
-        Parameters:
-        row - the row the cell is in.
-        col - the column the cell is in.
-
-        Returns:
-        An array containing the possible values.
-        '''
-        used = set()
-        cageCells = self.KSudoku.getCageCells(row, col)
-        nonCageCells = self.KSudoku.getRelatedCells(row, col)
-        cageSum = self.KSudoku.getCageSum(row, col)
-        nonZeroCageCells = 0
-
-        for i in nonCageCells:
-            if self.KSudoku.grid[i[0]][i[1]] > 0:
-                used.add(self.KSudoku.grid[i[0]][i[1]])
-
-        for i in cageCells:
-            if self.KSudoku.grid[i[0]][i[1]] != 0:
-                cageSum = cageSum - self.KSudoku.grid[i[0]][i[1]]
-                used.add(self.KSudoku.grid[i[0]][i[1]])
-                nonZeroCageCells += 1
-
-        upLim = self.upperLimit(len(cageCells) - nonZeroCageCells, cageSum)
-        lowLim = self.lowerLimit(len(cageCells) - nonZeroCageCells, cageSum)
-        validGuesses = set([1,2,3,4,5,6,7,8,9]) - used
-        validGuesses = {i for i in validGuesses if i <= upLim and i >= lowLim}
-
-        return validGuesses
 
 
     def SolutionFinder(self):
@@ -205,10 +173,11 @@ class KillerSudokuSolver3:
         '''
         Goes through the entire grid and inserts each empty cell into the priority queue.
         '''
+        domainGetter = KillerSudokuDomain(self.KSudoku)
         for i in range(9):
             for j in range(9):
                 if self.KSudoku.grid[i][j] == 0:
-                    values = self.getDomain(i, j)
+                    values = domainGetter.getDomain(i, j)
                     cageCells = self.KSudoku.getCageCells(i, j)
                     sumRem = self.KSudoku.getCageSum(i,j)
                     cellRem = len(cageCells)

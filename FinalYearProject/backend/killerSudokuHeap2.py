@@ -126,7 +126,6 @@ class KillerSudokuHeap2:
         return True
         
 
-    
 
     def decreaseNonCageKey(self, cell, val):
         '''
@@ -146,6 +145,7 @@ class KillerSudokuHeap2:
             self.addToHeap((len(m_set), item[1], item[3], m_set, item[5]))
             return (item[0], item[1], item[3], item[4], item[5])
         return None
+
 
         
 
