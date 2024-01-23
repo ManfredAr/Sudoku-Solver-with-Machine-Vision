@@ -64,6 +64,7 @@ class KillerSudokuExtraction:
             for j in range(len(self.cages[i])):
                 if self.cages[i][j][5] != 1:
                     cells = self.constructCage(i, j)
+                    cells = sorted(cells, key=lambda cell: (cell[0], cell[1]))
                     cages[counter] = {self.cages[i][j][0] : cells}
                     counter += 1
         return cages

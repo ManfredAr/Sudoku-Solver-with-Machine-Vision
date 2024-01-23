@@ -1,6 +1,8 @@
 from backend.SudokuTechniques.SudokuHints import SudokuHints
 from backend.SudokuTechniques.HiddenSinglePairTriple import HiddenSinglePairTriple
 import unittest  
+from backend.KSudokuDomain import KillerSudokuDomain
+from backend.KillerSudoku import KillerSudoku
 
 class test_HiddenSinglePairTriple(unittest.TestCase):
 

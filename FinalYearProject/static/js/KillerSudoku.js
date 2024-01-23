@@ -10,12 +10,13 @@ var solution = null;
 // on load the screen should be set up with the grid and the buttons.
 window.onload = function () {
     document.getElementsByClassName("bg")[0].classList.add("invisible");
+    console.log("solution");
     if (gridData != "-1") {
         document.getElementsByClassName("play")[0].classList.remove("remove");
         board = gridData;
         cages = cageData;
         solution = solutionData;
-        setPuzzle(board, solution);
+        setPuzzle(board, solution, cages);
     } else {
         document.getElementsByClassName("difficulty")[0].classList.remove("remove");
         document.getElementById("dif-easy").addEventListener("click", () => generatePuzzle("easy"));
@@ -77,6 +78,11 @@ function setPuzzle(board, solution, cages) {
     for (let i = 0; i < tiles.length; i++) {
         tiles[i].addEventListener("click", () => SetScreen.selectedTile(tiles[i].id));
     }
+
+    let close = document.getElementById("close");
+    close.addEventListener("click", function () {
+        document.getElementsByClassName("displayHint")[0].classList.add("remove");
+    });
 
     document.getElementById("enableNotes").addEventListener("click", () => SetScreen.activeNotes());
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());

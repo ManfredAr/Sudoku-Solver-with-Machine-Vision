@@ -13,10 +13,10 @@ class killerSudokuGenerator:
         '''
         The constructor for the class to create instances. 
         '''
-        self.easy = {"3" : [5,6,7], "4" : [1,2,3], "5" : [0]}
-        self.medium = {"3" : [8,9], "4" : [2,3,4], "5" : [0]}
-        self.hard = {"3" : [6,7,8], "4" : [4,5], "5" : [1,2]}
-        self.expert = {"3" : [4,5], "4" : [3,4,5], "5" : [3,4]}
+        self.easy = {"3" : [2,3,4], "4" : [0], "5" : [0]}
+        self.medium = {"3" : [5,6], "4" : [1,2], "5" : [0]}
+        self.hard = {"3" : [4,5], "4" : [3,4], "5" : [1]}
+        self.expert = {"3": [3], "4" : [4,5,6], "5" : [3,4]}
         self.cages = {}
         self.sudokuGen = SudokuGenerator()
         self.sudokuGen.filledGrid()
@@ -50,12 +50,12 @@ class killerSudokuGenerator:
             
             grid = [[0 for _ in range(9)] for _ in range(9)]
             kSudoku = KillerSudokuSolver3(KillerSudoku(grid, self.cages))
-            if kSudoku.SolutionFinder() != 1:
+            solutions = kSudoku.SolutionFinder()
+            if solutions != 1:
                 self.cages = {}
                 self.grid = copy.deepcopy(self.sudokuGen.grid)
             else:
                 break
-        
         return self.originalGrid, self.cages
 
 
@@ -101,11 +101,6 @@ class killerSudokuGenerator:
         cells - the cells not already in cages. 
         '''
         while len(cells) != 0:
-            if self.difficulty == "expert": # adding bigger cages for hard difficulties.
-                triple = self.findConnectCells(3, cells[0], [])
-                if triple != -1 and len(triple) == 3:
-                    cells = self.addCage(triple, cells)
-                    continue
             pairs = self.findConnectCells(2, cells[0], [])
             if pairs != -1 and len(pairs) == 2:
                 cells = self.addCage(pairs, cells)

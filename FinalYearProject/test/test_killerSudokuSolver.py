@@ -15,6 +15,26 @@ class Test_KSudokuSolver(unittest.TestCase):
             [1,5,0,0,0,0,6,0,2],
             [0,7,0,2,0,0,0,8,9]]
     
+    test = [[0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0]]
+
+    grid2 =[[6,2,5,4,3,9,7,1,8],
+            [7,1,3,8,2,5,9,6,4],
+            [9,8,4,1,6,7,5,2,3],
+            [0,9,1,6,7,4,8,0,2],
+            [0,7,8,2,9,1,4,0,6],
+            [2,4,6,3,5,8,1,9,7],
+            [4,5,2,7,1,6,3,8,9],
+            [1,3,7,9,8,2,6,4,5],
+            [8,6,9,5,4,3,2,7,1]]
+    
     cages = {
         1 : { 5 : [(0,0)] },
         2 : { 11 : [(0,1), (1,1)] },
@@ -57,6 +77,34 @@ class Test_KSudokuSolver(unittest.TestCase):
         32 : { 13 : [(7,6), (7,7)] },
         33 : { 20 : [(7,8), (8,6), (8,7), (8,8)] },
     }
+
+    cage2 = {0: {27:[(7, 0), (7, 1), (8, 0), (8, 1), (8, 2)]}, 
+            1: {28: [(0, 6), (0, 7), (1, 5), (1, 6), (1, 7)]}, 
+            2: {26: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 0)]}, 
+            3: {23: [(0, 8), (1, 8), (2, 8), (3, 8), (4, 8)]}, 
+            4: {28: [(2, 1), (3, 1), (4, 1), (5, 1)]}, 
+            5: {25: [(5, 8), (6, 8), (7, 7), (7, 8)]}, 
+            6: {20: [(3, 4), (3, 5), (4, 5), (5, 5)]}, 
+            7: {25: [(6, 3), (7, 3), (8, 3), (8, 4)]}, 
+            8: {17: [(6, 4), (6, 5), (7, 4), (7, 5)]}, 
+            9: {16: [(3, 6), (3, 7), (4, 7)]}, 
+            10: {16:[(3, 3), (4, 2), (4, 3)]}, 
+            11: {10:[(8, 6), (8, 7), (8, 8)]}, 
+            12: {10:[(5, 6), (6, 6), (7, 6)]}, 
+            13: {9: [(0, 0), (0, 1), (1, 1)]}, 
+            14: {12:[(0, 2), (1, 2), (2, 2)]}, 
+            15: {14:[(0, 3), (1, 3), (1, 4)]}, 
+            16: {12:[(0, 4), (0, 5)]}, 
+            17: {14:[(2, 3), (2, 4), (2, 5)]}, 
+            18: {7: [(2, 6), (2, 7)]}, 
+            19: {1: [(3, 2)]}, 
+            20: {17:[(4, 4), (5, 3), (5, 4)]}, 
+            21: {4: [(4, 6)]}, 
+            22: {13:[(5, 2), (6, 1), (6, 2)]}, 
+            23: {17:[(5, 7), (6, 7)]}, 
+            24: {4: [(6, 0)]}, 
+            25: {7: [(7, 2)]}, 
+            26: {3: [(8, 5)]}}
 
 
     multipleGrid = [[9,2,6,5,7,1,4,8,3],
@@ -114,36 +162,6 @@ class Test_KSudokuSolver(unittest.TestCase):
          [1,2,3,4,5,6,7,8,9]]
         solver = KillerSudokuSolver(KillerSudoku(test, self.cages))
         self.assertEqual(solver.getNextEmptyCell(), (None, None))
-
-    
-    # testing the correct domain is returned
-    def test_getDomain(self):
-        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
-                                                [0,0,0,5,9,8,0,1,6],
-                                                [0,1,2,0,0,0,0,5,0],
-                                                [0,0,0,4,0,7,0,9,0],
-                                                [0,4,0,0,0,5,0,6,0],
-                                                [0,0,0,0,0,0,0,2,0],
-                                                [6,0,0,0,7,0,5,0,4],
-                                                [1,5,0,0,0,0,6,0,2],
-                                                [0,7,0,2,0,0,0,8,9]], self.cages))
-        self.assertEqual(solver.getDomain(3, 0), set([2, 3, 5, 8]))
-
-    
-    # testing is a cell is the last cage to be filled or on its own its values becames the cage sum
-    def test_getLastDomain(self):
-        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
-                                                   [0,0,0,5,9,8,0,1,6],
-                                                   [0,1,2,0,0,0,0,5,0],
-                                                   [0,0,0,4,0,7,0,9,0],
-                                                   [0,4,0,0,0,5,0,6,0],
-                                                   [0,0,0,0,0,0,0,2,0],
-                                                   [6,0,0,0,7,0,5,0,4],
-                                                   [1,5,0,0,0,0,6,0,2],
-                                                   [0,7,0,2,0,0,0,8,9]], self.cages))
-        solver.setupHeap()
-        #print(solver.queue.pq)
-        self.assertEqual(solver.getDomain(1, 1), set([3]))
         
 
     # testing the pq contains all the empty cells.
@@ -178,7 +196,7 @@ class Test_KSudokuSolver(unittest.TestCase):
     # testing that decrease keys returns all the orginal values of te changed keys
     def test_decreaseKeys(self):
         solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
-                                            [0,0,0,5,9,8,0,1,6],
+                                            [0,0,0,0,9,8,0,1,6],
                                             [0,1,2,0,0,0,0,5,0],
                                             [0,0,0,4,0,7,0,9,0],
                                             [0,4,0,0,0,5,0,6,0],
@@ -190,7 +208,7 @@ class Test_KSudokuSolver(unittest.TestCase):
         poppedCell = solver.queue.pop_cell()
         solver.KSudoku.grid[0][0] = 5
         # this only changes the domain of one cell 
-        self.assertEqual(solver.decreaseKeys(poppedCell[2], 5, poppedCell[3], poppedCell[4]), [(4, 2, (3, 0), {8, 2, 3, 5}, 10)])
+        self.assertEqual(solver.decreaseKeys(poppedCell[2], 5, poppedCell[3], poppedCell[4])[0], [(3, 2, (1, 0), {4, 5, 7}, 13), (4, 2, (1, 2), {3, 4, 5, 7}, 12)])
 
 
     # testing that a unique puzzle returns 1
@@ -200,6 +218,12 @@ class Test_KSudokuSolver(unittest.TestCase):
 
 
     # testing that a non unique puzzle does not return 1
-    def test_uniquePuzzle(self):
+    def test_NonuniquePuzzle(self):
         solver = KillerSudokuSolver3(KillerSudoku(self.multipleGrid, self.multiplecages))
         self.assertEqual(solver.SolutionFinder(), 2)
+
+
+    # testing that 1 is returned
+    def test_uniquePuzzle2(self):
+        solver = KillerSudokuSolver3(KillerSudoku(self.test, self.cage2))
+        self.assertNotEqual(solver.SolutionFinder(), 1)

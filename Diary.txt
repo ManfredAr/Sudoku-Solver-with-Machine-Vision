@@ -85,7 +85,13 @@ and pointing cells. For now this is all I need as there are many technique which
 Next, I will work on generating Sudoku and killer Sudoku puzzles and integrating it into the frontend.
 
 
-Wekk 17 - 8/01/24
+Week 17 - 8/01/24
 This week I worked on generating Sudoku and Killer Sudoku puzzles. I have also hooked It up to the frontend. The puzzles generation has been tested in 
 both frontend and backend. In addition I have added some more testing for other features as well as documentation especially for the javascript code.
 Next, I will work on writing my report for generating puzzles and also implement the new Sudoku hints into the frontend.
+
+
+Week 18 - 20/01/24
+This week I added the section about generating puzzles into my report and implemented the sudoku hints into the frontend. In addition to this I have started
+to code the killer sudoku hints and connect it to the frontend. 
+Next, I will finish my killer sudoku hints code and try connecting it to the solver to check if it gets faster.  

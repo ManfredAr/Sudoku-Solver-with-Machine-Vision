@@ -1,5 +1,6 @@
 import { Notes } from "./notes.js";
 import { Stack } from "./stack.js";
+import { GetHint } from "./getHint.js";
 
 /**
  * This class is responsible for initialising the Killer Sudoku elements on the screen as well
@@ -25,6 +26,7 @@ class KSudokuScreen {
         this.sel_col = 0;
         this.prev_row = 0;
         this.prev_col = 0;
+        this.setcallback = this.setcallback.bind(this);
     }
 
     /**
@@ -247,12 +249,12 @@ class KSudokuScreen {
                     this.myStack.insertGuess(this.sel_row, this.sel_col, curText, parseInt(element.innerText));
                 }
                 console.log(this.sel_row, this.sel_col, this.element);
-                this.board[parseInt(this.sel_row)][parseInt(this.sel_col)] = parseInt(element.innerText);
                 tile.innerText = element.innerText;
                 if (element.innerText != this.solution[this.sel_row][this.sel_col]) {
                     tile.classList.add("incorrectGuess");
                 } else {
                     tile.classList.remove("incorrectGuess");
+                    this.board[parseInt(this.sel_row)][parseInt(this.sel_col)] = parseInt(element.innerText);
                 }
             }
         } else {
@@ -306,9 +308,44 @@ class KSudokuScreen {
      * Inserts the corerct answer for a cell into the selected cell.
      */
     giveHint() {
-        document.getElementById("c" + this.sel_row + "." + this.sel_col).innerText = this.solution[this.sel_row][this.sel_col];
-        this.board[this.sel_row][this.sel_col] = this.solution[this.sel_row][this.sel_col]
+        let hintGenerator = new GetHint(this.board, this.groups);
+        hintGenerator.requestKillerSudokuHint(this.setcallback);
+    }
+
+    setcallback(data) {
+        if (data["answer"] == -1) {
+            document.getElementsByClassName("displayHint")[0].classList.remove("remove");
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    console.log(this.board);
+                    if (this.board[i][j] == '-' || this.board[i][j] == 0) {
+                        document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];
+                        this.board[i][j] = this.solution[i][j];
+                        document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
+                        return
+                    }
+                }
+            }
+        } else {
+            let hint = "";
+            for (let i = 0; i < data["hint"].length; i++) {
+                hint += data["hint"][i] + "\n";
+            }
+            document.getElementById("hint-text").innerText = hint;
+            document.getElementsByClassName("displayHint")[0].classList.remove("remove");
+            let info = data["answer"];
+            let i = parseInt(info[0]);
+            let j = parseInt(info[1]);
+            console.log(info[0], info[1]);
+            document.getElementById("c" + info[0] + "." + info[1]).innerText = info[2];
+            this.updateBoard(i, j);
+        }
         this.isComplete();
+    }
+
+
+    updateBoard(i, j) {
+        this.board[i][j] = this.solution[i][j];
     }
 
     /**

@@ -1,4 +1,6 @@
 from backend.killerSudokuHeap2 import KillerSudokuHeap2
+from backend.KSudokuDomain import KillerSudokuDomain
+import time
 
 class KillerSudokuSolver3:
     '''
@@ -14,8 +16,7 @@ class KillerSudokuSolver3:
         '''
         self.KSudoku = killerSudoku
         self.queue = KillerSudokuHeap2()
-        self.time = 0
-        
+
 
     def solver(self):
         '''
@@ -26,11 +27,14 @@ class KillerSudokuSolver3:
         False if no solution was found.
         '''
         self.setupHeap()
+        s = time.time()
         if self.solve(self.queue) == True:
-            print(self.time)
+            e = time.time()
+            print(e-s)
             return self.KSudoku.grid
         return False
     
+
 
     def solve(self, queue):
         '''
@@ -52,7 +56,12 @@ class KillerSudokuSolver3:
     
         for value in domain:
             self.KSudoku.grid[cell[0]][cell[1]] = value
-            updatedCells = self.decreaseKeys(cell, value, cageLength, cageSum)
+            updatedCells, backtrack = self.decreaseKeys(cell, value, cageLength, cageSum)
+            if backtrack == True:
+                queue.increaseKey(updatedCells)
+                self.KSudoku.grid[cell[0]][cell[1]] = 0
+                continue
+
             if self.solve(queue):
                 return True
             self.KSudoku.grid[cell[0]][cell[1]] = 0
@@ -63,42 +72,6 @@ class KillerSudokuSolver3:
         queue.addToHeap((priority, cageLength, cell, domain, cageSum))
         return False
     
-
-
-
-    def getDomain(self, row, col):
-        '''
-        For a given cell find the valid choices for this cell.
-
-        Parameters:
-        row - the row the cell is in.
-        col - the column the cell is in.
-
-        Returns:
-        An array containing the possible values.
-        '''
-        used = set()
-        cageCells = self.KSudoku.getCageCells(row, col)
-        nonCageCells = self.KSudoku.getRelatedCells(row, col)
-        cageSum = self.KSudoku.getCageSum(row, col)
-        nonZeroCageCells = 0
-
-        for i in nonCageCells:
-            if self.KSudoku.grid[i[0]][i[1]] > 0:
-                used.add(self.KSudoku.grid[i[0]][i[1]])
-
-        for i in cageCells:
-            if self.KSudoku.grid[i[0]][i[1]] != 0:
-                cageSum = cageSum - self.KSudoku.grid[i[0]][i[1]]
-                used.add(self.KSudoku.grid[i[0]][i[1]])
-                nonZeroCageCells += 1
-
-        upLim = self.upperLimit(len(cageCells) - nonZeroCageCells, cageSum)
-        lowLim = self.lowerLimit(len(cageCells) - nonZeroCageCells, cageSum)
-        validGuesses = set([1,2,3,4,5,6,7,8,9]) - used
-        validGuesses = {i for i in validGuesses if i <= upLim and i >= lowLim}
-
-        return validGuesses
 
 
     def SolutionFinder(self):
@@ -132,10 +105,14 @@ class KillerSudokuSolver3:
         total_solutions = 0
         for value in domain:
             self.KSudoku.grid[cell[0]][cell[1]] = value
-            updated_cells = self.decreaseKeys(cell, value, cageLength, cageSum)
+            updated_cells, backtrack = self.decreaseKeys(cell, value, cageLength, cageSum)
 
-            total_solutions += self.solve(queue)
+            if backtrack == True:
+                queue.increaseKey(updated_cells)
+                self.KSudoku.grid[cell[0]][cell[1]] = 0
+                continue
 
+            total_solutions += self.NumberOfSolutions(queue)
             # resetting the grid and queue to before a value was assigned.
             self.KSudoku.grid[cell[0]][cell[1]] = 0
             queue.increaseKey(updated_cells)
@@ -196,12 +173,21 @@ class KillerSudokuSolver3:
         '''
         Goes through the entire grid and inserts each empty cell into the priority queue.
         '''
+        domainGetter = KillerSudokuDomain(self.KSudoku)
         for i in range(9):
             for j in range(9):
                 if self.KSudoku.grid[i][j] == 0:
-                    values = self.getDomain(i, j)
-                    self.queue.addToHeap((len(values), len(self.KSudoku.getCageCells(i, j)), (i,j), values, self.KSudoku.getCageSum(i,j)))
+                    values = domainGetter.getDomain(i, j)
+                    cageCells = self.KSudoku.getCageCells(i, j)
+                    sumRem = self.KSudoku.getCageSum(i,j)
+                    cellRem = len(cageCells)
+                    for k in cageCells:
+                        if self.KSudoku.grid[k[0]][k[1]] != 0:
+                            cellRem -= 1
+                            sumRem -= self.KSudoku.grid[k[0]][k[1]]
 
+                    # adding each cell and its information into the queue.
+                    self.queue.addToHeap((len(values), cellRem, (i,j), values, sumRem))
 
 
     def decreaseKeys(self, cell, val, cageLength, cageSum):
@@ -209,10 +195,14 @@ class KillerSudokuSolver3:
         It updates the cells in the queue to reduce the domains due to a guess being made.
 
         Parameter:
-        A tuple containing the row and column of a cell
-
+        cell - A tuple containing the row and column of a cell
+        val - the value assigned to the cell
+        cageLength - the number of unfilled cells in the cage
+        cageSum - the remaining cage sum
+        
         Returns:
         An array containing all changed cells.
+        Also true to trigger a backtrack, false otherwise.
         '''
         cageCells = set(self.KSudoku.getCageCells(cell[0], cell[1]))
         nonCageCells = self.KSudoku.getRelatedCells(cell[0], cell[1])
@@ -234,4 +224,9 @@ class KillerSudokuSolver3:
                 if check != None:
                     changed.append(check)
 
-        return changed
+        # checks whether the domains can be reduced. 
+        # during this process if the domain is empty then a backtrack is necessary.
+        if self.queue.reduceDomain(cageCells, self.KSudoku) == False:
+            return changed, True
+        
+        return changed, False

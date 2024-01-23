@@ -11,7 +11,7 @@ class SudokuTest(LiveServerTestCase):
     options.page_load_strategy = 'eager'
 
     # testing that the hint div is only shown when the hint button is pressed.
-    def test_enterGuessFromNotes(self):
+    def test_displayHintDiv(self):
         driver = webdriver.Chrome(options=self.options)
         driver.get('http://127.0.0.1:8000/PlaySudoku/')
         button = driver.find_element(By.ID, "dif-easy")
@@ -30,7 +30,7 @@ class SudokuTest(LiveServerTestCase):
 
 
     # testing that the hint div is removed after pressing the close button
-    def test_enterGuessFromNotes(self):
+    def test_removeHintDiv(self):
         driver = webdriver.Chrome(options=self.options)
         driver.get('http://127.0.0.1:8000/PlaySudoku/')
         button = driver.find_element(By.ID, "dif-easy")

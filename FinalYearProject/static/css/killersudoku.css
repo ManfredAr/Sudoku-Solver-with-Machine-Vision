@@ -78,7 +78,7 @@
 }
 
 .remove {
-    display: none;
+    display: none !important;
 }
 
 .number {
@@ -253,6 +253,71 @@
     justify-content: center;
     align-items: center;
     z-index: 999;
+}
+
+/* displays the spinner */
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+/* makes the div invisible */
+.invisible {
+    display: none;
+}
+
+/* blurs the background and disbale all features. */
+.disable {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* making the hits position centered */
+.displayHint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* seting the width and colour of the content */
+.hintContent {
+    background-color: white;
+    width: 540px;
+    display: flex;
+}
+
+/* making the hist display in the center */
+.hints {
+    text-align: center;
+}
+
+/* setting the text clolur to black. */
+.hints p {
+    color: black !important;
+}
+
+.hintContent button {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    color: black;
+    background: none;
+    padding: none;
+    border: none;
 }
 
 /* Styling for smaller screens */

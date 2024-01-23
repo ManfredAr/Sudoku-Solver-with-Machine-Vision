@@ -9,6 +9,41 @@ class KillerSudokuTest(LiveServerTestCase):
     options = Options()
     options.page_load_strategy = "eager"
     
+    # testing that the hint div is only shown when the hint button is pressed.
+    def test_displayHintDiv(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
+        button = driver.find_element(By.ID, "dif-easy")
+        button.click()
+        time.sleep(0.1)
+
+        hintDiv = driver.find_element(By.CLASS_NAME, 'displayHint')
+        class_attribute = hintDiv.get_attribute('class')
+        assert 'remove' in class_attribute, "hint div not removed"
+
+        driver.find_element(By.ID, 'hint').click()
+
+        class_attribute = hintDiv.get_attribute('class')
+        assert 'remove' not in class_attribute, "hint div removed"
+        driver.quit()
+
+
+    # testing that the hint div is removed after pressing the close button
+    def test_removeHintDiv(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
+        button = driver.find_element(By.ID, "dif-easy")
+        button.click()
+        time.sleep(0.1)
+
+        hintDiv = driver.find_element(By.CLASS_NAME, 'displayHint')
+        driver.find_element(By.ID, 'hint').click()
+        driver.find_element(By.CLASS_NAME, 'close').click()
+        class_attribute = hintDiv.get_attribute('class')
+        assert 'remove' in class_attribute, "hint div not removed"
+        driver.quit()
+
+
     # testing all the difficulty buttons appear properly
     def test_difficultyButtons(self):
         driver = webdriver.Chrome(options=self.options)
