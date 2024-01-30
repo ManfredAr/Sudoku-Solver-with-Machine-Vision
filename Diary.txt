@@ -95,3 +95,11 @@ Week 18 - 20/01/24
 This week I added the section about generating puzzles into my report and implemented the sudoku hints into the frontend. In addition to this I have started
 to code the killer sudoku hints and connect it to the frontend. 
 Next, I will finish my killer sudoku hints code and try connecting it to the solver to check if it gets faster.  
+
+
+Week 19 - 29/01/2024
+This week I have completed the implementation of the Killer Sudoku killer hint and attempted to incorperate the hints into the solver, however while testing
+this approach seemed to slow down significantly, therefore this plan had to be abandoned. I have also worked on the report, I have written a section on the 
+hints, the new improved killer sudoku solver, as well as the starting on the professional issues and technical decisions sections.
+Next, I will completed the professional issues and technical decisions sections. Next, I will try to restructure my machine vision code and try to 
+improve the accuracy of the model. 
