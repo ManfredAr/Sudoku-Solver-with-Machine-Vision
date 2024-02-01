@@ -37,7 +37,6 @@ class SudokuExtraction:
         image_bytes = self.image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         self.image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        #self.image = cv2.imread(self.image)
         self.image_copy = self.image
 
 
@@ -142,7 +141,6 @@ class SudokuExtraction:
         edgePoints = np.zeros((4, 1, 2), dtype=np.float32)
         for i in range(4):
             edgePoints[i][0] = edges[i]
-
         # creating a 450 by 450 template image
         dst = np.array([[0, 0], [450, 0], [450, 450], [0, 450]], dtype='float32')
         edgePoints = self.sortPoints(edgePoints)
