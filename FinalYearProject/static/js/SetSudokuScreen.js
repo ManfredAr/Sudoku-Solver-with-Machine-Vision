@@ -107,11 +107,14 @@ class SudokuScreen {
             document.getElementsByClassName("displayHint")[0].classList.remove("remove");
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
-                    if (this.board[i][j] == '-') {
+                    console.log(i, j);
+                    console.log(this.board);
+                    if (this.board[i][j] == '-' || this.board[i][j] == '0') {
+                        console.log(i, j);
                         document.getElementById(i + "." + j).innerText = this.solution[i][j];
                         document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
                         this.board[i][j] = this.solution[i][j];
-                        return
+                        return 1
                     }
                 }
             }
