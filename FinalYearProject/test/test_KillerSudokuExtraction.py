@@ -1,40 +1,38 @@
 from backend.KillerSudokuExtraction import KillerSudokuExtraction
 import unittest 
+import cv2
 
 class Test_PuzzleExtraction(unittest.TestCase):
-    ## the following tests are redundant because of changed code.
 
+    grid = [[10, 1, 0, 1, 1, 0], [21, 1, 0, 1, 1, 0], [18, 1, 0, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [26, 1, 1, 0, 1, 0], [-1, 0, 1, 0, 1, 0], 
+            [-1, 0, 1, 0, 1, 0], [-1, 0, 1, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 1, 1, 0, 0], 
+            [4, 1, 1, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [28, 1, 0, 0, 1, 0], [-1, 0, 0, 1, 1, 0], [12, 1, 0, 0, 1, 0], [-1, 0, 1, 1, 1, 0], 
+            [-1, 1, 0, 1, 0, 0], [-1, 1, 1, 1, 0, 0], [15, 1, 0, 1, 1, 0], [15, 1, 0, 1, 1, 0], [32, 1, 0, 1, 1, 0], [-1, 1, 1, 0, 0, 0], 
+            [-1, 0, 1, 1, 0, 0], [-1, 1, 1, 1, 0, 0], [28, 1, 0, 1, 1, 0], [-1, 1, 1, 1, 0, 0], [-1, 1, 1, 0, 1, 0], [-1, 0, 1, 1, 0, 0], 
+            [-1, 1, 0, 1, 0, 0], [-1, 1, 0, 1, 0, 0], [15, 1, 0, 1, 1, 0], [12, 1, 0, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [-1, 1, 0, 1, 0, 0], 
+            [25, 1, 0, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [15, 1, 0, 1, 1, 0], [-1, 1, 0, 1, 1, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 0, 1, 0, 0], 
+            [-1, 1, 1, 1, 0, 0], [-1, 1, 1, 0, 1, 0], [-1, 0, 1, 1, 0, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 1, 0, 1, 0], [-1, 0, 1, 1, 0, 0], 
+            [-1, 1, 1, 1, 0, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 0, 1, 0, 0], [9, 1, 0, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [15, 1, 0, 1, 1, 0], 
+            [-1, 1, 1, 1, 0, 0], [10, 1, 0, 1, 1, 0], [28, 1, 0, 0, 1, 0], [-1, 0, 0, 1, 1, 0], [-1, 1, 1, 1, 0, 0], [-1, 1, 1, 1, 0, 0], 
+            [-1, 1, 1, 1, 0, 0], [14, 1, 0, 1, 1, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 1, 0, 1, 0], [-1, 0, 1, 1, 0, 0], [-1, 1, 1, 0, 0, 0], 
+            [-1, 0, 1, 1, 0, 0], [4, 1, 1, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [24, 1, 0, 1, 1, 0], [-1, 1, 0, 1, 0, 0], [-1, 1, 0, 1, 0, 0], 
+            [23, 1, 1, 0, 1, 0], [-1, 0, 1, 0, 1, 0], [-1, 0, 1, 0, 1, 0], [-1, 0, 1, 0, 1, 0], [-1, 0, 1, 1, 1, 0], [-1, 1, 1, 0, 1, 0],
+            [-1, 0, 1, 1, 0, 0], [-1, 1, 1, 1, 0, 0], [-1, 1, 1, 1, 0, 0]]
+    
+    cage = {0: {10: [(0, 0), (1, 0), (2, 0), (3, 0)]}, 1: {21: [(0, 1), (1, 1), (2, 1)]}, 2: {18: [(0, 2), (0, 3), (1, 2)]}, 
+            3: {26: [(0, 4), (0, 5), (0, 6), (0, 7), (0, 8)]}, 4: {4: [(1, 3), (1, 4)]}, 5: {28: [(1, 5), (1, 6), (2, 5), (2, 6)]}, 
+            6: {12: [(1, 7), (1, 8), (2, 7)]}, 7: {15: [(2, 2), (3, 1), (3, 2)]}, 8: {15: [(2, 3), (3, 3), (4, 3), (5, 3)]}, 
+            9: {32: [(2, 4), (3, 4), (4, 4), (5, 4), (6, 4)]}, 10: {28: [(2, 8), (3, 8), (4, 7), (4, 8)]}, 
+            11: {15: [(3, 5), (4, 5), (5, 5), (6, 5)]}, 12: {12: [(3, 6), (3, 7), (4, 6)]}, 13: {25: [(4, 0), (4, 1), (5, 0), (6, 0)]}, 
+            14: {15: [(4, 2), (5, 1), (5, 2)]}, 15: {9: [(5, 6), (5, 7), (6, 6)]}, 16: {15: [(5, 8), (6, 8), (7, 8), (8, 8)]}, 
+            17: {10: [(6, 1), (7, 0), (7, 1)]}, 18: {28: [(6, 2), (6, 3), (7, 2), (7, 3)]}, 19: {14: [(6, 7), (7, 7), (8, 7)]}, 
+            20: {4: [(7, 4), (7, 5)]}, 21: {24: [(7, 6), (8, 5), (8, 6)]}, 22: {23: [(8, 0), (8, 1), (8, 2), (8, 3), (8, 4)]}}
+    
 
-    '''
-    # testing that the constructor is instantiated properly
-    def test_Preprocess(self):
-        num = KillerSudokuExtraction(".\MachineVisionImages\Ksudoku1.jpg")
-        self.assertEqual(num.image, ".\MachineVisionImages\Ksudoku1.jpg")
-
-    # Testing a straightened Image is of height and width 990
-    def test_straightenImage(self):
-        num = KillerSudokuExtraction(".\MachineVisionImages\Ksudoku1.jpg")
-        processedImage = num.extraction.ConvertAndCrop()
-        edgePoints = num.extraction.getBorder(processedImage)
-        straightenedImage, original = num.straightenImage(processedImage, edgePoints)
-        self.assertEqual((990,990), straightenedImage.shape)
-
-    # Testing CellExtraction returns 2 sets of 81 images
-    # The second set of images should be coloured  
-    def test_cellExtraction(self):
-        num = KillerSudokuExtraction(".\MachineVisionImages\Ksudoku1.jpg")
-        processedImage = num.extraction.ConvertAndCrop()
-        edgePoints = num.extraction.getBorder(processedImage)
-        straightenedImage, original = num.straightenImage(processedImage, edgePoints)
-        cells, cageSums = num.CellExtraction(straightenedImage, original)
-        self.assertEqual(len(cells), 81)
-        self.assertEqual(len(cageSums), 81)
-        self.assertEqual(cageSums[0].shape, (50,50,3))
-
-
-    # testing that for a puzzle with 33 cages, the dictionary of cages returned is of length 33
-    def test_convertToPuzzle(self):
-        num = KillerSudokuExtraction(".\MachineVisionImages\Ksudoku1.jpg")
-        grid, cages = num.ConvertToPuzzle()
-        self.assertEqual(len(cages), 33)
-    '''
+    # testing the images are resized properly.
+    def test_getCages(self):
+        image = cv2.imread("MachineVisionImages/Ksudoku3.jpg")
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        extract = KillerSudokuExtraction(image)
+        extract.cages = [self.grid[i:i+9] for i in range(0, len(self.grid), 9)]
+        self.assertEqual(extract.constructCages(), self.cage)

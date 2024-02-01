@@ -3,6 +3,7 @@ import keras
 import cv2
 import numpy as np
 from scipy import ndimage
+import matplotlib.pyplot as plt
 
 class NumberRecognition:
     '''
@@ -16,7 +17,7 @@ class NumberRecognition:
         '''
         Constructor for the class, it instantiates the trained model so it can make predictions.
         '''
-        self.model = keras.models.load_model("backend/test2.h5")
+        self.model = keras.models.load_model("backend/test3.h5")
 
     def ConvertToArray(self, arr):
         '''
@@ -89,11 +90,8 @@ class NumberRecognition:
         colsPadding = (int(math.ceil((28-cols)/2.0)),int(math.floor((28-cols)/2.0)))
         rowsPadding = (int(math.ceil((28-rows)/2.0)),int(math.floor((28-rows)/2.0)))
         image = np.lib.pad(image,(rowsPadding,colsPadding),'constant')
-
-        shiftx, shifty = self.getBestShift(image)
-
-        return self.shift(image, shiftx, shifty)
     
+        return image
 
     def getBestShift(self, img):
         '''

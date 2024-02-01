@@ -231,11 +231,8 @@ class KillerSudokuExtraction:
 
     def formatNumbers(self, images):
         for i in range(len(images)):
-            aa = cv2.detailEnhance(images[i], sigma_s=20, sigma_r=1.0)
+            aa = cv2.detailEnhance(images[i], sigma_s=10, sigma_r=1.0)
             images[i] = cv2.cvtColor(aa, cv2.COLOR_BGR2GRAY)
-            cv2.imshow("a", aa)
-            cv2.waitKey()
-            cv2.destroyAllWindows()
         return images
 
 
