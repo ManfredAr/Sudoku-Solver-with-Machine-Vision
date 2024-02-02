@@ -47,9 +47,15 @@
             <div class="heading">
                 <h2> Please check if this is your puzzle! </h2>
             </div>
-            <div id="grid"></div> </br>
+            <div class="puzzle">
+                <div class="left-div">
+                    <div id="grid"></div> </br>
+                </div>
 
-            <div id="values"> </br></br></div>
+                <div class="right-div">
+                    <div id="values"> </br></br></div>
+                </div>
+            </div>
             <div class="set">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -64,9 +70,15 @@
             <div class="heading">
                 <h2> Please check if this is your puzzle! </h2>
             </div>
-            <div id="grid1"></div> </br>
+            <div class="puzzle">
+                <div class="left-div">
+                    <div id="grid1"></div> </br>
+                </div>
 
-            <div class="values"> </br></br></div>
+                <div class="right-div">
+                    <div class="values"> </br></br></div>
+                </div>
+            </div>
             <div class="set">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}

@@ -1,6 +1,6 @@
 /* add a white text color. */
 .UploadContainer {
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 /* displays the cells in the puzzles in rows. */
@@ -9,10 +9,13 @@
     flex-direction: column;
 }
 
-/* adds margin below the heading */
-.heading {
-    margin-bottom: 10px;
+.play {
+    border: 0;
+    margin: 0;
+    padding: 0px !important;
+    display: block !important;
 }
+
 
 /* puts options on the same line */
 .options label {
@@ -80,7 +83,7 @@ input#imageUpload {
 .set,
 .set1 {
     text-align: center;
-    padding: 50px;
+    padding: 100px;
 }
 
 /* adds a black text and black background. */
@@ -91,8 +94,17 @@ input#imageUpload {
     font-weight: bold;
 }
 
+.puzzle {
+    display: flex;
+    justify-content: center;
+}
+
 /* css for smaller screens */
 @media (max-width: 768px) {
+    .puzzle {
+        display: block;
+    }
+
     .puzzleType {
         width: 320px;
     }
@@ -117,7 +129,7 @@ input#imageUpload {
 
     #values {
         width: 320px;
-        height: 50px;
+        height: 75px;
     }
 
     .number {

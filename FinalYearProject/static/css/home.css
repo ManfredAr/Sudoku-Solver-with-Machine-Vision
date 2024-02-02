@@ -1,5 +1,5 @@
 .heading {
-    /* Makes the heading bold and centered */    
+    /* Makes the heading bold and centered */
     font-weight: bolder;
     font-size: 50px;
     text-align: center;
@@ -7,7 +7,7 @@
 }
 
 .choices button {
-    /* Adds separation between buttons */    
+    /* Adds separation between buttons */
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 15px;
@@ -36,29 +36,34 @@ body {
     /* adding a gradient background */
     height: 100vh;
     min-height: 100vh;
-    background-image: linear-gradient(rgba(136, 1, 138, 0.768), rgb(0, 28, 152));
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: rgb(157, 111, 207);
     padding-bottom: 40px;
 }
 
 .Navbar {
-    /* chnage nav bar background to black */
+    /* change nav bar background to black */
     background-color: black;
 }
 
 p {
     /* Set the headings color to white */
-    color: rgb(255, 213, 213);
+    color: rgb(0, 0, 0);
 }
 
 .white-text {
     /* Set the text color to white */
-    color: white; 
+    color: white;
 }
 
-.navbar-nav a:hover, a:hover {
+.navbar-nav a:hover,
+a:hover {
     /* invert the colors on hover */
     background-color: white;
     color: black !important;
+}
+
+@media (max-width: 768px) {
+    .heading {
+        font-size: 30px;
+    }
 }
