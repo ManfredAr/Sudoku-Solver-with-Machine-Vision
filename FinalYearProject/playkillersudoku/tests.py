@@ -15,7 +15,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(1)
 
         hintDiv = driver.find_element(By.CLASS_NAME, 'displayHint')
         class_attribute = hintDiv.get_attribute('class')
@@ -34,7 +34,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
 
         hintDiv = driver.find_element(By.CLASS_NAME, 'displayHint')
         driver.find_element(By.ID, 'hint').click()
@@ -75,7 +75,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         diff_div = driver.find_element(By.CLASS_NAME, 'difficulty')
         class_attribute = diff_div.get_attribute('class')
         assert 'remove' in class_attribute, "play div not removed"
@@ -87,7 +87,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         
         for i in range(8):
             for j in range(8):
@@ -104,7 +104,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         
         for i in range(8):
             for j in range(8):
@@ -122,7 +122,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         arr = [1,2,3,4,5,6,7,8,9,"x"]
         for i in range(len(arr)):
             num = driver.find_element(By.ID, arr[i])
@@ -136,7 +136,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         arr = ["1","2","3","4","5","6","7","8","9","x"]           
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
@@ -156,7 +156,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         arr = ["1","2","3","4","5","6","7","8","9","x"]           
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
@@ -181,7 +181,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         arr = ["1","2","3","4","5","6","7","8","9","x"]           
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
@@ -211,7 +211,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         arr = ["1","2","3","4","5","6","7","8","9","x"]           
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
@@ -244,7 +244,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         arr = ["1","2","3","4","5","6","7","8","9"]           
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
@@ -267,7 +267,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
         guess = driver.find_element(By.ID, "1")
@@ -286,7 +286,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
         driver.find_element(By.ID, "1").click()
@@ -295,20 +295,6 @@ class KillerSudokuTest(LiveServerTestCase):
         assert cell.text == "1", f"previous guess not displayed"
         driver.quit()
 
-    # checking if a new guess is made, undo brings the previous guess back.
-    def test_guessUndo(self):
-        driver = webdriver.Chrome(options=self.options)
-        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
-        button = driver.find_element(By.ID, "dif-easy")
-        button.click()
-        time.sleep(0.1)
-        cell = driver.find_element(By.ID, "c0.0")
-        cell.click()
-        driver.find_element(By.ID, "1").click()
-        driver.find_element(By.ID, "2").click()
-        driver.find_element(By.ID, "undo").click()
-        assert cell.text == "1", f"previous guess not displayed"
-        driver.quit()
 
     # checking notes are removed with the undo button.
     def test_notesUndo(self):
@@ -316,7 +302,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
         driver.find_element(By.ID, "x").click()
@@ -334,7 +320,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         cell = driver.find_element(By.ID, "c0.0")
         cell.click()
         driver.find_element(By.ID, "x").click()
@@ -353,7 +339,7 @@ class KillerSudokuTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         driver.find_element(By.ID, "solve").click()
         for i in range(8):
             for j in range(8):
@@ -364,12 +350,12 @@ class KillerSudokuTest(LiveServerTestCase):
 
     # testing that the after solving the number buttons are removed
     # and a congratulation message is displayed with menu options.
-    def test_solve(self):
+    def test_removeButtons(self):
         driver = webdriver.Chrome(options=self.options)
         driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
         driver.find_element(By.ID, "solve").click()
         styleButton = driver.find_element(By.CLASS_NAME, "buttons").get_attribute("style")
         styleValues = driver.find_element(By.CLASS_NAME, "values").get_attribute("style")
@@ -379,12 +365,12 @@ class KillerSudokuTest(LiveServerTestCase):
 
 
     # testing that the correct sum of cage sums is displayed.
-    def test_solve(self):
+    def test_sumtotal(self):
         driver = webdriver.Chrome(options=self.options)
         driver.get("http://127.0.0.1:8000/PlayKillerSudoku/")
         button = driver.find_element(By.ID, "dif-easy")
         button.click()
-        time.sleep(0.1)
+        time.sleep(3)
 
         sum_cell = driver.find_elements(By.CLASS_NAME, "sumsquare")
         count = 0

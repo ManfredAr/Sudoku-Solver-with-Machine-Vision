@@ -114,7 +114,8 @@ class SudokuScreen {
                         document.getElementById(i + "." + j).innerText = this.solution[i][j];
                         document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
                         this.board[i][j] = this.solution[i][j];
-                        return 1
+                        document.getElementById(i + "." + j).classList.remove("incorrectGuess");
+                        return
                     }
                 }
             }
@@ -129,6 +130,7 @@ class SudokuScreen {
             let i = parseInt(info[0]);
             let j = parseInt(info[1]);
             document.getElementById(info[0] + "." + info[1]).innerText = info[2];
+            document.getElementById(i + "." + j).classList.remove("incorrectGuess");
             this.updateBoard(i, j);
         }
         this.isComplete();
@@ -239,12 +241,12 @@ class SudokuScreen {
                     this.myStack.insertGuess(this.sel_row, this.sel_col, curText, parseInt(element.innerText));
                 }
                 console.log(this.sel_row, this.sel_col, this.element);
-                this.board[parseInt(this.sel_row)][parseInt(this.sel_col)] = parseInt(element.innerText);
                 tile.innerText = element.innerText;
                 if (element.innerText != this.solution[this.sel_row][this.sel_col]) {
                     tile.classList.add("incorrectGuess");
                 } else {
                     tile.classList.remove("incorrectGuess");
+                    this.board[parseInt(this.sel_row)][parseInt(this.sel_col)] = parseInt(element.innerText);
                 }
             }
         } else {
@@ -341,6 +343,17 @@ class SudokuScreen {
             }
         }
         this.isComplete();
+    }
+
+    addNewNum(element) {
+        let tile = document.getElementById(this.sel_row + "." + this.sel_col);
+        if (element.innerText == "x") {
+            tile.innerText = "";
+            this.board[this.sel_row][this.sel_col] = "-";
+        } else {
+            tile.innerText = element.innerText;
+            this.board[this.sel_row][this.sel_col] = element.innerText;
+        }
     }
 }
 

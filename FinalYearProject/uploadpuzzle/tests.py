@@ -199,6 +199,9 @@ class UploadTest(LiveServerTestCase):
         driver.find_element(By.ID, "processImage").click()
 
         element = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, '0.0')))
+        cell = driver.find_element(By.ID, "0.0")
+        cell.click()
+        driver.find_element(By.ID, "2").click()
         driver.find_element(By.ID, "set").click()
         alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
 

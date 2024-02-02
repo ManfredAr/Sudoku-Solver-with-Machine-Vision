@@ -21,7 +21,7 @@ class SudokuHints:
         # converts the puzzle into the correct form.
         for i in range(9):
             for j in range(9):
-                if self.grid[i][j] == '-':
+                if self.grid[i][j] == '-' or self.grid[i][j] == '':
                     self.grid[i][j] = 0
                 else:
                     self.grid[i][j] = int(self.grid[i][j])

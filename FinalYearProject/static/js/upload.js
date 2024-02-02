@@ -156,7 +156,7 @@ function displaySudokuPuzzle(puzzle) {
     // add event listeners for cells and buttons
     let numClass = document.getElementsByClassName("num");
     for (let i = 0; i < numClass.length; i++) {
-        numClass[i].addEventListener("click", () => sudokuInstance.selectedNum(numClass[i]));
+        numClass[i].addEventListener("click", () => sudokuInstance.addNewNum(numClass[i]));
     }
 
     let tiles = document.getElementsByClassName("tile");

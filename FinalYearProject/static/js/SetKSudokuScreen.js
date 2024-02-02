@@ -322,6 +322,7 @@ class KSudokuScreen {
                         document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];
                         this.board[i][j] = this.solution[i][j];
                         document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
+                        document.getElementById("c" + i + "." + j).classList.remove("incorrectGuess");
                         return
                     }
                 }
@@ -338,6 +339,7 @@ class KSudokuScreen {
             let j = parseInt(info[1]);
             console.log(info[0], info[1]);
             document.getElementById("c" + info[0] + "." + info[1]).innerText = info[2];
+            document.getElementById("c" + i + "." + j).classList.remove("incorrectGuess");
             this.updateBoard(i, j);
         }
         this.isComplete();
