@@ -118,7 +118,7 @@
 
 /* Adding a color when the notes button is clicked */
 .activeButton {
-    background-color: red;
+    background-color: red !important;
     color: white !important;
 }
 
