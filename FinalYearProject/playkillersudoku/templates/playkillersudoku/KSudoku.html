@@ -43,52 +43,55 @@
 
 
 <div class="play remove">
-    <div id="grid1"></div> </br>
+    <div class="left-div">
+        <div id="grid1"></div> </br>
 
-    <div class="displayHint remove">
-        <div class="hintContent d-flex flex-column justify-content-end">
-            {% csrf_token %}
-            <div class=" close">
-                <button type=" button" id="close" class="btn-close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="displayHint remove">
+            <div class="hintContent d-flex flex-column justify-content-end">
+                {% csrf_token %}
+                <div class=" close">
+                    <button type=" button" id="close" class="btn-close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="hints">
+                    <p id="hint-text"></p>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div class="right-div">
+        <div class="buttons">
+            <div class="note">
+                <Button id="enableNotes"> Notes </Button>
+            </div>
+
+            <div class="back">
+                <Button id="undo"> Undo </Button> </br>
+            </div>
+
             <div class="hints">
-                <p id="hint-text"></p>
+                <Button id="hint"> Hint </Button> </br>
+            </div>
+
+            <div class="complete">
+                <Button id="solve"> Solve </Button> </br>
             </div>
         </div>
-    </div>
 
-    <div class="buttons">
-        <div class="note">
-            <Button id="enableNotes"> Notes </Button>
+
+        <div id="complete" style="display: none;">
+            <h1 style="padding: 20px;">Congratulations!</h1>
+            <div class="choices">
+                <span><a href="/home"><button>Home</button></a></span></br>
+                <span><a href="/PlaySudoku"><button>Play Sudoku</button></a></span></br>
+                <span><a href="/PlayKillerSudoku"><button>Play Killer Sudoku</button></a></span></br>
+                <span><a href="/Upload"><button>Upload A puzzle</button></a></span></br>
+            </div>
         </div>
 
-        <div class="back">
-            <Button id="undo"> Undo </Button> </br>
-        </div>
-
-        <div class="hints">
-            <Button id="hint"> Hint </Button> </br>
-        </div>
-
-        <div class="complete">
-            <Button id="solve"> Solve </Button> </br>
-        </div>
-    </div>
-
-
-    <div id="complete" style="display: none;">
-        <h1 style="padding: 20px;">Congratulations!</h1>
-        <div class="choices">
-            <span><a href="/home"><button>Home</button></a></span></br>
-            <span><a href="/PlaySudoku"><button>Play Sudoku</button></a></span></br>
-            <span><a href="/PlayKillerSudoku"><button>Play Killer Sudoku</button></a></span></br>
-            <span><a href="/Upload"><button>Upload A puzzle</button></a></span></br>
-        </div>
-    </div>
-
-    <div class="values"> </br>
+        <div class="values"> </br></div>
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 /* add a white text color. */
 .UploadContainer {
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 /* displays the cells in the puzzles in rows. */
@@ -9,9 +9,17 @@
     flex-direction: column;
 }
 
-/* adds margin below the heading */
-.heading {
-    margin-bottom: 10px;
+.play {
+    border: 0;
+    margin: 0;
+    padding: 0px !important;
+    display: block !important;
+}
+
+#processImage {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 /* puts options on the same line */
@@ -80,7 +88,7 @@ input#imageUpload {
 .set,
 .set1 {
     text-align: center;
-    padding: 50px;
+    padding: 100px;
 }
 
 /* adds a black text and black background. */
@@ -89,10 +97,21 @@ input#imageUpload {
     color: rgb(0, 0, 0) !important;
     font-size: 20px;
     font-weight: bold;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
 }
 
-/* css for smaller screens */
-@media (max-width: 768px) {
+.puzzle {
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 1000px) {
+    .puzzle {
+        display: block;
+    }
+
     .puzzleType {
         width: 320px;
     }
@@ -102,28 +121,21 @@ input#imageUpload {
         align-items: center;
         justify-content: center;
     }
+}
 
-    .cell {
-        height: 35px;
-        width: 35px;
-        padding: 5px;
+/* css for smaller screens */
+@media (max-width: 768px) {
+    .puzzle {
+        display: block;
     }
 
-    .noteCell {
-        height: 7px;
-        width: 7px;
-        font-size: 6px;
-    }
-
-    #values {
+    .puzzleType {
         width: 320px;
-        height: 50px;
     }
 
-    .number {
-        /* the dimensions of each individual number buttons */
-        width: 32px;
-        height: 32px;
-        font-size: 20px;
+    .UploadContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

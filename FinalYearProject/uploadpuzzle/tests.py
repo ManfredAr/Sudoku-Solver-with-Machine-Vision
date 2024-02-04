@@ -10,6 +10,90 @@ from selenium.webdriver.support import expected_conditions as EC
 class UploadTest(LiveServerTestCase):
     options = Options()
     options.page_load_strategy = "eager"
+
+
+    # testing change cages buttons are visible
+    def test_changeCageButton(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get("http://127.0.0.1:8000/Upload/")
+
+        imageInput = driver.find_element(By.ID, "imageUpload")
+
+        file_path = 'C:\\Users\\MAYNA\\FY project\\PROJECT\\FinalYearProject\\MachineVisionImages\\Ksudoku1.jpg'
+        imageInput.send_keys(file_path)
+        cage = driver.find_element(By.ID, "cageChange")
+        setCage = driver.find_element(By.ID, "cageSet")
+
+        assert cage != None, f"change cage button not displayed"
+        assert setCage != None, f"set cage button not displayed"
+
+        driver.quit()
+
+       
+    # testing the change cage button changes colour.
+    def test_changeCageButtonCSS(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get("http://127.0.0.1:8000/Upload/")
+
+        imageInput = driver.find_element(By.ID, "imageUpload")
+
+        file_path = 'C:\\Users\\MAYNA\\FY project\\PROJECT\\FinalYearProject\\MachineVisionImages\\Ksudoku3.jpg'
+        imageInput.send_keys(file_path)
+        ksudokuButton = driver.find_element(By.ID, "ksudoku")
+        ksudokuButton.click()
+        processButton = driver.find_element(By.ID, "processImage")
+        processButton.click()
+        time.sleep(4)
+        cage = driver.find_element(By.ID, "cageChange")
+        cage.click()
+        cageDiv = cage.get_attribute('class')
+        assert 'activeButton' in cageDiv, f"no change in change cage colour"
+
+        driver.quit()
+
+
+    # no change if change cage not clicked.
+    def test_noCageChange(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get("http://127.0.0.1:8000/Upload/")
+
+        imageInput = driver.find_element(By.ID, "imageUpload")
+
+        file_path = 'C:\\Users\\MAYNA\\FY project\\PROJECT\\FinalYearProject\\MachineVisionImages\\Ksudoku3.jpg'
+        imageInput.send_keys(file_path)
+        ksudokuButton = driver.find_element(By.ID, "ksudoku")
+        ksudokuButton.click()
+        processButton = driver.find_element(By.ID, "processImage")
+        processButton.click()
+        time.sleep(4)
+        driver.find_element(By.ID, "cageSet").click()
+        alert = driver.switch_to.alert
+        assert alert != None, f"alert not displayed with change cage not clicked"
+        
+        driver.quit()
+
+
+    # testing changes in cage cells.
+    def test_CageChange(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get("http://127.0.0.1:8000/Upload/")
+
+        imageInput = driver.find_element(By.ID, "imageUpload")
+
+        file_path = 'C:\\Users\\MAYNA\\FY project\\PROJECT\\FinalYearProject\\MachineVisionImages\\Ksudoku3.jpg'
+        imageInput.send_keys(file_path)
+        ksudokuButton = driver.find_element(By.ID, "ksudoku")
+        ksudokuButton.click()
+        processButton = driver.find_element(By.ID, "processImage")
+        processButton.click()
+        time.sleep(4)
+        driver.find_element(By.ID, "cageChange").click()
+        driver.find_element(By.ID, "c0.0").click()
+        driver.find_element(By.ID, "cageSet").click()
+        cageDiv = driver.find_element(By.ID, "0.0").get_attribute('class')
+        assert cageDiv == "tile cell", f"cage not changed properly"
+        
+        driver.quit()
     
     # testing the radio buttons are displayed and only one can be selected at any time.
     def test_radioButton(self):
@@ -199,6 +283,9 @@ class UploadTest(LiveServerTestCase):
         driver.find_element(By.ID, "processImage").click()
 
         element = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, '0.0')))
+        cell = driver.find_element(By.ID, "0.0")
+        cell.click()
+        driver.find_element(By.ID, "2").click()
         driver.find_element(By.ID, "set").click()
         alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
 

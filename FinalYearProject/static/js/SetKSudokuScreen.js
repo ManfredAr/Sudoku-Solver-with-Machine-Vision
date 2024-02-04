@@ -19,6 +19,7 @@ class KSudokuScreen {
         this.board = grid;
         this.solution = solution;
         this.groups = group;
+        this.convertFormat()
         this.notes = new Notes();
         this.myStack = new Stack();
         this.takingNotes = false;
@@ -27,7 +28,135 @@ class KSudokuScreen {
         this.prev_row = 0;
         this.prev_col = 0;
         this.setcallback = this.setcallback.bind(this);
+        this.count = 100;
+        this.changeCages = false;
     }
+
+    convertFormat() {
+        this.cellToCage = {};
+        let count = 0;
+        for (const group in this.groups) {
+            const dict = this.groups[group];
+            const values = Object.values(dict)[0];
+            for (let i = 0; i < values.length; i++) {
+                this.cellToCage[values[i][0] + " " + values[i][1]] = count;
+            }
+            count += 1;
+        }
+    }
+
+    createNewCage() {
+        if (this.changeCages == false) {
+            alert("Please click on the change cage button to change cages.")
+            return;
+        }
+        let newCageCells = [];
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (document.getElementById("c" + i + "." + j).classList.contains("selected-tile")) {
+                    newCageCells.push([i, j]);
+                }
+            }
+        }
+
+        // sorting points from top left to bottom right.
+        newCageCells.sort(function (a, b) {
+            if (a[1] !== b[1]) {
+                return a[1] - b[1];
+            }
+            return a[0] - b[0];
+        });
+
+        for (let a = 0; a < newCageCells.length; a++) {
+            let cageNum = this.cellToCage[newCageCells[a][0] + " " + newCageCells[a][1]]
+            let cage = this.groups[cageNum];
+            const CageSum = Object.keys(cage)[0];
+            const values = Object.values(cage)[0];
+            for (let b = 0; b < values.length; b++) {
+                if (newCageCells[a][0] == values[b][0] && newCageCells[a][1] == values[b][1]) {
+                    values.splice(b, 1);
+                    break
+                }
+            }
+            if (values.length != 0) {
+                this.groups[cageNum] = { [CageSum]: values }
+            } else {
+                delete this.groups[cageNum];
+                console.log(cageNum);
+                console.log(this.groups)
+            }
+            this.cellToCage[newCageCells[a][0] + " " + newCageCells[a][1]] = this.count;
+
+            document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).innerHTML = ""
+            document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).classList = ["tile cell"]
+            let cageElement = document.createElement("div");
+            cageElement.id = "c" + newCageCells[a][0] + "." + newCageCells[a][1];
+            cageElement.className = "cage";
+            cageElement.classList.add("cage");
+            if (this.board[newCageCells[a][0]][newCageCells[a][1]] != "-" && this.board[newCageCells[a][0]][newCageCells[a][1]] != "0") {
+                cage.innerText = this.board[newCageCells[a][0]][newCageCells[a][1]];
+            }
+            document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).appendChild(cageElement);
+            if (this.board[newCageCells[a][0]][newCageCells[a][1]] == "-" || this.board[newCageCells[a][0]][newCageCells[a][1]] == "0") {
+                this.notes.addKNotes(newCageCells[a][0], newCageCells[a][1]);
+            }
+            if (newCageCells[a][0] == 2 || newCageCells[a][0] == 5) {
+                document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).classList.add("horizontal");
+            }
+
+            // adding horizontal rows for the mini boxes
+            if (newCageCells[a][1] == 2 || newCageCells[a][1] == 5) {
+                document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).classList.add("vertical");
+            }
+        }
+        this.groups[this.count] = { 0: newCageCells };
+        this.displayCages(this.count);
+        this.count += 1;
+    }
+
+
+    toggleCageChanges() {
+        if (this.changeCages == true) {
+            this.changeCages = false;
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (i != this.sel_row || j != this.sel_col) {
+                        document.getElementById("c" + i + "." + j).classList.remove('selected-tile');
+                    }
+                }
+            }
+            document.getElementById("cageChange").classList.remove("activeButton");
+        } else {
+            this.changeCages = true;
+            document.getElementById("cageChange").classList.toggle("activeButton");
+        }
+    }
+
+
+    selectCell(id) {
+        let coordinates = id.split(".");
+        this.prev_row = this.sel_row;
+        this.prev_col = this.sel_col;
+        this.sel_row = parseInt(coordinates[0]);
+        this.sel_col = parseInt(coordinates[1]);
+        // removing the color from previous square
+        if (document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.contains('selected-tile')) {
+            let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
+            tile.classList.remove("selected-tile");
+            return
+        }
+
+
+        if (!this.changeCages) {
+            let prevtile = document.getElementById("c" + this.prev_row + "." + this.prev_col);
+            prevtile.classList.remove("selected-tile");
+        }
+
+        // adding color for new selected square
+        let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
+        tile.classList.add("selected-tile");
+    }
+
 
     /**
      * Initialises the elements on the screen. Creates the input buttons, the playing grid, 
@@ -59,7 +188,6 @@ class KSudokuScreen {
         // Creates the 9x9 grid
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
-                console.log("we're here");
                 let tile = document.createElement("div");
                 tile.id = row.toString() + "." + col.toString();
                 tile.className = "tile";
@@ -69,7 +197,7 @@ class KSudokuScreen {
                     tile.classList.add("horizontal");
                 }
 
-                // adding horizontal times for the mini boxes
+                // adding horizontal rows for the mini boxes
                 if (col == 2 || col == 5) {
                     tile.classList.add("vertical");
                 }
@@ -94,46 +222,50 @@ class KSudokuScreen {
         // the grid is initially set up with a cage around every cell.
         // After this check which cels are in the same group and remove the borders between them.
 
-        let count = 0;
         for (const group in this.groups) {
-            const dict = this.groups[group];
-            const CageSum = Object.keys(dict)[0];
-            const values = Object.values(dict)[0];
-            let sum = document.createElement("div");
-            sum.innerText = CageSum;
-            sum.classList.add("sumsquare");
-            document.getElementById(values[0][0] + "." + values[0][1]).appendChild(sum);
-            count += 1;
-            for (let i = 0; i < values.length; i++) {
-                document.getElementById(values[0][0] + "." + values[0][1]).setAttribute("cageNum", group);
-                for (let j = i + 1; j < values.length; j++) {
+            this.displayCages(group);
+        }
+    }
 
-                    // removes left and right borders.
-                    if (values[i][0] === values[j][0] && ((values[i][1] === (values[j][1] + 1)) || (values[i][1] === (values[j][1] - 1)))) {
-                        if (values[i][1] < values[j][1]) {
-                            document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeRight");
-                            document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeLeft");
-                            document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeRightPadding");
-                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeLeftPadding");
-                        } else {
-                            document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeLeft");
-                            document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeRight");
-                            document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeLeftPadding");
-                            document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");
-                        }
-                    }
+    displayCages(group) {
+        const dict = this.groups[group];
+        const CageSum = Object.keys(dict)[0];
+        const values = Object.values(dict)[0];
+        let sum = document.createElement("div");
+        sum.innerText = CageSum;
+        sum.classList.add("sumsquare");
+        document.getElementById(values[0][0] + "." + values[0][1]).appendChild(sum);
+        for (let i = 0; i < values.length; i++) {
+            document.getElementById(values[0][0] + "." + values[0][1]).setAttribute("cageNum", group);
+            for (let j = i + 1; j < values.length; j++) {
 
-                    // removes top and bottom borders.
-                    if (values[i][1] === values[j][1] && ((values[i][0] === (values[j][0] + 1)) || (values[i][0] === (values[j][0] - 1)))) {
-                        document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeBottom");
-                        document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeTop");
-                        document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeBottomPadding");
-                        document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeTopPadding");
+                // removes left and right borders.
+                if (values[i][0] === values[j][0] && ((values[i][1] === (values[j][1] + 1)) || (values[i][1] === (values[j][1] - 1)))) {
+                    if (values[i][1] < values[j][1]) {
+                        document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeRight");
+                        document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeLeft");
+                        document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeRightPadding");
+                        document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeLeftPadding");
+                    } else {
+                        document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeLeft");
+                        document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeRight");
+                        document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeLeftPadding");
+                        document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeRightPadding");
                     }
+                }
+
+                // removes top and bottom borders.
+                if (values[i][1] === values[j][1] && ((values[i][0] === (values[j][0] + 1)) || (values[i][0] === (values[j][0] - 1)))) {
+                    document.getElementById("c" + values[i][0] + "." + values[i][1]).classList.add("removeBottom");
+                    document.getElementById("c" + values[j][0] + "." + values[j][1]).classList.add("removeTop");
+                    document.getElementById(values[i][0] + "." + values[i][1]).classList.add("removeBottomPadding");
+                    document.getElementById(values[j][0] + "." + values[j][1]).classList.add("removeTopPadding");
                 }
             }
         }
     }
+
+
 
     /**
      * toggles the notes button to allow user to input notes. 
@@ -322,6 +454,7 @@ class KSudokuScreen {
                         document.getElementById("c" + i + "." + j).innerText = this.solution[i][j];
                         this.board[i][j] = this.solution[i][j];
                         document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
+                        document.getElementById("c" + i + "." + j).classList.remove("incorrectGuess");
                         return
                     }
                 }
@@ -338,6 +471,7 @@ class KSudokuScreen {
             let j = parseInt(info[1]);
             console.log(info[0], info[1]);
             document.getElementById("c" + info[0] + "." + info[1]).innerText = info[2];
+            document.getElementById("c" + i + "." + j).classList.remove("incorrectGuess");
             this.updateBoard(i, j);
         }
         this.isComplete();
@@ -389,6 +523,9 @@ class KSudokuScreen {
     changeCageSum(id) {
         let tile = document.getElementById(this.sel_row + "." + this.sel_col);
         let sumElement = tile.querySelector(".sumsquare");
+        if (sumElement == null) {
+            return;
+        }
         let num = id.id;
         let cage = this.groups[parseInt(tile.getAttribute("cagenum"))];
         const values = Object.values(cage)[0];

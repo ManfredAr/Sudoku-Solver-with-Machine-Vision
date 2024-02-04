@@ -156,7 +156,7 @@ function displaySudokuPuzzle(puzzle) {
     // add event listeners for cells and buttons
     let numClass = document.getElementsByClassName("num");
     for (let i = 0; i < numClass.length; i++) {
-        numClass[i].addEventListener("click", () => sudokuInstance.selectedNum(numClass[i]));
+        numClass[i].addEventListener("click", () => sudokuInstance.addNewNum(numClass[i]));
     }
 
     let tiles = document.getElementsByClassName("tile");
@@ -177,6 +177,9 @@ function displayKSudokuPuzzle(puzzle, cages) {
     document.getElementById("type").classList.toggle("invisible");
     document.getElementById("ksudokuDiv").classList.toggle("invisible");
 
+    document.getElementById("cageChange").addEventListener("click", () => ksudokuInstance.toggleCageChanges());
+    document.getElementById("cageSet").addEventListener("click", () => ksudokuInstance.createNewCage());
+
     // add event listeners for cells and buttons
     let numClass = document.getElementsByClassName("num");
     for (let i = 0; i < numClass.length; i++) {
@@ -185,6 +188,6 @@ function displayKSudokuPuzzle(puzzle, cages) {
 
     let tiles = document.getElementsByClassName("tile");
     for (let i = 0; i < tiles.length; i++) {
-        tiles[i].addEventListener("click", () => ksudokuInstance.selectedTile(tiles[i].id));
+        tiles[i].addEventListener("click", () => ksudokuInstance.selectCell(tiles[i].id));
     }
 }
