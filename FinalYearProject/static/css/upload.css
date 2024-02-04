@@ -107,6 +107,22 @@ input#imageUpload {
     justify-content: center;
 }
 
+@media (max-width: 1000px) {
+    .puzzle {
+        display: block;
+    }
+
+    .puzzleType {
+        width: 320px;
+    }
+
+    .UploadContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
 /* css for smaller screens */
 @media (max-width: 768px) {
     .puzzle {
@@ -121,29 +137,5 @@ input#imageUpload {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .cell {
-        height: 35px;
-        width: 35px;
-        padding: 5px;
-    }
-
-    .noteCell {
-        height: 7px;
-        width: 7px;
-        font-size: 6px;
-    }
-
-    #values {
-        width: 320px;
-        height: 75px;
-    }
-
-    .number {
-        /* the dimensions of each individual number buttons */
-        width: 32px;
-        height: 32px;
-        font-size: 20px;
     }
 }

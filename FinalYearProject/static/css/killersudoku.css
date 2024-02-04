@@ -333,6 +333,29 @@
     display: inline-block;
 }
 
+@media (max-width: 1000px) {
+    .play {
+        display: block !important;
+    }
+
+    .values {
+        width: 540px;
+        height: 50px;
+    }
+
+    .number {
+        /* the dimensions of each individual number buttons */
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+
+    .left-div,
+    .right-div {
+        display: block;
+    }
+}
+
 /* Styling for smaller screens */
 /* all these stylings simply changes the dimension of the elements */
 @media (max-width: 768px) {

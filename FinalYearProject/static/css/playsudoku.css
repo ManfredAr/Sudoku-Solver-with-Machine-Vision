@@ -233,6 +233,29 @@
     display: inline-block;
 }
 
+@media (max-width: 1000px) {
+    .play {
+        display: block !important;
+    }
+
+    .left-div,
+    .right-div {
+        display: block;
+    }
+
+    #values {
+        width: 320px;
+        height: 50px;
+    }
+
+    .number {
+        /* the dimensions of each individual number buttons */
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+}
+
 @media (max-width: 768px) {
     .play {
         display: block;
