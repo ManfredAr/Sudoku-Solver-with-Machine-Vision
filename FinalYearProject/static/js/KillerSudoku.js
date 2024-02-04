@@ -10,7 +10,20 @@ var solution = null;
 // on load the screen should be set up with the grid and the buttons.
 window.onload = function () {
     document.getElementsByClassName("bg")[0].classList.add("invisible");
-    console.log("solution");
+
+    const serializedData = localStorage.getItem('ksudoku');
+    if (serializedData) {
+        const { board, solution, groups } = JSON.parse(serializedData);
+        if (confirm("You have saved a Killer Sudoku puzzle, would you like to continue?")) {
+            document.getElementsByClassName("play")[0].classList.remove("remove");
+            setPuzzle(board, solution, groups);
+            localStorage.removeItem('ksudoku');
+            return
+        } else {
+            localStorage.removeItem('ksudoku');
+        }
+    }
+
     if (gridData != "-1") {
         document.getElementsByClassName("play")[0].classList.remove("remove");
         board = gridData;
@@ -88,6 +101,7 @@ function setPuzzle(board, solution, cages) {
     document.getElementById("undo").addEventListener("click", () => SetScreen.lastAction());
     document.getElementById("solve").addEventListener("click", () => SetScreen.autoComplete());
     document.getElementById("hint").addEventListener("click", () => SetScreen.giveHint());
+    document.getElementById("save").addEventListener("click", () => SetScreen.save());
     document.getElementsByClassName("difficulty")[0].classList.add("remove");
     document.getElementsByClassName("play")[0].classList.remove("remove");
     document.getElementsByClassName("bg")[0].classList.remove("invisible");

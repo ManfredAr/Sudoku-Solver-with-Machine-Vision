@@ -553,5 +553,14 @@ class KSudokuScreen {
         }
         this.isComplete();
     }
+
+    save() {
+        let board = this.board;
+        let solution = this.solution;
+        let groups = this.groups
+        const data = { board, solution, groups };
+        const serializedData = JSON.stringify(data);
+        localStorage.setItem('ksudoku', serializedData);
+    }
 }
 export { KSudokuScreen };

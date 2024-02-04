@@ -8,6 +8,68 @@ import time
 class KillerSudokuTest(LiveServerTestCase):
     options = Options()
     options.page_load_strategy = "eager"
+
+        # testing the save button exists
+    def test_saveButtonCheck(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
+        button = driver.find_element(By.ID, "dif-easy")
+        button.click()
+        time.sleep(3)
+        save = driver.find_element(By.ID, 'save')
+        assert save != None, "save button not on the screen"
+        driver.quit()
+
+
+    # testing saved puzzle is presented to user
+    def test_SavedPuzzleDisplayMessage(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
+        button = driver.find_element(By.ID, "dif-easy")
+        button.click()
+        time.sleep(3)
+        driver.find_element(By.ID, 'save').click()
+        driver.refresh()
+        time.sleep(1)
+        alert = driver.switch_to.alert
+        assert alert != None, f"alert not displayed with previous puzzle notice" 
+        driver.quit()
+
+
+    # testing that pressing ok displays saved puzzle.
+    def test_SavedPuzzleDisplay(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
+        button = driver.find_element(By.ID, "dif-easy")
+        button.click()
+        time.sleep(3)
+        driver.find_element(By.ID, 'save').click()
+        driver.refresh()
+        time.sleep(1)
+        alert = driver.switch_to.alert
+        alert.accept()
+        play_div = driver.find_element(By.CLASS_NAME, 'play')
+        class_attribute = play_div.get_attribute('class')
+        assert 'remove' not in class_attribute, "play div removed incorrectly when displaying saved puzzle"
+        driver.quit()
+
+
+    # testing that pressing ok displays saved puzzle.
+    def test_SavedPuzzleNotDisplay(self):
+        driver = webdriver.Chrome(options=self.options)
+        driver.get('http://127.0.0.1:8000/PlayKillerSudoku/')
+        button = driver.find_element(By.ID, "dif-easy")
+        button.click()
+        time.sleep(3)
+        driver.find_element(By.ID, 'save').click()
+        driver.refresh()
+        time.sleep(1)
+        alert = driver.switch_to.alert
+        alert.dismiss()
+        play_div = driver.find_element(By.CLASS_NAME, 'play')
+        class_attribute = play_div.get_attribute('class')
+        assert 'remove' in class_attribute, "play div displayed incorrectly when removing saved puzzle"
+        driver.quit()
     
     # testing that the hint div is only shown when the hint button is pressed.
     def test_displayHintDiv(self):

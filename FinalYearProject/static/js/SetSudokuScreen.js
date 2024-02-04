@@ -355,6 +355,16 @@ class SudokuScreen {
             this.board[this.sel_row][this.sel_col] = element.innerText;
         }
     }
+
+    save() {
+        console.log("huh?");
+        let board = this.board;
+        let solution = this.solution;
+        const data = { board, solution };
+        const serializedData = JSON.stringify(data);
+        localStorage.setItem('sudoku', serializedData);
+        console.log("saved!");
+    }
 }
 
 export { SudokuScreen };
