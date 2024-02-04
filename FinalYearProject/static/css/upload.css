@@ -16,6 +16,11 @@
     display: block !important;
 }
 
+#processImage {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
+}
 
 /* puts options on the same line */
 .options label {
@@ -92,6 +97,9 @@ input#imageUpload {
     color: rgb(0, 0, 0) !important;
     font-size: 20px;
     font-weight: bold;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .puzzle {

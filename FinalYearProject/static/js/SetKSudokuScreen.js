@@ -29,6 +29,7 @@ class KSudokuScreen {
         this.prev_col = 0;
         this.setcallback = this.setcallback.bind(this);
         this.count = 100;
+        this.changeCages = false;
     }
 
     convertFormat() {
@@ -45,6 +46,10 @@ class KSudokuScreen {
     }
 
     createNewCage() {
+        if (this.changeCages == false) {
+            alert("Please click on the change cage button to change cages.")
+            return;
+        }
         let newCageCells = [];
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
@@ -95,12 +100,18 @@ class KSudokuScreen {
             if (this.board[newCageCells[a][0]][newCageCells[a][1]] == "-" || this.board[newCageCells[a][0]][newCageCells[a][1]] == "0") {
                 this.notes.addKNotes(newCageCells[a][0], newCageCells[a][1]);
             }
+            if (newCageCells[a][0] == 2 || newCageCells[a][0] == 5) {
+                document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).classList.add("horizontal");
+            }
+
+            // adding horizontal rows for the mini boxes
+            if (newCageCells[a][1] == 2 || newCageCells[a][1] == 5) {
+                document.getElementById(newCageCells[a][0] + "." + newCageCells[a][1]).classList.add("vertical");
+            }
         }
         this.groups[this.count] = { 0: newCageCells };
         this.displayCages(this.count);
         this.count += 1;
-        //console.log(this.cellToCage);
-        //console.log(this.count);
     }
 
 
