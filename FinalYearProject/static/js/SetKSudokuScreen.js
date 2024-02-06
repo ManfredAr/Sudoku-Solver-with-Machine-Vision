@@ -306,6 +306,7 @@ class KSudokuScreen {
                         element.innerText = "";
                         this.notes.addKNotes(row, col);
                         this.board[row][col] = "";
+                        element.classList.remove("incorrectGuess");
                     } else {
                         element.innerText = prev;
                         this.board[row][col] = prev;
@@ -346,8 +347,6 @@ class KSudokuScreen {
      * @param {div} element - the selected div element.
      */
     selectedNum(element) {
-        console.log("hi");
-        console.log("c" + this.sel_row + "." + this.sel_col);
         if (!this.takingNotes) {
             let tile = document.getElementById("c" + this.sel_row + "." + this.sel_col);
             let children = tile.childElementCount;
@@ -371,6 +370,7 @@ class KSudokuScreen {
                     this.notes.clearNotes(this.sel_row, this.sel_col);
                 } else {
                     this.myStack.insertGuess(this.sel_row, this.sel_col, curText, "");
+                    document.getElementById("c" + this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
                 }
                 this.notes.addKNotes(this.sel_row, this.sel_col);
                 // if user deletes a guess then the notes subcells should be baught back.

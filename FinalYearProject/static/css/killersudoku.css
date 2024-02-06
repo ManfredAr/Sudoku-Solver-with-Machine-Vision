@@ -337,7 +337,7 @@
 
 @media (max-width: 1000px) {
     .play {
-        display: block !important;
+        display: block;
     }
 
     .values {
