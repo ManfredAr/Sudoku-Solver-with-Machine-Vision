@@ -1,9 +1,8 @@
 import copy
 from backend.Sudoku import Sudoku
-from backend.SudokuSolver2 import SudokuSolver2
-
+from backend.SudokuSolver import SudokuSolver
 from backend.KillerSudoku import KillerSudoku
-from backend.killerSudokuSolver3 import KillerSudokuSolver3
+from backend.killerSudokuSolver import KillerSudokuSolver
 
 class convertToPuzzle:
     '''
@@ -48,7 +47,7 @@ class convertToPuzzle:
         if self.sudoku.isValid() == False:
             return False, False
         
-        self.solver = SudokuSolver2(self.sudoku)
+        self.solver = SudokuSolver(self.sudoku)
 
         solution = self.solver.solver()
         return self.puzzle, solution
@@ -85,7 +84,7 @@ class convertToPuzzle:
         if self.Ksudoku.checkValid() == False:
             return False, False, False
         
-        self.solver = KillerSudokuSolver3(self.Ksudoku)
+        self.solver = KillerSudokuSolver(self.Ksudoku)
 
         solution = self.solver.solver()
 

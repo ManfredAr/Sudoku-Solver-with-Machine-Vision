@@ -1,6 +1,6 @@
 from backend.SudokuGenerator import SudokuGenerator  
 from backend.Sudoku import Sudoku 
-from backend.SudokuSolver2 import SudokuSolver2
+from backend.SudokuSolver import SudokuSolver
 import unittest  
 
 class Test_Sudoku(unittest.TestCase):
@@ -16,26 +16,26 @@ class Test_Sudoku(unittest.TestCase):
     def test_easyPuzzle(self):
         gen = SudokuGenerator()
         puzzle = gen.generate("easy")[0]
-        solver = SudokuSolver2(Sudoku(puzzle))
+        solver = SudokuSolver(Sudoku(puzzle))
         self.assertEqual(solver.SolutionFinder(), 1)
 
     # testing that medium puzzles are unique.
     def test_mediumPuzzle(self):
         gen = SudokuGenerator()
         puzzle = gen.generate("medium")[0]
-        solver = SudokuSolver2(Sudoku(puzzle))
+        solver = SudokuSolver(Sudoku(puzzle))
         self.assertEqual(solver.SolutionFinder(), 1)
 
     # testing that hard puzzles are unique.
     def test_hardPuzzle(self):
         gen = SudokuGenerator()
         puzzle = gen.generate("hard")[0]
-        solver = SudokuSolver2(Sudoku(puzzle))
+        solver = SudokuSolver(Sudoku(puzzle))
         self.assertEqual(solver.SolutionFinder(), 1)
 
     # testing that expert puzzles are unique.
     def test_expertPuzzle(self):
         gen = SudokuGenerator()
         puzzle = gen.generate("expert")[0]
-        solver = SudokuSolver2(Sudoku(puzzle))
+        solver = SudokuSolver(Sudoku(puzzle))
         self.assertEqual(solver.SolutionFinder(), 1)

@@ -1,5 +1,5 @@
 import copy
-from backend.SudokuSolver2 import SudokuSolver2
+from backend.SudokuSolver import SudokuSolver
 from backend.Sudoku import Sudoku
 import random
 
@@ -81,7 +81,7 @@ class SudokuGenerator:
                 self.grid[i][j] = options[((i-6)*3)+(j-6)]
 
         sudoku = Sudoku(self.grid)
-        self.sudokuSolver = SudokuSolver2(sudoku)
+        self.sudokuSolver = SudokuSolver(sudoku)
         self.grid = self.sudokuSolver.solver()
     
 
@@ -112,7 +112,7 @@ class SudokuGenerator:
                 self.grid[x][y] = 0
 
                 # checking for unique solution after each removal
-                SolutionFinder = SudokuSolver2(Sudoku(copy.deepcopy(self.grid)))
+                SolutionFinder = SudokuSolver(Sudoku(copy.deepcopy(self.grid)))
                 solutions = SolutionFinder.SolutionFinder()
 
                 if solutions == 1:

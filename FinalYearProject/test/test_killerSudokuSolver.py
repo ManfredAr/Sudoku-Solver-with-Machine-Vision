@@ -1,6 +1,5 @@
 from backend.KillerSudoku import KillerSudoku
 from backend.killerSudokuSolver import KillerSudokuSolver
-from backend.killerSudokuSolver3 import KillerSudokuSolver3
 import unittest
 
 class Test_KSudokuSolver(unittest.TestCase):
@@ -135,38 +134,15 @@ class Test_KSudokuSolver(unittest.TestCase):
     
     # testing that the constructor stores the killer sudoku object properly
     def test_Constructor(self):
-        solver = KillerSudokuSolver3(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver.KSudoku.grid, self.grid)
         self.assertEqual(solver.KSudoku.cages, self.cages)
         self.assertEqual(len(solver.KSudoku.cellCage), 81)
-
-
-
-    # testing that the next empty cell is returned correctly
-    def test_GetNextCell(self):
-        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
-        self.assertEqual(solver.getNextEmptyCell(), (0, 0))
-
-    
-    # testing that if theres no next empty cell then None, None is returned.
-    def test_GetNoNextCell(self):
-        # test grid
-        test = [[1,2,3,4,5,6,7,8,9], 
-         [9,8,7,6,5,4,3,2,1],
-         [1,2,3,4,5,6,7,8,9], 
-         [9,8,7,6,5,4,3,2,1],
-         [1,2,3,4,5,6,7,8,9], 
-         [9,8,7,6,5,4,3,2,1],
-         [1,2,3,4,5,6,7,8,9], 
-         [9,8,7,6,5,4,3,2,1],
-         [1,2,3,4,5,6,7,8,9]]
-        solver = KillerSudokuSolver(KillerSudoku(test, self.cages))
-        self.assertEqual(solver.getNextEmptyCell(), (None, None))
         
 
     # testing the pq contains all the empty cells.
     def test_setupHeap(self):
-        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                                     [0,0,0,5,9,8,0,1,6],
                                                     [0,1,2,0,0,0,0,5,0],
                                                     [0,0,0,4,0,7,0,9,0],
@@ -181,7 +157,7 @@ class Test_KSudokuSolver(unittest.TestCase):
 
     # testing the killer sudoku grid is solved correctly
     def test_correctSolution(self):
-        solver2 = KillerSudokuSolver3(KillerSudoku(self.grid, self.cages))
+        solver2 = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver2.solver(), [[5, 8, 6, 1, 3, 2, 9, 4, 7],
                                             [4, 3, 7, 5, 9, 8, 2, 1, 6],
                                             [9, 1, 2, 7, 6, 4, 8, 5, 3],
@@ -195,7 +171,7 @@ class Test_KSudokuSolver(unittest.TestCase):
 
     # testing that decrease keys returns all the orginal values of te changed keys
     def test_decreaseKeys(self):
-        solver = KillerSudokuSolver3(KillerSudoku([[0,8,0,1,3,0,0,4,0],
+        solver = KillerSudokuSolver(KillerSudoku([[0,8,0,1,3,0,0,4,0],
                                             [0,0,0,0,9,8,0,1,6],
                                             [0,1,2,0,0,0,0,5,0],
                                             [0,0,0,4,0,7,0,9,0],
@@ -213,17 +189,17 @@ class Test_KSudokuSolver(unittest.TestCase):
 
     # testing that a unique puzzle returns 1
     def test_uniquePuzzle(self):
-        solver = KillerSudokuSolver3(KillerSudoku(self.grid, self.cages))
+        solver = KillerSudokuSolver(KillerSudoku(self.grid, self.cages))
         self.assertEqual(solver.SolutionFinder(), 1)
 
 
     # testing that a non unique puzzle does not return 1
     def test_NonuniquePuzzle(self):
-        solver = KillerSudokuSolver3(KillerSudoku(self.multipleGrid, self.multiplecages))
+        solver = KillerSudokuSolver(KillerSudoku(self.multipleGrid, self.multiplecages))
         self.assertEqual(solver.SolutionFinder(), 2)
 
 
     # testing that 1 is returned
     def test_uniquePuzzle2(self):
-        solver = KillerSudokuSolver3(KillerSudoku(self.test, self.cage2))
+        solver = KillerSudokuSolver(KillerSudoku(self.test, self.cage2))
         self.assertNotEqual(solver.SolutionFinder(), 1)

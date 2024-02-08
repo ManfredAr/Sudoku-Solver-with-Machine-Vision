@@ -17,7 +17,7 @@ class NumberRecognition:
         '''
         Constructor for the class, it instantiates the trained model so it can make predictions.
         '''
-        self.model = keras.models.load_model("backend/test3.h5")
+        self.model = keras.models.load_model("backend/NumberRecognition.h5")
 
     def ConvertToArray(self, arr):
         '''

@@ -1,5 +1,5 @@
 from backend.SudokuGenerator import SudokuGenerator
-from backend.killerSudokuSolver3 import KillerSudokuSolver3
+from backend.killerSudokuSolver import KillerSudokuSolver
 from backend.KillerSudoku import KillerSudoku
 import random
 import copy
@@ -49,7 +49,7 @@ class killerSudokuGenerator:
                 return None, None
             
             grid = [[0 for _ in range(9)] for _ in range(9)]
-            kSudoku = KillerSudokuSolver3(KillerSudoku(grid, self.cages))
+            kSudoku = KillerSudokuSolver(KillerSudoku(grid, self.cages))
             solutions = kSudoku.SolutionFinder()
             if solutions != 1:
                 self.cages = {}

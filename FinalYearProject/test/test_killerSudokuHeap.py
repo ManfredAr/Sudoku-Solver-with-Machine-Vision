@@ -1,4 +1,4 @@
-from backend.killerSudokuHeap2 import KillerSudokuHeap2
+from backend.killerSudokuHeap import KillerSudokuHeap
 from backend.KillerSudoku import KillerSudoku
 import unittest  
 
@@ -60,7 +60,7 @@ class Test_KSudokuHeap(unittest.TestCase):
     # testing the class is instantiated properly.
     # the kep_map and qp should be empty initially.
     def test_Constructor(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         self.assertEqual(queue.key_map, {})
         self.assertEqual(queue.pq, [])
         self.assertEqual(queue.REMOVED, '<removed-task>')
@@ -68,7 +68,7 @@ class Test_KSudokuHeap(unittest.TestCase):
     
     # testing the elements pushed and kept sorted in the heap.
     def test_addToHeap(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.addToHeap((1, 1, (4,1), {3}, 2))
         queue.addToHeap((2, 1, (8,8), {4,8}, 4))
@@ -77,7 +77,7 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing that a removed item contains '<removed-task>' in the last index
     def test_removeTask(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.addToHeap((1, 1, (4,1), {3}, 2))
         queue.addToHeap((2, 1, (8,8), {4,8}, 4))
@@ -87,13 +87,13 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing that an empty heap will return None
     def test_EmptyPopCell(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         self.assertEqual(queue.pop_cell(), (None, None, None, None, None))
 
 
     # testing that an non-empty heap will return cell with the smallest domain
     def test_PopCell(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.addToHeap((1, 1, (4,1), {3}, 2))
         queue.addToHeap((2, 1, (8,8), {4,8}, 4))
@@ -102,7 +102,7 @@ class Test_KSudokuHeap(unittest.TestCase):
     
     # testing that Removed elements are not popped even if they are at the head of the queue
     def test_RemovedPopCell(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.addToHeap((1, 1, (4,1), {3}, 2))
         queue.addToHeap((2, 1, (8,8), {4,8}, 4))
@@ -112,7 +112,7 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing after assigning a value to a cell the domains are updated for all cage values
     def test_decreaseCageKey(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.addToHeap((1, 1, (4,1), {3}, 2))
         queue.addToHeap((2, 1, (8,8), {4,8}, 4))
@@ -122,7 +122,7 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing after assigning a value to a cell the domains are updated for non cage values
     def test_decreaseNonCageKey(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.decreaseNonCageKey((0, 0), 2)
         self.assertEqual(queue.pq, [[2, 1, 1, (0, 0), {1, 3}, 3, 'available'], [3, 1, 0, (0, 0), {1, 2, 3}, 3, '<removed-task>']])
@@ -130,7 +130,7 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing that after reverting a change made the affected cells should go back to how they were before. 
     def test_increase(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((3, 1, (0,0), {1,2,3}, 3))
         queue.addToHeap((1, 1, (4,1), {3}, 2))
         queue.addToHeap((2, 1, (8,8), {4,8}, 4))
@@ -140,7 +140,7 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing that if domains were updating without any errors then it shoudl return false
     def test_noBacktrack(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((4, 3, (1,0), {1,4,7,9}, 15))
         queue.addToHeap((4, 3, (2,0), {4,5,6,9}, 15))
         queue.addToHeap((4, 3, (2,1), {1,2,5,7}, 15))
@@ -150,7 +150,7 @@ class Test_KSudokuHeap(unittest.TestCase):
 
     # testing that if there was an error while updating domains false is returned.
     def test_Backtrack(self):
-        queue = KillerSudokuHeap2()
+        queue = KillerSudokuHeap()
         queue.addToHeap((4, 3, (1,0), {1,4,7,9}, 15))
         queue.addToHeap((4, 3, (2,0), {4,5,6,9}, 15))
         queue.addToHeap((4, 3, (2,1), {7}, 15))
