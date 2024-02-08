@@ -103,3 +103,10 @@ this approach seemed to slow down significantly, therefore this plan had to be a
 hints, the new improved killer sudoku solver, as well as the starting on the professional issues and technical decisions sections.
 Next, I will completed the professional issues and technical decisions sections. Next, I will try to restructure my machine vision code and try to 
 improve the accuracy of the model. 
+
+
+Week 20 - 06/02/2024
+This week I have worked on improving some sectios of the report. I have also improved the accuracy of the machine vision code by training a better 
+machine learning model. In addition I have worked on the frontend to add more CSS for different screen sizes and generally making the website look
+better.
+Next, I will work on writing the conclusion of the report as well as cleaning up my code structure. 

@@ -107,10 +107,7 @@ class SudokuScreen {
             document.getElementsByClassName("displayHint")[0].classList.remove("remove");
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
-                    console.log(i, j);
-                    console.log(this.board);
                     if (this.board[i][j] == '-' || this.board[i][j] == '0') {
-                        console.log(i, j);
                         document.getElementById(i + "." + j).innerText = this.solution[i][j];
                         document.getElementById("hint-text").innerText = "cell " + i + ", " + j + " found through backtracking";
                         this.board[i][j] = this.solution[i][j];
@@ -168,6 +165,7 @@ class SudokuScreen {
                         element.innerText = "";
                         this.notes.addNotes(row, col);
                         this.board[row][col] = "";
+                        element.classList.remove("incorrectGuess");
                     } else {
                         element.innerText = prev;
                         this.board[row][col] = prev;
@@ -179,7 +177,7 @@ class SudokuScreen {
                     }
                 }
             } else if (action[0] == "note") {
-                // If the last action was to add a not.
+                // If the last action was to add a note.
                 let prev = parseInt(action[3]);
                 let noteCell = document.getElementById(row + "." + col + "." + prev);
                 // Since notes can only be added if the cell didn't contain a guess
@@ -197,6 +195,7 @@ class SudokuScreen {
                 let array = action[3];
                 this.notes.addCellNotes(row, col, array);
                 this.notes.addNotes(row, col);
+                document.getElementById(row + "." + col).classList.remove("incorrectGuess");
             }
         }
     }
@@ -233,6 +232,7 @@ class SudokuScreen {
                     this.myStack.insertGuess(this.sel_row, this.sel_col, curText, "");
                 }
                 this.notes.addNotes(this.sel_row, this.sel_col);
+                document.getElementById(this.sel_row + "." + this.sel_col).classList.remove("incorrectGuess");
                 // if user deletes a guess then the notes subcells should be baught back.
             } else {
                 if (children == 9) {
@@ -269,7 +269,6 @@ class SudokuScreen {
                     }
                 }
             }
-            console.log("cell: ", this.notes.getCellNotes(this.sel_row, this.sel_col));
         }
         this.myStack.displayStack();
 
@@ -285,7 +284,6 @@ class SudokuScreen {
         for (let a = 0; a < 9; a++) {
             for (let b = 0; b < 9; b++) {
                 if (this.board[a][b] != this.solution[a][b]) {
-                    console.log(this.board[a][b], this.solution[a][b]);
                     return;
                 }
             }
@@ -354,6 +352,14 @@ class SudokuScreen {
             tile.innerText = element.innerText;
             this.board[this.sel_row][this.sel_col] = element.innerText;
         }
+    }
+
+    save() {
+        let board = this.board;
+        let solution = this.solution;
+        const data = { board, solution };
+        const serializedData = JSON.stringify(data);
+        localStorage.setItem('sudoku', serializedData);
     }
 }
 

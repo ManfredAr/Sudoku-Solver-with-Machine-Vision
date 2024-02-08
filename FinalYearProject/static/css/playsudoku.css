@@ -97,7 +97,8 @@
 #solve,
 #hint,
 #cageChange,
-#cageSet {
+#cageSet,
+#save {
     border: 0;
     border-radius: 10px;
     padding: 10px;
@@ -116,7 +117,8 @@
 .complete,
 .hints,
 .changeCages,
-.setCage {
+.setCage,
+.store {
     padding: 10px;
 }
 
@@ -235,7 +237,7 @@
 
 @media (max-width: 1000px) {
     .play {
-        display: block !important;
+        display: block;
     }
 
     .left-div,
