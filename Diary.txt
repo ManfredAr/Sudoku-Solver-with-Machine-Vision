@@ -110,3 +110,9 @@ This week I have worked on improving some sectios of the report. I have also imp
 machine learning model. In addition I have worked on the frontend to add more CSS for different screen sizes and generally making the website look
 better.
 Next, I will work on writing the conclusion of the report as well as cleaning up my code structure. 
+
+
+Week 21 - 14/02/2024
+This week I have worked on writing the conclusion to my report and included more information to the user manual. In addition I have added sections 
+on professional issues and critical analysis.
+Next, I will work on addin a summary section to the main sections of the report.
